@@ -1,0 +1,8 @@
+#!/bin/bash
+
+fcitx_set=$(fcitx-imlist -l | sed -n '2p' | sed 's/ (.*//')
+case $fcitx_set in
+	fcitx-keyboard-jp) ~/.i3/switch_eng;;
+	googlepinyin) ~/.i3/switch_eng 1;;
+	mozc) ~/.i3/switch_eng 2;;
+esac

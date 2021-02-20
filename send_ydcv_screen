@@ -1,0 +1,29 @@
+#!/bin/bash
+
+notification_id=1777
+
+WORD=''
+POS=$(xdotool getmouselocation  | sed -E "s/ screen:0 window:[^ ]*|x:|y://g")
+WIN=$(xdotool getmouselocation  | sed -E "s/x:[^ ]* y:[^ ]* screen:0 window://g")
+echo $WIN
+
+while true;
+do
+	TMP=$(xdotool getmouselocation)
+	if [[ $WIN = $(echo $TMP | sed -E "s/x:[^ ]* y:[^ ]* screen:0 window://g" ) ]]; then
+		if [[ $POS != $(echo $TMP | sed -E "s/ screen:0 window:[^ ]*|x:|y://g" ) ]]; then
+			POS=$(echo $TMP | sed -E "s/ screen:0 window:[^ ]*|x:|y://g")
+			xdotool click 1
+			xdotool click 1
+			if [[ $WORD != $(xclip -o | head -n1 | cut -d" " -f 1) ]]; then
+				WORD=$(xclip -o | head -n1 | cut -d" " -f 1)
+				echo $WORD
+				if [ -n $WORD ]; then
+					notify-send.sh -r $notification_id -u low "$(ydcv $WORD)"
+				fi
+				sleep 0.2
+			fi
+		fi
+	fi
+	sleep 0.2
+done

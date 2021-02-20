@@ -1,0 +1,17 @@
+#!/bin/zsh
+
+ENRTY_TEXT=$(xsel -o)
+if [ -z $ENRTY_TEXT ]; then
+    ART_QUERY=$(zenity --entry --title " ART INSTITVTE CHICAGO" --text "Search by keyword, artist, or reference" --entry-text "$(cat $HOME/.config/i3/.query.txt)" --width=400)
+else
+    ART_QUERY=$(zenity --entry --title " ART INSTITVTE CHICAGO" --text "Search by keyword, artist, or reference" --entry-text "$ENRTY_TEXT" --width=400)
+fi
+if [ $? -ne 0 ]; then
+	xsel --clear
+    exit 1
+fi 
+echo $ART_QUERY > $HOME/.config/i3/.query.txt
+if [[ -f "$HOME/.config/i3/.artist" ]]; then
+    rm $HOME/.config/i3/.artist
+fi
+python $HOME/.i3/switch_art_chicago.py $ART_QUERY

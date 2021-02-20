@@ -1,0 +1,18 @@
+#!/bin/zsh
+
+if [ -e $HOME/.config/i3/.art.shw ]; then
+	ARTIST=$(sed -n 3p $HOME/.config/i3/.art.txt | tr -d  | sed 's/^[ ]*//g')
+else
+	ARTIST=${${${${${${$(cat $HOME/.config/i3/.temp.txt)#*_}%%*}%%\[*}%%\(*}%_}//_/ }
+fi
+if [ $? -ne 0 ]; then
+	ART_QUERY=$(zenity --entry --title " ART INSTITVTE CHICAGO" --text "Search by artist" --entry-text "$(cat $HOME/.config/i3/.query.txt)" --width=400)
+else
+	ART_QUERY=$(zenity --entry --title " ART INSTITVTE CHICAGO" --text "Search by artist" --entry-text "$ARTIST" --width=400)
+fi
+if [ $? -ne 0 ]; then
+    exit 1
+fi
+touch $HOME/.config/i3/.artist
+echo $ART_QUERY > $HOME/.config/i3/.query_artist.txt
+python $HOME/.i3/get_artist_chicago.py ${ART_QUERY//_/%20}

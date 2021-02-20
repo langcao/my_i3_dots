@@ -1,0 +1,21 @@
+#!/bin/bash
+
+FILE=/tmp/cmus_lyrics.lck
+if [ -f "$FILE" ]; then
+	pkill -f load_lrc.py
+	cmus_lyrics_id=779
+	notify-send.sh -s $cmus_lyrics_id
+	rm $FILE
+fi
+
+FILE=/tmp/cmus_status.lck
+if [ -f "$FILE" ]; then
+	rm $FILE
+fi
+
+if [ -f "/tmp/cmus_id" ]; then
+	cmus_notification_id=778
+	notify-send.sh -s $cmus_notification_id
+fi
+
+cmus-remote -s

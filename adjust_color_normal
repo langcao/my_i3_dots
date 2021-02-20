@@ -1,0 +1,11 @@
+#!/bin/bash
+
+notification_id=777
+
+SCREEN_COLOR=6500
+
+echo $SCREEN_COLOR > /tmp/screen_color.conf
+redshift -PO $SCREEN_COLOR
+
+notify-send.sh -r $notification_id -u low " $(cat /tmp/screen_color.conf)K"
+py3-cmd refresh redshift

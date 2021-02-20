@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+if [[ -f "$HOME/.config/i3/.artist" ]]; then
+	echo "Searching artist"
+    python $HOME/.i3/get_artist_chicago.py $(cat $HOME/.config/i3/.query_artist.txt)
+else
+	echo "Searching keyword" 
+	python $HOME/.i3/get_art_chicago.py $(cat $HOME/.config/i3/.query.txt)
+fi

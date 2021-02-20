@@ -1,0 +1,18 @@
+#!/bin/bash
+
+notification_id=777
+
+acpi_listen | while IFS= read -r line;
+do
+    if [ "$line" = "jack/headphone HEADPHONE plug" ]
+    then
+        notify-send.sh -r $notification_id -u low "$(pamixer --get-volume)% " --icon=/home/milklee/.i3/Icons/earbuds.png
+        pactl set-sink-mute 0 0
+        ~/.i3/beep
+    elif [ "$line" = "jack/headphone HEADPHONE unplug" ]
+    then
+        notify-send.sh -r $notification_id $id -u low '✗ ' --icon=/home/milklee/.i3/Icons/earbuds.png
+        pactl set-sink-mute 0 1
+        playerctl pause
+    fi
+done

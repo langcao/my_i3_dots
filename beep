@@ -1,0 +1,8 @@
+#!/bin/bash
+
+pkill -f ffplay
+# ffplay -loglevel quiet -nodisp -autoexit $HOME/.i3/share/sound/pop.wav
+ 
+if [ $(pacmd list-sink-inputs | grep -c 'state: RUNNING') -eq 0 ]; then
+	ffplay -loglevel quiet -nodisp -autoexit $HOME/.i3/share/sound/headset.mp3 # typewriter.mp3 # keys.wav # shaker-bell.wav # poklu-click.wav # wind-bell.mp3 # 
+fi

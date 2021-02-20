@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]; then
+	echo 'No input file.'	
+else
+	cat $HOME/.config/lyrics/"${1}.srt" | sed -e '$!N;/\n.*-->/!P;D' | sed '/^$/d' | sed 's/,[0-9]* -->.*//' | sed '1~2 s/^/[/g; 1~2 s/$/]/g' | sed -n '{N;s/\n//p}'> $HOME/.config/lyrics/"${1}.lrc"
+fi

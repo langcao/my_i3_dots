@@ -1,0 +1,7 @@
+#!/bin/bash
+
+case $(cat /tmp/fcitx_current) in
+	Æ) ~/.i3/switch_eng 1;;
+	中) ~/.i3/switch_eng 2;;
+	あ) ~/.i3/switch_eng;;
+esac

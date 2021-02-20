@@ -1,0 +1,11 @@
+#!/bin/bash
+
+FILE=/tmp/cmus_lyrics.lck
+if [ -f "$FILE" ]; then
+	pkill -f load_lrc.py
+	cmus_lyrics_id=779
+	dunstify -C $cmus_lyrics_id
+	rm $FILE
+else
+	python ~/.i3/load_lrc.py
+fi

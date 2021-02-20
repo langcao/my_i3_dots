@@ -1,0 +1,14 @@
+#!/bin/bash
+
+FILE=/tmp/cmus_status.lck
+if [ -f "$FILE" ]; then
+	rm $FILE
+	cmus_notification_id=778
+	notify-send.sh -s $cmus_notification_id
+else
+	touch $FILE
+	while [ -f "$FILE" ]; do
+		~/.i3/send_cmus
+		sleep 1
+	done
+fi

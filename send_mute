@@ -1,0 +1,19 @@
+#!/bin/bash
+
+notification_id=777
+
+if [ $# -eq 0 ]; then
+	pactl set-sink-mute 0 toggle
+else
+	pactl set-sink-mute 0 $1
+fi
+
+py3-cmd refresh volume_status
+~/.i3/beep
+
+if pamixer --get-mute
+then
+	notify-send.sh -r $notification_id -u low " ✗ "
+else
+	notify-send.sh -r $notification_id -u low " $(pamixer --get-volume)% "
+fi

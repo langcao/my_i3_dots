@@ -1,0 +1,967 @@
+general {
+        colors = true
+        #color_good = "#BBBBBB"
+        #color_bad = "#CC1616"
+        #color_degraded = "#55858E"
+        interval = 2
+        
+        output_format = "i3bar"
+        colors = true
+        color_good = "#00FF00"
+        color_degraded = "#FFFF00"
+        color_bad = "#FF0000"
+    }
+
+    order += "window"
+    order += "xsel"
+    order += "frame user"
+    order += "frame devices"
+    #order += "frame conky"
+    order += "frame wireless"
+    order += "frame google"
+    order += "frame misc"
+    order += "frame play"
+    order += "frame keyboards"
+
+    #order += "ipv6"
+    #order += "ethernet eth0"
+    #order += "run_watch DHCP"
+    #order += "run_watch VPN"
+
+    window {
+        format = '[\?max_width=45 {title}]'
+        color = "#CCFB5D"
+        on_click 1 = 'floating toggle'
+        on_click 3 = 'kill'
+        on_click 4 = 'focus left'
+        on_click 5 = 'focus right'
+    }
+    
+    xsel{
+        format = " {selection}"
+        color = "#35DDEC"
+        max_size = 170
+        # command = "xsel --clipboard --output"
+        on_click 1 = "exec xsel --clear"
+        on_click 3 = "exec --no-startup-id google-chrome-stable ~/.local/share/xsel/clipboard_log"
+        on_click 2 = 'exec --no-startup-id rm ~/.local/share/xsel/clipboard_log, exec --no-startup-id dunstify -u low " Clipboard history is cleared." ""'
+        log_file = "~/.local/share/xsel/clipboard_log"
+    }
+
+    frame user {
+        format = '{output}{button}'
+        format_separator = ''
+        format_button_open = '－'
+        format_button_closed = ''
+        open = False
+
+        whoami {
+            format = " {username}"
+            on_click 1 = "exec nautilus /home/fandy"
+            color = "#F0858E"
+        }
+
+        uname {
+            format = "@{node}  {system} {release} ({machine}) {version} "
+            color = "#F0858E"
+            on_click 1 = 'exec nautilus /home/fandy'
+            on_click 3 = 'restart'
+        }
+
+        arch_updates {
+            include_aur = True
+            hide_if_zero = False
+            format = "⚑ [\?if=total {pacman}/{aur} |Up to date ]" 
+            color = "#35DDEC"
+            on_click 1 = 'reload'
+            on_click 3 = 'exec lilyterm -E yay -Syu'
+        }
+    }
+
+
+    #run_watch DHCP {
+    #   pidfile = "/var/run/dhclient*.pid"
+    #}
+
+    #run_watch VPN {
+    #   pidfile = "/var/run/vpnc/pid"
+    #}
+
+    frame google {
+        format = '{output}{button}'
+        format_separator = ' '
+        format_button_open = '－'
+        format_button_closed = '✉'
+        open = False
+
+        taskwarrior {
+            format = '[ {task}]'
+            color = "#FCD17F"
+        }
+
+        google_calendar {
+            format_date = "%a %m/%d"
+            format_time = "%I:%M"
+            format = '{events}'
+            format_separator = ' '
+            format_event = '〥 [\?color=event {summary} ][\?if=is_toggled ({start_time}～{end_time}) |[\?if=location ({location}, {start_date})| ({start_date})] [{format_timer}]]'
+            format_time = '%I:%M %p' 
+            events_within_hours = 120
+            thresholds = {
+                'event': [(1, '#d0e6ff'), (2, '#bbdaff'), (3, '#99c7ff'),
+                    (4, '#86bcff'), (5, '#62a9ff'), (6, '#8c8cff'), (7, '#7979ff')],
+                'time': [(1, '#ffcece'), (2, '#ffbfbf'), (3, '#ff9f9f'),
+                    (4, '#ff7f7f'), (5, '#ff5f5f'), (6, '#ff3f3f'), (7, '#ff1f1f')]
+            }
+            #color = "#48CACD"
+        }
+
+        group{
+            cycle = 0
+            button_next = 1
+            button_prev = 2
+
+            imap {
+                cache_timeout = 60
+                #format = "✉ {user} ([\?if=unseen {unseen}|connecting...])"
+                format = " {user} [({unseen})]"
+                imap_server = 'mail.ecc.u-tokyo.ac.jp'
+                mailbox = 'INBOX'
+                name = 'cao@sat.t.u-tokyo.ac.jp'
+                password = 'miaomiao1982'
+                port = '993'
+                user = 'cao@sat.t.u-tokyo.ac.jp'
+                #new_mail_color = "#F87431#F62217"
+                color = "#FCDFFF"
+                on_click 3 = 'workspace , exec --no-startup-id google-chrome-stable --new-window https://ms.ecc.u-tokyo.ac.jp/'
+            }
+
+            imap {
+                cache_timeout = 60
+                #format = "✉ {user} ([\?if=unseen {unseen}|connecting...])"
+                format = " {user} [({unseen})]"
+                imap_server = 'mail.ecc.u-tokyo.ac.jp'
+                mailbox = 'INBOX'
+                name = 'li_xun@sat.t.u-tokyo.ac.jp'
+                password = 'miaomiao1985'
+                port = '993'
+                user = 'li_xun@sat.t.u-tokyo.ac.jp'
+                #new_mail_color = "#F87431#F62217"
+                color = "#FCDFFF"
+                on_click 3 = 'workspace , exec --no-startup-id google-chrome-stable --new-window https://ms.ecc.u-tokyo.ac.jp/'
+            }
+
+            imap {
+                cache_timeout = 60
+                #format = "✉ {user} ([\?if=unseen {unseen}|connecting...])"
+                format = " {user} [({unseen})]"
+                imap_server = 'imap.gmail.com'
+                mailbox = 'INBOX'
+                name = 'milkquick'
+                password = 'kkmiudnpygdsyflj'
+                port = '993'
+                user = 'milkquick@gmail.com'
+                hide_if_zero = False
+                #new_mail_color = "#F87431#F62217"
+                color = "#FCDFFF"
+                on_click 3 = 'workspace , exec --no-startup-id google-chrome-stable --new-window gmail.com'
+            }
+
+            imap {
+                cache_timeout = 60
+                #format = "✉ {user} ([\?if=unseen {unseen}|connecting...])"
+                format = " {user} [({unseen})]"
+                imap_server = 'mail.v.zzu.edu.cn'
+                mailbox = 'INBOX'
+                name = 'lcao@zzu.edu.cn'
+                password = 'miaomiao1982'
+                port = '993'
+                user = 'lcao@zzu.edu.cn'
+                #new_mail_color = "#F87431#F62217"
+                color = "#FCDFFF"
+                on_click 3 = 'workspace , exec --no-startup-id google-chrome-stable --new-window mail.v.zzu.edu.cn/'
+            }
+        }
+
+
+        dropboxd_status {
+            status_off = ""
+            format = "[\?if=status  {status} ]"
+            on_click 1 = 'workspace , exec nautilus /opt/workspace/Dropbox'
+            on_click 2 = 'exec --no-startup-id dropbox'
+            on_click 3 = 'exec --no-startup-id pkill dropbox'
+            color = "#666666"
+        }
+        
+        whatismyip {
+            format = "{icon} {ip}@{city}, {country} "
+            expected = {'country': 'Japan'}
+            icon_on = ''
+            icon_off = ' '
+            color = "#AC4517"
+        }
+    }
+
+    frame devices {
+        format = '{output}{button}'
+        format_separator = ' '
+        format_button_open = '－'
+        format_button_closed = 'ﺴ'
+        open = False
+
+        sysdata {
+            format = "[\?color=cpu  {cpu_temp}{temp_unit} ({cpu_usage}%) [\?color=#52D017  {load1}/{load5}/{load15}] \?color=mem   {mem_used}{mem_unit} ({mem_used_percent}%)] "
+            mem_unit = 'dynamic'
+            on_click 1 = 'workspace , exec lilyterm -s -E htop'
+            on_click 3 = 'exec --no-startup-id pkill htop'
+        }
+
+        group disks {
+            color = "#BBBBBB"
+            cycle = 0
+            format = "{output}"
+
+            diskdata home{
+                disk = 'sda4'
+                format_space = '\?min_length=4 {value:.1f}'
+                format = " \\home {used}GiB ({used_percent}%)"
+                on_click 1 = "exec nautilus ~/"
+                on_click 3 = 'exec --no-startup-id pkill nautilus' 
+            }
+
+            diskdata opt{
+                disk = 'sda5'
+                format_space = '\?min_length=4 {value:.1f}'
+                format = " \\opt {used}GiB ({used_percent}%)"
+                on_click 1 = "exec nautilus /opt/workspace"
+                on_click 3 = 'exec --no-startup-id pkill nautilus' 
+            }
+        }
+
+        diskdata {
+            #disk = 'sda7'
+            si_unit = True
+            format_rate = '[\?min_length=5 {value:.2f}]'
+            format = '  {read}{unit}↓ {write}{unit}↑ {total}{unit}↕'
+            color = "#52D017"
+            on_click 1 = 'workspace , exec lilyterm -s -E glances'
+            on_click 3 = 'exec --no-startup-id pkill glances' 
+        }
+
+        nvidia_smi {
+            format_gpu = ' [\?color=#ADCAAA  {gpu_name}] [\?color=temperature.gpu {temperature.gpu}°C] '
+            format_gpu += '[\?color=memory.used_percent {memory.used} MiB'
+            format_gpu += '[\?color=darkgray&show ] ({memory.used_percent:.2f}%)] '
+        }
+
+        speedtest {
+            color = "#ADCAAA"
+            format = " [\?soft ][\?if=elapsed "
+            format += "[\?color=elapsed_time {elapsed_time}s]|"
+            format += "[\?color=ping {ping}s] "
+            format += "[[  \?color=download {download}M/s][   \?color=upload {upload}M/s]]] "
+        }
+    }
+
+    frame conky {
+    format = '{output}{button}'
+    format_separator = ' '
+    format_button_open = ' －'
+    format_button_closed = '❀'
+    open = False
+
+        conky proc {
+            format = 'Processes [\?color=cyan {processes}/{running_processes}]'
+        }
+        conky memory {
+            format = 'Memory [\?color=lightskyblue {mem}/{memmax}] '
+            format += '[\?color=memperc {memperc}% \[{membar}\]]'
+            thresholds = [
+                (0, 'darkgray'), (0.001, 'good'), (50, 'degraded'),
+                (75, 'orange'), (85, 'bad')
+            ]
+        }
+        conky diskio {
+            format = 'Disk IO [\?color=darkgray&show sda] '
+            format += '[\?color=lightskyblue '
+            format += '{diskio_read sda}/{diskio_write sda} '
+            format += '({diskio sda})]'
+
+            # format += ' '
+            # format += '[\?color=darkgray&show sdb] '
+            # format += '[\?color=lightskyblue '
+            # format += '{diskio_read sdb}/{diskio_write sdb} '
+            # format += '({diskio sdb})]'
+            config = {'short_units': True}
+        }
+        conky top_mem {
+            format = 'Top Mem [\?color=darkgray '
+            format += '{top_mem name 1} '
+            format += '[\?color=yellowgreen {top_mem mem_res 1}] '
+            format += '[\?color=lightgreen {top_mem mem 1}%] '
+
+            format += '{top_mem name 2} '
+            format += '[\?color=yellowgreen {top_mem mem_res 2}] '
+            format += '[\?color=lightgreen {top_mem mem 2}%] '
+
+            format += '{top_mem name 3} '
+            format += '[\?color=yellowgreen {top_mem mem_res 3}] '
+            format += '[\?color=lightgreen {top_mem mem 3}%]]'
+            config = {'short_units': True}
+        }
+        conky top_cpu {
+            format = 'Top [\?color=darkgray '
+            format += '{top name 1} '
+            format += '[\?color=deepskyblue {top mem_res 1}] '
+            format += '[\?color=lightskyblue {top cpu 1}%] '
+
+            format += '{top name 2} '
+            format += '[\?color=deepskyblue {top mem_res 2}] '
+            format += '[\?color=lightskyblue {top cpu 2}%] '
+
+            format += '{top name 3} '
+            format += '[\?color=deepskyblue {top mem_res 3}] '
+            format += '[\?color=lightskyblue {top cpu 3}%]]'
+            config = {'short_units': True}
+        }
+    }
+
+    frame wireless {
+        format = '{output}{button}'
+        format_separator = ' '
+        format_button_open = '－'
+        format_button_closed = '〒'
+        open = False
+
+        net_iplist {
+            format = ' 〒{format_iface}'
+            format_iface = '[\?color=good \?if=ip4 {ip4} (IPv4)|no IPv4] [\?color=degraded \?if=ip6 {ip6} (IPv6)|no IPv6]'
+            on_click 1 = 'exec --no-startup-id nm-applet'
+            on_click 3 = 'exec --no-startup-id pkill nm-applet'
+        }
+
+        wifi {
+            format ='  {ssid}: {signal_dbm} ({signal_percent}) '
+            on_click 1 = 'exec --no-startup-id nm-applet'
+            on_click 3 = 'exec --no-startup-id pkill nm-applet'
+        }
+
+        online_status {
+            icon_on = ''
+            icon_off = ''
+        }
+        net_rate {
+            format_rate = '[\?min_length=4 {value:.2f}]'
+            format = '{interface}: {down}↓{up}↑{total}↕'
+            color = "#52D017"
+            on_click 1 = 'workspace , exec lilyterm -s -E htop'
+            on_click 3 = 'workspace , exec lilyterm -s -E glances'
+        }
+
+
+        bluetooth {
+            format = 'ⓑ {format_device} '
+            format_device = '[\?if=name [\?color=good {name}] [\?color=degraded ({mac})]|No Bluetooth Device]'
+            format_separator = ' \| '
+            format_none = ' '
+            on_click 1 = 'exec --no-startup-id blueman-applet'
+            on_click 3 = 'exec --no-startup-id pkill blueman-applet'
+        }
+    }
+
+
+    frame misc {
+        format = '{output}{button}'
+        format_separator = '  '
+        format_button_open = '－'
+        format_button_closed = '☂'
+        open = False
+
+        clock {
+            format = ["{Asia/Tokyo}", "{Europe/London}", "{America/New_York}", "{Asia/Shanghai}"]
+            button_change_format = 1
+            format_time = " %X   %x %a ✧{name}✧"
+            #format_time = " {icon} {name} » %X » %x %a"
+            color = "#A27DEC"
+        }
+
+        group weather {
+            cycle = 10
+            format = "{output}"
+            color = "#D27DEC"
+
+            frame temp_air {
+                format_separator = ''
+
+                #weather_yahoo temperature {
+                #    cache_timeout = 7200
+                #    woeid = 1118379
+                #    location_city = Shibuya
+                #    format = '[{format_today}]'
+                #    format_today = "{icon} {location_city} » {text} {temp}°{unit}"
+                #    request_timeout = 10
+                #}
+
+                weather_owm {
+                    api_key = 'da68ce7fbe3afa8b07f51cd3d22de875'
+                    city = 'Tokyo'
+                    format = '{icon} {temperature} » {sunrise} » {sunset} » {clouds} » {humidity} » {wind} » {pressure} » {forecast}'
+                    format_temperature = '[\?color=all {current}°{unit}]'
+                    format_clouds = ' {coverage}%'
+                    format_wind = '[\?if=speed  {speed:.0f}{unit}, {degree}°]'
+                    format_pressure = ' {pressure}hPa'
+                    format_humidity = ' {humidity}%'
+                    unit_temperature = 'C'
+                    unit_wind = 'kmh'
+                    forecast_text_separator = ' » '
+                    forecast_days = 7
+                    format_forecast = '{icon} {temperature}'
+                    offset_gmt = '+9:00'
+                    forecast_include_today = True
+                    icon_sunrise = '' 
+                    icon_sunset = '' 
+                    icon_sun = ''
+                    icon_cloud = ''
+                    icon_rain = ''
+                    icon_snow = ''
+                    icon_thunderstorm = 'S'
+                }
+
+                air_quality {
+                    auth_token = '688699b79eec0b4f4b13d4dff72a4eefbe86c3ac'
+                    location = '@5573'
+                    format = ' »  {aqi} ({category})'
+                    format_datetime = {'time': '%-I%P'}
+                }
+            }
+
+            #weather_yahoo atmosphere {
+            #    cache_timeout = 7200
+            #    woeid = 1118379
+            #    location_city = Shibuya
+            #    format = '[{format_today} ]» Humidity {atmosphere_humidity}% » Visibility {atmosphere_visibility}{units_distance}'
+            #    format_today = "{icon} {location_city}"
+            #    request_timeout = 10
+            #}
+            
+            #weather_yahoo wind {
+            #    cache_timeout = 7200
+            #    woeid = 1118379
+            #    location_city = Shibuya
+            #    format = '[{format_today} ]» Wind Speed {wind_speed}{units_speed} » Direction {wind_direction}° » Chill {wind_chill}°{units_temperature}'
+            #    format_today = "{icon} {location_city}"
+            #    request_timeout = 10
+            #}
+            
+            #weather_yahoo low-high {
+            #    cache_timeout = 7200
+            #    woeid = 1118379
+            #    location_city = Shibuya
+            #    format = '[{format_today} ][{format_forecast}]'
+            #    format_today = "{icon} {location_city}"
+            #    format_forecast = "» {low}～{high}°{unit}"
+            #    forecast_days = 3
+            #    forecast_today = True
+            #    request_timeout = 10
+            #}
+
+            #weather_yahoo week-forecast {
+            #    cache_timeout = 7200
+            #    woeid = 1118379
+            #    location_city = Shibuya
+            #    format = '[{format_today} ][{format_forecast}] '
+            #    format_today = "{icon} {location_city}"
+            #    format_forecast = ' » {icon}'
+            #    format_separator = ''
+            #    forecast_days = 6
+            #    request_timeout = 10
+            #}
+        }
+
+        group fortune { 
+            format_button_open = '☈'
+            format_button_closed = '☈ ideagen '
+            format = '{button}{output} '
+            button_next = 5 
+            button_prev = 4
+            color = "#D03281"
+            open = False
+
+            getjson {
+                url = 'https://api.icndb.com/jokes/random'
+                format = ' {value-joke}'
+                on_click 1 = 'reload'
+            }
+            
+            #getjson {
+            #    url = 'https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=2c0e2e4a1d264a83b06adec138adef9c'
+            #    format = ' ({articles-0-author}) {articles-0-title} - {articles-0-description}'
+            #    on_click 1 = 'reload'
+            #}
+
+            #getjson {
+            #    url = 'https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=2c0e2e4a1d264a83b06adec138adef9c'
+            #    format = ' ({articles-0-author}) {articles-0-title} - {articles-0-description}'
+            #    on_click 1 = 'reload'
+            #}
+            
+            external_script deutsch1 {
+                format = " {output}"
+                #cache_timeout = 2
+                script_path = "fortune Vokabular"
+                strip_output = True
+                color = "#23AD168"
+            }
+            
+            external_script deutsch2 {
+                format = " {output}"
+                #cache_timeout = 2
+                script_path = "fortune German"
+                strip_output = True
+                color = "#23AD168"
+            }
+
+            external_script gre {
+                format = " {output}"
+                #cache_timeout = 2
+                script_path = "fortune gre subset"
+                strip_output = True
+                color = "#23AD168"
+            }
+
+            external_script chengyu {
+                format = " {output}"
+                #cache_timeout = 5
+                script_path = "fortune chengyu"
+                strip_output = True
+                color = "#B02381"
+            }
+
+            external_script dict_ch-jp {
+                format = " {output}"
+                #cache_timeout = 5
+                script_path = "fortune dict_ch-jp | tr  -s '\t \n' ' '"
+                strip_output = True
+                color = "#B02381"
+            }
+
+            external_script dict_jp-ch {
+                format = " {output}"
+                #cache_timeout = 5
+                script_path = "fortune dict_jp-ch | tr  -s '\t \n' ' '"
+                strip_output = True
+                color = "#B02381"
+            }
+
+            external_script jp_gy {
+                format = " {output}"
+                #cache_timeout = 5
+                script_path = "fortune jp_gy | tr  -s '\t \n' ' '"
+                strip_output = True
+                color = "#CF3281"
+            }
+
+            external_script jp_sy {
+                format = " {output}"
+                #cache_timeout = 5
+                script_path = "fortune jp_sy | tr  -s '\t \n' ' '"
+                strip_output = True
+                color = "#CF3281"
+            }
+
+            external_script chinese_diet {
+                format = " {output}"
+                #cache_timeout = 5
+                script_path = "fortune chinese diet | tr  -s '\t \n' ' '"
+                strip_output = True
+                color = "#CF3281"
+            }
+
+            external_script tang_song {
+                format = " {output}"
+                #cache_timeout = 5
+                script_path = "fortune tang300 song100 | tr  -s '\t \n' ' '"
+                strip_output = True
+                color = "#CF3281"
+            }
+
+            external_script en1 {
+                format = " {output}"
+                #cache_timeout = 5
+                script_path = "fortune -e fortunes wisdom love art paradoxum | tr  -s '\t \n' ' '"
+                strip_output = True
+                color = "#B02381"
+            }
+
+            external_script en2 {
+                format = " {output}"
+                #cache_timeout = 5
+                script_path = "fortune -e definitions science education issa-haiku | tr  -s '\t \n' ' '"
+                strip_output = True
+                color = "#B02381"
+            }
+
+            external_script bible {
+                format = " {output}"
+                #cache_timeout = 5
+                script_path = "fortune bible"
+                strip_output = True
+                color = "#B02381"
+            }
+
+            external_script bible_en {
+                format = " {output}"
+                #cache_timeout = 5
+                script_path = "fortune bible_en"
+                strip_output = True
+                color = "#B02381"
+            }
+
+            external_script quran {
+                format = " {output}"
+                #cache_timeout = 5
+                script_path = "fortune quran"
+                strip_output = True
+                color = "#B02381"
+            }
+        }
+    }
+
+    frame play {
+        format = '{output}{button}'
+        format_separator = ' '
+        format_button_open = '－'
+        format_button_closed = '♫'
+        open = False
+
+        #spotify {
+        #   button_next = 4
+        #  button_play_pause = 1
+        #   button_previous = 5
+        #   format = " ♬ Spotify [{time} ][{artist} ]{title} "
+        #  format_down = ""
+        #}
+
+        conky proc {
+            format = '[\?color=cyan  {processes}/{running_processes} processes]'
+        }
+
+        conky memory {
+            format = ' [\?color=lightskyblue  {mem}/{memmax}] '
+            format += '[\?color=memperc {memperc}% \[{membar}\]]'
+            thresholds = [
+                (0, 'darkgray'), (0.001, 'good'), (50, 'degraded'),
+                (75, 'orange'), (85, 'bad')
+            ]
+        }
+
+        conky top_mem {
+            format = '[\?color=darkgray  '
+            format += '{top_mem name 1} '
+            format += '[\?color=yellowgreen {top_mem mem_res 1}] '
+            format += '[\?color=lightgreen {top_mem mem 1}%] '
+
+            format += '{top_mem name 2} '
+            format += '[\?color=yellowgreen {top_mem mem_res 2}] '
+            format += '[\?color=lightgreen {top_mem mem 2}%] '
+
+            format += '{top_mem name 3} '
+            format += '[\?color=yellowgreen {top_mem mem_res 3}] '
+            format += '[\?color=lightgreen {top_mem mem 3}%]]'
+            config = {'short_units': True}
+        }
+
+        conky top_cpu {
+            format = ' [\?color=darkgray  '
+            format += '{top name 1} '
+            format += '[\?color=deepskyblue {top mem_res 1}] '
+            format += '[\?color=lightskyblue {top cpu 1}%] '
+
+            format += '{top name 2} '
+            format += '[\?color=deepskyblue {top mem_res 2}] '
+            format += '[\?color=lightskyblue {top cpu 2}%] '
+
+            format += '{top name 3} '
+            format += '[\?color=deepskyblue {top mem_res 3}] '
+            format += '[\?color=lightskyblue {top cpu 3}%]]'
+            config = {'short_units': True}
+        }
+
+        backlight {
+            button_down = 4
+            button_up = 5
+            brightness_initial = 80
+            brightness_minimal = 0
+            brightness_delta = 7
+            format = ' ☼ {level}% '
+            color = "#E77D0C"
+            on_click 3 = 'exec --no-startup-id redshift -PO 6500'
+            on_click 1 = 'exec --no-startup-id redshift -PO 2700'
+            on_click 2 = 'exec --no-startup-id redshift -O 5000'
+            on_click 4 = 'exec --no-startup-id light -A 5'
+            on_click 5 = 'exec --no-startup-id light -U 5'
+        }
+
+        hueshift {
+            format = '\?color=color_temperature  {color_temperature}K'
+            delta = 250
+            maximum = 4000
+        }
+
+        volume_status {
+            button_down = 4
+            button_up = 5
+            format = '[\?if=is_input |♪]{percentage}%'
+            format_muted = '[\?if=is_input |♪]✗'
+            max_volume = 200
+            volume_delta = 5
+            on_click 3 = 'exec --no-startup-id pavucontrol'
+            on_click 2 = 'exec --no-startup-id pkill pavucontrol'
+        }
+
+        mpris {
+            icon_play = ''
+            icon_pause = ''
+            icon_previous =''
+            icon_next =''
+            #icon_pause = '■'
+            #icon_next = '►►'
+            #icon_previous = '◄◄'
+            #format = " [\?if=player=Cantata ♬| ] [ {artist}][{album}] [{time}][/{length}][ {title}] {previous}  {toggle}  {next}"
+            format = "[  {previous} ][\?if=player=Cantata ♬|][ {next} ][{player} ][\?color=degraded {artist}][ {album} ][{time}][/{length}][ {title}]"
+            format_none = ''
+            player_priority = "[mpd, cantata, vlc, *]"
+            on_click 3 = 'workspace ♬'
+            #on_click 3 = 'workspace '
+            button_next = 5
+            button_previous = 4
+        }
+
+        #cmus {
+        #    button_next = 5
+        #    button_next = 4
+        #    cache_timeout = 0
+        #    format = "[\?if=is_playing  ][\?if=status=paused ][\?if=status=stopped ][ {bitrate}bit/sec][ {positiontime}/{durationtime}][ {album}][ {artist} -][ {tracknumber}.][ {title}][\?if=continue  ][\?if=repeat ,][\?if=shuffle ,]"
+        #    on_click 2 = 'exec --no-startup-id pkill cmus'
+        #}
+
+        uptime {
+            format = '❦ [\?if=days {days}d][\?if=hours {hours}°][\?if=minutes {minutes}\']{seconds}\" '
+            color = "#24F10C"
+            on_click 3 = "exec scrot '/home/fandy/Desktop/Screenshot_%y%m%d_%H%M%S_$wx$h.jpg', exec dunstify 'Screenshot saved to desktop'"
+            on_click 2 = "exec rm /home/fandy/Desktop/Screenshot*.jpg, exec dunstify 'Screenshots removed.'"
+            on_click 1 = "exec dunstify 'Screenshots:' \"$(ls $HOME/Desktop/Screenshot* | sed 's/.*Screenshot.//g')\""
+
+        }
+    }
+
+    frame keyboards {
+        format = '{output}{button}'
+        format_separator = ''
+        format_button_open = '－ '
+        format_button_closed = ' '
+        #color = "#AE7BFF"
+        open = False
+
+        frame delta-mode {
+            format = '{output}{button}'
+            format_separator = ''
+            format_button_open = ''
+            format_button_closed = '  '
+            color = "#FF4517"
+            open = True
+
+            getjson {
+                url = 'http://ip-api.com/json'
+                format = ' {city}/{regionName}   N:{lat}° E:{lon}°'
+            }
+
+            external_script mouse{
+                format = "  {output} "
+                cache_timeout = 1
+                script_path = "xdotool getmouselocation | sed 's/ screen.*//g; s/.*/(&)/g'"
+                strip_output = True
+                color = "#3BBFF"
+                on_click 1 = "exec xdotool key Super+m"
+                on_click 3 = "exec xdotool key Escape"
+            }
+
+            external_script word{
+                format = "[ {output} ]"
+                cache_timeout = 2
+                script_path = "grep '^<' ~/.cache/jukuu/logs.txt | tail -1 | sed 's/....-..-.*//g; s/[<|>]//g; s/-.*-/ & /g'" 
+                strip_output = True
+                color = "#F9F6F"
+                on_click 1 = "exec --no-startup-id xclip -i /dev/null, exec --no-startup-id python ~/.i3/get_jukuu.py '' ''"
+                on_click 2 = "exec --no-startup-id xclip -i /dev/null, exec --no-startup-id python ~/.i3/get_jukuu.py "
+                on_click 3 = "exec --no-startup-id xclip -i /dev/null, exec --no-startup-id python ~/.i3/get_jukuu.py '' '' critical"
+            }
+
+            static_string worddel{
+                format = "  "
+                cache_timeout = -1
+                color = "#C4B11"
+                on_click 1 = "exec --no-startup-id python ~/.i3/get_jukuu.py "
+                on_click 3 = "exec --no-startup-id python ~/.i3/get_jukuu.py "
+                on_click 2 = "exec --no-startup-id python ~/.i3/get_jukuu.py "                
+            }
+
+            static_string wordtrash{
+                format = " ⚡ "
+                cache_timeout = -1
+                color = "#C4B11"
+                on_click 1 = "exec --no-startup-id python ~/.i3/get_jukuu.py "
+                on_click 3 = 'exec --no-startup-id rm ~/.cache/jukuu/dels.txt, exec --no-startup-id rm ~/.cache/jukuu/lck/*, exec --no-startup-id dunstify -u low " Trash wordlist is cleared." ""'
+                on_click 2 = "exec --no-startup-id python ~/.i3/get_jukuu.py  "
+            }
+
+            static_string wordup{
+                format = "  "
+                on_click 1 = "exec --no-startup-id xclip -i /dev/null, exec --no-startup-id python ~/.i3/get_jukuu.py  ''"
+                on_click 3 = "exec --no-startup-id xclip -i /dev/null, exec --no-startup-id python ~/.i3/get_jukuu.py  '' critical"
+                on_click 2 = "exec --no-startup-id pkill dunst"
+            }
+
+            static_string pageup{
+                format = "  "
+                on_click 1 = "exec --no-startup-id xclip -i /dev/null, exec --no-startup-id python ~/.i3/get_jukuu.py '' PageUp"
+                on_click 3 = "exec --no-startup-id xclip -i /dev/null, exec --no-startup-id python ~/.i3/get_jukuu.py '' PageUp critical"
+                on_click 2 = "exec --no-startup-id pkill dunst"
+            }
+
+            static_string wordenter{
+                format = "  "
+                on_click 1 = "exec --no-startup-id python ~/.i3/get_jukuu.py "
+                on_click 3 = "exec --no-startup-id python ~/.i3/get_jukuu.py "
+                on_click 2 = 'exec --no-startup-id dunstify -u critical "$(cat ~/.cache/jukuu/output.txt)"'
+            }
+
+            static_string pagedown{
+                format = "  "
+                on_click 1 = "exec --no-startup-id xclip -i /dev/null, exec --no-startup-id xclip -i /dev/null, exec --no-startup-id python ~/.i3/get_jukuu.py '' PageDown"
+                on_click 3 = "exec --no-startup-id xclip -i /dev/null, exec --no-startup-id python ~/.i3/get_jukuu.py '' PageDown critical"
+                on_click 2 = "exec --no-startup-id pkill dunst"
+            }
+                
+            static_string worddown{
+                format = "   "
+                on_click 1 = "exec --no-startup-id xclip -i /dev/null, exec --no-startup-id python ~/.i3/get_jukuu.py  ''"
+                on_click 3 = "exec --no-startup-id xclip -i /dev/null, exec --no-startup-id python ~/.i3/get_jukuu.py  '' critical"
+                on_click 2 = "exec --no-startup-id pkill dunst"
+            }
+        }
+
+        #group clocks {
+        #    button_next = 1
+        #    clock {
+        #        blocks = ""
+        #        format_time = '{icon} %X '
+        #        on_click 3 = "exec --no-startup-id pkill python"
+        #    }   
+        #    clock {
+        #        blocks = ""
+        #        format_time = '{icon} %x %a '
+        #        on_click 3 = "exec --no-startup-id pkill python"
+        #    }
+        #}
+
+        clock {
+            format_time = ' %x %a   %X  '
+            on_click 1 = 'exec --no-startup-id pkill dunst, exec --no-startup-id dunstify -u normal "$(cal)" "$(date --rfc-3339=seconds)"'
+            on_click 3 = 'exec --no-startup-id pkill dunst, exec --no-startup-id dunstify -u normal "$(calcurse -r7 --format-apt="%S - %E\n%m\n")"'
+            on_click 2 = 'exec --no-startup-id exec lilyterm -E calcurse'
+        }
+
+        #battery all {
+        #    format = " %status%percentage %remaining "
+        #    status_chr = "⚡"
+        #    status_bat = " "
+        #    status_unk = " "
+        #    status_full = ""
+        #    
+        #    low_threshold = 11
+        #    threshold_type = percentage
+        #    integer_battery_capacity = true
+        #    last_full_capacity = true
+        #    hide_seconds = true
+        #}
+
+
+        battery_level {
+            cache_timeout = 20
+            format = "{icon} {percent}% [\?if=time_remaining ({time_remaining}) ]"
+            #blocks = "⚡"
+            #blocks = ""
+            blocks = ""
+            hide_seconds = true
+            #measurement_mode = 'acpi'
+            charging_character = ""
+            on_click 1 = 'exec --no-startup-id pkill dunst, exec --no-startup-id dunstify "Runing python processes:" "$(ps -ef | grep python | grep -v i3 | grep -v grep | grep -v defunct | sed "s/.*:..:.. //g")"'
+            on_click 3 = 'exec --no-startup-id dunstify "Python teminated be $USER", exec --no-startup-id pkill python'
+        }
+
+        xrandr {
+            format = "  {output} "
+            #hide_if_single_combination = True
+            on_click 2 = 'exec --no-startup-id dunstify "Working monitors:" "$(xrandr | grep connected | grep -v dis)"'
+        }
+
+        xrandr_rotate {
+            format = "  {icon} {screen}-"
+            vertical_icon = '↕'
+            horizontal_icon = '↔'
+            hide_if_disconnected = True
+        }
+
+        xscreensaver {
+            icon_off = "xscr "
+            icon_on = "xscr "
+        }
+
+        scratchpad {
+            hide_when_none = True
+            #color = "#E17D0C"
+            format = '[\?not_zero \?color=scratchpad √{scratchpad}™]'
+            on_click 1 = "scratchpad show"
+        }
+
+        #systemd_suspend_inhibitor {
+        # 	format = '[\?color=state \?if=state مَخْرَج|شَخْصاً]'
+        #}
+
+        keyboard_locks {
+            format = " \?color=good [\?if=caps_lock CAPS ][\?if=num_lock NUM ]⌨ "
+            on_click 1 = 'exec --no-startup-id feh --randomize --bg-fill ~/Pictures/Wallpapers'
+            on_click 3 = 'exec --no-startup-id feh --bg-fill ~/.config/i3/.wallpaper.jpg'
+            on_click 4 = 'exec --no-startup-id feh --randomize --bg-fill ~/Pictures/Wallpapers/Animation'
+            on_click 5 = 'exec --no-startup-id feh --randomize --bg-fill ~/Pictures/Wallpapers/Animation'
+        }
+
+        group xmodmap {
+            button_prev = 1
+            button_next = 3
+            static_string on {
+                format = "xmod"
+                on_click 1 = 'exec xmodmap ~/.Xmodmap'
+                on_click 3 = 'exec xmodmap ~/.Xmodmap'
+            }
+
+            static_string off {
+                format = "\?color=degraded xmod"
+                on_click 1 = 'exec xmodmap ~/.Xmodmap'
+                on_click 3 = 'exec xmodmap ~/.Xmodmap'
+            }
+        }
+
+        keyboard_layout on {
+            format = "-{layout} "
+            layouts = ['jp', 'dvorak', 'us']
+            button_next = 1
+            button_prev = 3
+        }
+
+        do_not_disturb {
+            format = '[\?color=state [\?if=state on|off]] '
+            on_click 3 = 'exec --no-startup-id pkill blueman-applet, exec --no-startup-id pkill nm-applet, restart'
+        }   
+    }

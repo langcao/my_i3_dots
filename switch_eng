@@ -1,0 +1,18 @@
+#!/bin/bash
+
+notification_id=777
+
+if [ ! -f "/tmp/fcitx_hotkey_disable" ]; then
+	ind=$(($1+1))
+	fcitx_set=$(cat $HOME/.config/fcitx/fcitx_methods | sed -n ''${ind}'p')
+	fcitx_show=$(fcitx-imlist -s $fcitx_set | head -n 1 | sed 's/[^(]*(//; s/)[^)]*//')
+	case $ind in
+		1) echo 'Æ' > /tmp/fcitx_current;;
+		2) echo '中' > /tmp/fcitx_current;;
+		3) echo 'あ' > /tmp/fcitx_current;;
+	esac
+	py3-cmd refresh external_script fcitx, keyboard_layout on
+	notify-send.sh -r $notification_id -u low " ($(cat /tmp/fcitx_current)) ${fcitx_show}"
+else
+	notify-send.sh -r $notification_id -u low " Command (⌘) + Eng to enable IM swtiches." 
+fi

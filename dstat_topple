@@ -1,0 +1,11 @@
+#!/bin/bash
+
+FILE=/tmp/dstat.lck
+if [ -f "$FILE" ]; then
+	pkill -f my_dstat.py
+	id=$(cat /tmp/dstat_id)
+	notify-send.sh -s $id
+	rm $FILE
+else
+	python ~/.i3/my_dstat.py
+fi

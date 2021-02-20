@@ -1,0 +1,17 @@
+#!/bin/bash
+
+notification_id=1777
+
+WORD=''
+while true;
+do
+	if [[ $WORD != $(xclip -o | head -n1 | cut -d" " -f 1) ]]; then
+		WORD=$(xclip -o | head -n1 | cut -d" " -f 1)
+		echo $WORD
+		if [ -n $WORD ]; then
+			notify-send.sh -r $notification_id -u low "$(ydcv $WORD)"
+		fi
+		sleep 0.2
+	fi
+	sleep 0.2
+done

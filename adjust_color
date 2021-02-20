@@ -1,0 +1,7 @@
+#!/bin/bash
+
+notification_id=777
+
+echo $SCREEN_COLOR
+redshift -PO $SCREEN_COLOR
+notify-send.sh -r $notification_id -u low " $(echo $SCREEN_COLOR)K"
