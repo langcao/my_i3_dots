@@ -1,0 +1,9 @@
+remove lock = Caps_Lock
+
+keycode 66 = Control_L
+keycode 101 = Super_R
+keycode 49 = Escape
+keycode 105 = Caps_Lock
+keycode 104 = Return
+
+add control = Control_L
