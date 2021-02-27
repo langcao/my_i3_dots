@@ -15,8 +15,8 @@ do
 			POS=$(echo $TMP | sed -E "s/ screen:0 window:[^ ]*|x:|y://g")
 			xdotool click 1
 			xdotool click 1
-			if [[ $WORD != $(xclip -o | head -n1 | cut -d" " -f 1) ]]; then
-				WORD=$(xclip -o | head -n1 | cut -d" " -f 1)
+			if [[ $WORD != $(xclip -o | head -n1 | cut -d" " -f 1 | sed 's/[[:punct:]]//g') ]]; then
+				WORD=$(xclip -o | head -n1 | cut -d" " -f 1 | sed 's/[[:punct:]]//g')
 				echo $WORD
 				if [ -n $WORD ]; then
 					notify-send.sh -r $notification_id -u low "$(ydcv $WORD)"

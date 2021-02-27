@@ -5,8 +5,8 @@ notification_id=1777
 WORD=''
 while true;
 do
-	if [[ $WORD != $(xclip -o | head -n1 | cut -d" " -f 1) ]]; then
-		WORD=$(xclip -o | head -n1 | cut -d" " -f 1)
+	if [[ $WORD != $(xclip -o | head -n1 | cut -d" " -f 1 | sed 's/[[:punct:]]//g') ]]; then
+		WORD=$(xclip -o | head -n1 | cut -d" " -f 1 | sed 's/[[:punct:]]//g')
 		echo $WORD
 		if [ -n $WORD ]; then
 			notify-send.sh -r $notification_id -u low "$(ydcv $WORD)"
