@@ -397,7 +397,47 @@ for_window [class="Yad"] floating enable border pixel 0
 for_window [workspace=$ws_z] floating enable
 for_window [workspace=$ws_wechat] floating enable
 
-set $mode_ydcv_on ydcv   Click   Enter   +Enter   Prev   Next   PageUp   PageDown   Grab-On   Space   Esc 
+set $mode_mail Email   Click   Enter   +Enter   Prev   Next   PageUp   PageDown   Grab-On   Space   Esc
+bindsym $mod+Shift+m exec --no-startup-id python ~/.i3/python ~/.i3/save_mail.py, mode "$mode_mail"
+mode "$mode_mail" {
+	bindsym 1 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 0
+    bindsym 2 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 1
+    bindsym 3 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 2
+    bindsym 4 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 3
+    bindsym 5 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 4
+    bindsym 6 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 5
+    bindsym 7 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 6
+    bindsym 8 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 7
+    bindsym 9 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 8
+    bindsym 0 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 9
+
+    bindsym $mod+1 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 0
+    bindsym $mod+2 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 1
+    bindsym $mod+3 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 2
+    bindsym $mod+4 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 3
+    bindsym $mod+5 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 4
+    bindsym $mod+6 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 5
+    bindsym $mod+7 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 6
+    bindsym $mod+8 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 7
+    bindsym $mod+9 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 8
+    bindsym $mod+0 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 9
+
+    bindsym $mod+Shift+1 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 0
+    bindsym $mod+Shift+2 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 1
+    bindsym $mod+Shift+3 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 2
+    bindsym $mod+Shift+4 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 3
+    bindsym $mod+Shift+5 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 4
+    bindsym $mod+Shift+6 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 5
+    bindsym $mod+Shift+7 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 6
+    bindsym $mod+Shift+8 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 7
+    bindsym $mod+Shift+9 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 8
+    bindsym $mod+Shift+0 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 9
+
+    bindsym space exec --no-startup-id pkill send_mail, exec --no-startup-id pkill dunst
+    bindsym Escape exec --no-startup-id pkill send_mail, exec --no-startup-id pkill dunst, mode "default"
+}
+
+set $mode_ydcv_on ydcv   Click   Enter   +Enter   Prev   Next   PageUp   PageDown   Grab-On   Space   Esc
 bindsym $mod+Shift+s exec --no-startup-id ~/.i3/send_ydcv_screen, exec --no-startup-id dunstify -u normal "  Screen grab words...", mode "$mode_ydcv_on"
 mode "$mode_ydcv_on" {
     bindsym Return exec --no-startup-id dunstify -u critical "$(ydcv $(xclip -o))"
@@ -952,7 +992,7 @@ mode "$mode_launcher" {
     #bindsym $mod+i exec --no-startup-id feh --bg-fill ~/.config/i3/.wallpaper.jpg, mode "default"
     #bindsym $mod+j exec --no-startup-id systemd-run --on-calendar="*-*-* *:*/5:00" --user -- \ /usr/bin/feh --no-fehbg --bg-scale --randomize -r ~/Pictures/Wallpapers, mode "default"
     bindsym $mod+j workspace $ws_joy, exec --no-startup-id steam, mode "default"
-    bindsym $mod+h workspace $ws_movie,  exec --no-startup-id google-chrome-stable --incognito --new-window https://jp.pornhub.com/, mode "default"
+    bindsym $mod+h workspace $ws_movie,  exec --no-startup-id google-chrome-stable --incognito --new-window https://www.xvideos.com/, mode "default"
     bindsym $mod+l workspace $ws_z, exec --no-startup-id lazarus --class floatingApp, mode "default"
     bindsym $mod+m workspace $ws_n, exec --no-startup-id lilyterm -E matlab, mode "default"
     bindsym $mod+n exec --no-startup-id nautilus, mode "default"
@@ -1359,3 +1399,4 @@ exec --no-startup-id dunstify -u normal -t 20000 "$(calcurse -r7 --format-apt="(
 exec --no-startup-id dunstify -u normal -t 20000 "$(date --rfc-3339=s)"
 exec --no-startup-id dunstify -u normal -t 20000 "$(fortune wisdom)"
 exec --no-startup-id dunstify -u normal -t 20000 'Hello, world!' 'welcome, '$USER'~'
+exec --no-startup-id python ~/.i3/save_mail.py

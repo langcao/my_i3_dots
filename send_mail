@@ -25,37 +25,42 @@ esac
 HEADER="$EMAIL_PATH$ADDR$HEAD$ORDER"
 CONTENT="$EMAIL_PATH$ADDR$TEXT$ORDER"
 
-BACK="default"
-MAXNUM=5
-HEAD_ID=23100
-TEXT_ID=23200
+if [ -f "$HEADER" ]; then
+	BACK="default"
+	HEAD_ID=23100
+	TEXT_ID=23200
 
-while [ $BACK != "2" ];
-do
-	case "$BACK" in
-	"default")
-		ACTION=$(dunstify -r $HEAD_ID --action="default,Reply" -u critical "$(cat $HEADER)")
-		;;
-	"2")
-	    break
-	    ;;
-	esac
-	# notify-send.sh -r $TEXT_ID -u low "$(cat $CONTENT)"
+	while [ $BACK != "2" ];
+	do
+		case "$BACK" in
+		"default")
+			if [ -f "$HEADER" ]; then
+				ACTION=$(dunstify -r $HEAD_ID --action="default,Reply" -u critical "$(cat $HEADER)")
+			fi
+			;;
+		"2")
+		    break
+		    ;;
+		esac
+		# notify-send.sh -r $TEXT_ID -u low "$(cat $CONTENT)"
 
-	case "$ACTION" in
-	"default")
-	    BACK=$(dunstify -r $TEXT_ID --action="default,Reply" -u low "$(cat $HEADER)" "$(cat $CONTENT)")
-	    ;;
-	"2")
-	    if [ $ORDER -lt $MAXNUM ]; then
-	    	ORDER=$((ORDER+1));
-	    else
-	    	ORDER=0;
-		fi
-		echo $ORDER
-		HEADER="$EMAIL_PATH$ADDR$HEAD$ORDER"
-		CONTENT="$EMAIL_PATH$ADDR$TEXT$ORDER"
-		dunstify -r $HEAD_ID -u critical "$(cat $HEADER)"
-	    ;;
-	esac
-done
+		case "$ACTION" in
+		"default")
+		    ORDER=$((ORDER+1));
+		    HEADER="$EMAIL_PATH$ADDR$HEAD$ORDER"
+		    if [ ! -f "$HEADER" ]; then
+		    	ORDER=0;
+		    	HEADER="$EMAIL_PATH$ADDR$HEAD$ORDER"
+		    fi
+		    echo $ORDER
+			CONTENT="$EMAIL_PATH$ADDR$TEXT$ORDER"
+			dunstify -r $HEAD_ID -u critical "$(cat $HEADER)"
+		    ;;
+		"2")
+		    if [ -f "$HEADER" ]; then
+		    	BACK=$(dunstify -r $TEXT_ID --action="default,Reply" -u low "$(cat $HEADER)" "$(cat $CONTENT)")
+		    fi
+		    ;;
+		esac
+	done
+fi

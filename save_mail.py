@@ -93,13 +93,15 @@ for user, _ in enumerate(ADDRESS):
     NEW_NUM=len(data[0])
 
     select = data[0].split()
-    SHOW_NUM = 5
-    for note_id in range(min(NEW_NUM, SHOW_NUM+1)):
+    SHOW_NUM = 3
+    for note_id in range(min(NEW_NUM, SHOW_NUM)):
+        output = " %s <%s> (%d)\n"%(NAME[user], ADDRESS[user], note_id+1)
+
         num = select[-note_id-1]
         typ, data = imapobj.fetch(num, '(RFC822)')
         mail = email.message_from_string(data[0][1].decode('utf-8'))
         subject = str(make_header(decode_header(mail["Subject"])))
-        output = " %s"%(subject)
+        output += " %s"%(subject)
 
         date = str(make_header(decode_header(mail["Date"])))
         pos = date.find('+')
@@ -111,7 +113,8 @@ for user, _ in enumerate(ADDRESS):
         hms = date[pos - 9: pos - 1]
 
         sender = str(make_header(decode_header(mail["From"])))
-        output += "\n %s  %s <%s>\n %s   %s"%(sender, NAME[user], ADDRESS[user], day, hms)
+        receiver = str(make_header(decode_header(mail["To"])))
+        output += "\n %s  %s\n %s   %s"%(sender, receiver, day, hms)
 
         count, attachments = 0, ""
         for part in mail.walk():
@@ -127,7 +130,7 @@ for user, _ in enumerate(ADDRESS):
             output += '   %d Attachment(s)\n%s'%(count, attachments)
 
         filename = EMAIL_PATH + ADDRESS[user] + '/header_%d'%note_id
-        # print(filename)
+        print(filename)
         os.system('echo "%s" > %s'%(output, filename))
 
         content = get_content(mail)
