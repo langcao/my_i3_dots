@@ -1,0 +1,47 @@
+#!/bin/bash
+
+EMAIL_PATH="/tmp/emails/"
+HEAD="/header_"
+TEXT="/content_"
+
+# ADDRESS = ['lcao@zzu.edu.cn', 'li_xun@ircn.jp', 'cao@ircn.jp']
+ADDR=$1
+ORDER=$2
+
+HEADER="$EMAIL_PATH$ADDR$HEAD$ORDER"
+CONTENT="$EMAIL_PATH$ADDR$TEXT$ORDER"
+
+BACK="default"
+MAXNUM=5
+HEAD_ID=23100
+TEXT_ID=23200
+
+while [ $BACK != "2" ];
+do
+	case "$BACK" in
+	"default")
+		ACTION=$(dunstify -r $HEAD_ID --action="default,Reply" -u critical "$(cat $HEADER)")
+		;;
+	"2")
+	    break
+	    ;;
+	esac
+	# notify-send.sh -r $TEXT_ID -u low "$(cat $CONTENT)"
+
+	case "$ACTION" in
+	"default")
+	    BACK=$(dunstify -r $TEXT_ID --action="default,Reply" -u low "$(cat $CONTENT)")
+	    ;;
+	"2")
+	    if [ $ORDER -lt $MAXNUM ]; then
+	    	ORDER=$((ORDER+1));
+	    else
+	    	ORDER=0;
+		fi
+		echo $ORDER
+		HEADER="$EMAIL_PATH$ADDR$HEAD$ORDER"
+		CONTENT="$EMAIL_PATH$ADDR$TEXT$ORDER"
+		dunstify -r $HEAD_ID -u critical "$(cat $HEADER)"
+	    ;;
+	esac
+done
