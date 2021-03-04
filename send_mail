@@ -4,9 +4,23 @@ EMAIL_PATH="/tmp/emails/"
 HEAD="/header_"
 TEXT="/content_"
 
-# ADDRESS = ['lcao@zzu.edu.cn', 'li_xun@ircn.jp', 'cao@ircn.jp']
 ADDR=$1
 ORDER=$2
+case "$ADDR" in
+"0")
+    ADDR="lcao@zzu.edu.cn"
+    ;;
+"1")
+    ADDR="li_xun@ircn.jp"
+    ;;
+"2")
+    ADDR="cao@ircn.jp"
+    ;;
+"3")
+    ADDR="milkquick@gmail.com"
+    ;;
+esac
+
 
 HEADER="$EMAIL_PATH$ADDR$HEAD$ORDER"
 CONTENT="$EMAIL_PATH$ADDR$TEXT$ORDER"
@@ -30,7 +44,7 @@ do
 
 	case "$ACTION" in
 	"default")
-	    BACK=$(dunstify -r $TEXT_ID --action="default,Reply" -u low "$(cat $CONTENT)")
+	    BACK=$(dunstify -r $TEXT_ID --action="default,Reply" -u low "$(cat $HEADER)" "$(cat $CONTENT)")
 	    ;;
 	"2")
 	    if [ $ORDER -lt $MAXNUM ]; then
