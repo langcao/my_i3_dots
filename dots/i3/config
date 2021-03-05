@@ -433,8 +433,13 @@ mode "$mode_mail" {
     bindsym $mod+Shift+9 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 8
     bindsym $mod+Shift+0 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 9
 
-    bindsym space exec --no-startup-id pkill send_mail, exec --no-startup-id pkill dunst
-    bindsym Escape exec --no-startup-id pkill send_mail, exec --no-startup-id pkill dunst, mode "default"
+    bindsym Left exec --no-startup-id py3-cmd click --button 9 group
+    bindsym Right exec --no-startup-id py3-cmd click --button 9 group
+    bindsym Up exec --no-startup-id dunstctl close
+    bindsym Down exec --no-startup-id py3-cmd click --button 1 imap
+
+    bindsym space exec --no-startup-id killall send_mail, exec --no-startup-id pkill dunst
+    bindsym Escape exec --no-startup-id killall send_mail, exec --no-startup-id pkill dunst, mode "default"
 }
 
 set $mode_ydcv_on ydcv   Click   Enter   +Enter   Prev   Next   PageUp   PageDown   Grab-On   Space   Esc
