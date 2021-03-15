@@ -306,7 +306,7 @@ bindsym XF86AudioMute exec --no-startup-id ~/.i3/send_mute
 # bindsym XF86Eject exec --no-startup-id guake -e cmus --show
 bindsym XF86Tools exec --no-startup-id ~/.i3/send_cmus_topple
 bindsym XF86Eject exec --no-startup-id ~/.i3/send_lyrics_topple
-bindsym $mod+Shift+XF86Tools exec --no-startup-id pkill cmus, exec --no-startup-id guake --hide
+bindsym $mod+Shift+XF86Tools exec --no-startup-id killall cmus, exec --no-startup-id guake --hide
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause, exec --no-startup-id ~/.i3/send_cmus
 bindsym XF86AudioPause exec --no-startup-id playerctl pause, exec --no-startup-id ~/.i3/send_cmus
 bindsym XF86AudioPrev exec --no-startup-id ~/.i3/send_cmus_prev
@@ -358,22 +358,22 @@ bindsym $mod+minus scratchpad show
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+Escape exec i3lock-fancy-multimonitor --blur=0x6
 
-bindsym $mod+Ctrl+space exec --no-startup-id pkill zenity; exec --no-startup-id pkill dunst;
+bindsym $mod+Ctrl+space exec --no-startup-id killall zenity; exec --no-startup-id killall dunst;
 bindsym $mod+Ctrl+k exec --no-startup-id dunstify -t 2000 ' Retrieving bbs.fudan.edu.cn'; exec --no-startup-id python ~/.i3/get_joke.py;
-bindsym $mod+Ctrl+n exec --no-startup-id dunstify -t 2000 ' Retrieving bbs.fudan.edu.cn'; exec --no-startup-id pkill zenity; exec --no-startup-id python ~/.i3/get_joke_new.py;
+bindsym $mod+Ctrl+n exec --no-startup-id dunstify -t 2000 ' Retrieving bbs.fudan.edu.cn'; exec --no-startup-id killall zenity; exec --no-startup-id python ~/.i3/get_joke_new.py;
 bindsym $mod+Ctrl+l exec --no-startup-id dunstify -t 2000 ' Retrieving bbs.fudan.edu.cn'; exec --no-startup-id python ~/.i3/get_joke_latest.py;
-bindsym $mod+Ctrl+d exec --no-startup-id pkill zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune Vokabular German)</big></big>" --width=500
-bindsym $mod+Ctrl+e exec --no-startup-id pkill zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune gre subset)</big></big>" --width=500
-bindsym $mod+Ctrl+f exec --no-startup-id pkill zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune jokes)</big></big>" --width=500
-bindsym $mod+Ctrl+c exec --no-startup-id pkill zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune chengyu chinese diet)</big></big>" --width=500
-bindsym $mod+Ctrl+j exec --no-startup-id pkill zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune dict_ch-jp dict_jp-ch jp_gy jp_sy)</big></big>" --width=500
-bindsym $mod+Ctrl+p exec --no-startup-id pkill zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune jp_gy jp_sy)</big></big>" --width=500
-bindsym $mod+Ctrl+s exec --no-startup-id pkill zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune definitions science education issa-haiku)</big></big>" --width=500
-bindsym $mod+Ctrl+t exec --no-startup-id pkill zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune tang300 song100)</big></big>" --width=500
-bindsym $mod+Ctrl+w exec --no-startup-id pkill zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune wisdom love art paradoxum)</big></big>" --width=500
-bindsym $mod+Ctrl+b exec --no-startup-id pkill zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune wisdom bible bible_en)</big></big>" --width=500
-bindsym $mod+Ctrl+q exec --no-startup-id pkill zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune wisdom quran)</big></big>" --width=500
-bindsym $mod+Ctrl+a exec --no-startup-id pkill zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune)</big></big>" --width=500
+bindsym $mod+Ctrl+d exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune Vokabular German)</big></big>" --width=500
+bindsym $mod+Ctrl+e exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune gre subset)</big></big>" --width=500
+bindsym $mod+Ctrl+f exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune jokes)</big></big>" --width=500
+bindsym $mod+Ctrl+c exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune chengyu chinese diet)</big></big>" --width=500
+bindsym $mod+Ctrl+j exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune dict_ch-jp dict_jp-ch jp_gy jp_sy)</big></big>" --width=500
+bindsym $mod+Ctrl+p exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune jp_gy jp_sy)</big></big>" --width=500
+bindsym $mod+Ctrl+s exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune definitions science education issa-haiku)</big></big>" --width=500
+bindsym $mod+Ctrl+t exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune tang300 song100)</big></big>" --width=500
+bindsym $mod+Ctrl+w exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune wisdom love art paradoxum)</big></big>" --width=500
+bindsym $mod+Ctrl+b exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune wisdom bible bible_en)</big></big>" --width=500
+bindsym $mod+Ctrl+q exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune wisdom quran)</big></big>" --width=500
+bindsym $mod+Ctrl+a exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune)</big></big>" --width=500
 
 bindsym $mod+Ctrl+y exec --no-startup-id dunstify "$(xclip -o | ydcv)"
 
@@ -400,46 +400,46 @@ for_window [workspace=$ws_wechat] floating enable
 set $mode_mail Email   Click   Enter   +Enter   Prev   Next   PageUp   PageDown   Grab-On   Space   Esc
 bindsym $mod+Shift+m exec --no-startup-id python ~/.i3/python ~/.i3/save_mail.py, mode "$mode_mail"
 mode "$mode_mail" {
-	bindsym 1 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 0
-    bindsym 2 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 1
-    bindsym 3 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 2
-    bindsym 4 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 3
-    bindsym 5 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 4
-    bindsym 6 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 5
-    bindsym 7 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 6
-    bindsym 8 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 7
-    bindsym 9 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 8
-    bindsym 0 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 0 9
+	bindsym 1 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 0 0
+    bindsym 2 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 0 1
+    bindsym 3 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 0 2
+    bindsym 4 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 0 3
+    bindsym 5 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 0 4
+    bindsym 6 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 0 5
+    bindsym 7 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 0 6
+    bindsym 8 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 0 7
+    bindsym 9 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 0 8
+    bindsym 0 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 0 9
 
-    bindsym $mod+1 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 0
-    bindsym $mod+2 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 1
-    bindsym $mod+3 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 2
-    bindsym $mod+4 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 3
-    bindsym $mod+5 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 4
-    bindsym $mod+6 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 5
-    bindsym $mod+7 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 6
-    bindsym $mod+8 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 7
-    bindsym $mod+9 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 8
-    bindsym $mod+0 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 1 9
+    bindsym $mod+1 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 1 0
+    bindsym $mod+2 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 1 1
+    bindsym $mod+3 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 1 2
+    bindsym $mod+4 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 1 3
+    bindsym $mod+5 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 1 4
+    bindsym $mod+6 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 1 5
+    bindsym $mod+7 exec --no-startup-id killall dunst send_mail, exec --no-startup-id ~/.i3/send_mail 1 6
+    bindsym $mod+8 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 1 7
+    bindsym $mod+9 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 1 8
+    bindsym $mod+0 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 1 9
 
-    bindsym $mod+Shift+1 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 0
-    bindsym $mod+Shift+2 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 1
-    bindsym $mod+Shift+3 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 2
-    bindsym $mod+Shift+4 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 3
-    bindsym $mod+Shift+5 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 4
-    bindsym $mod+Shift+6 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 5
-    bindsym $mod+Shift+7 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 6
-    bindsym $mod+Shift+8 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 7
-    bindsym $mod+Shift+9 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 8
-    bindsym $mod+Shift+0 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 9
+    bindsym $mod+Shift+1 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 2 0
+    bindsym $mod+Shift+2 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 2 1
+    bindsym $mod+Shift+3 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 2 2
+    bindsym $mod+Shift+4 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 2 3
+    bindsym $mod+Shift+5 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 2 4
+    bindsym $mod+Shift+6 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 2 5
+    bindsym $mod+Shift+7 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 2 6
+    bindsym $mod+Shift+8 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 2 7
+    bindsym $mod+Shift+9 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 2 8
+    bindsym $mod+Shift+0 exec --no-startup-id killall send_mail, exec --no-startup-id ~/.i3/send_mail 2 9
 
     bindsym Left exec --no-startup-id py3-cmd click --button 9 group
     bindsym Right exec --no-startup-id py3-cmd click --button 8 group
     bindsym Up exec --no-startup-id dunstctl close
     bindsym Down exec --no-startup-id py3-cmd click --button 1 imap
 
-    bindsym space exec --no-startup-id killall send_mail, exec --no-startup-id pkill dunst
-    bindsym Escape exec --no-startup-id killall send_mail, exec --no-startup-id pkill dunst, mode "default"
+    bindsym space exec --no-startup-id killall send_mail, exec --no-startup-id killall dunst
+    bindsym Escape exec --no-startup-id killall send_mail, exec --no-startup-id killall dunst, mode "default"
 }
 
 set $mode_ydcv_on ydcv   Click   Enter   +Enter   Prev   Next   PageUp   PageDown   Grab-On   Space   Esc
@@ -447,8 +447,8 @@ bindsym $mod+Shift+s exec --no-startup-id ~/.i3/send_ydcv_screen, exec --no-star
 mode "$mode_ydcv_on" {
     bindsym Return exec --no-startup-id dunstify -u critical "$(ydcv $(xclip -o))"
     bindsym Shift+Return exec --no-startup-id python ~/.i3/get_jukuu.py 
-    bindsym space exec --no-startup-id pkill dunst
-    bindsym Escape exec --no-startup-id pkill dunst, exec --no-startup-id pkill send_ydcv, mode "default"
+    bindsym space exec --no-startup-id killall dunst
+    bindsym Escape exec --no-startup-id killall dunst, exec --no-startup-id killall send_ydcv, mode "default"
 
     bindsym m exec --no-startup-id dunstify "$(ydcv $(xclip -o))"
     bindsym comma exec --no-startup-id dunstify "$(ydcv $(xclip -o | tr  -d ' \n \t'))"
@@ -529,8 +529,8 @@ bindsym $mod+Shift+y exec --no-startup-id ~/.i3/send_ydcv, exec --no-startup-id 
 mode "$mode_ydcv_off" {
     bindsym Return exec --no-startup-id dunstify -u critical "$(ydcv $(xclip -o))"
     bindsym Shift+Return exec --no-startup-id python ~/.i3/get_jukuu.py 
-    bindsym space exec --no-startup-id pkill dunst
-    bindsym Escape exec --no-startup-id pkill dunst, exec --no-startup-id pkill send_ydcv, mode "default"
+    bindsym space exec --no-startup-id killall dunst
+    bindsym Escape exec --no-startup-id killall dunst, exec --no-startup-id killall send_ydcv, mode "default"
 
     bindsym m exec --no-startup-id dunstify "$(ydcv $(xclip -o))"
     bindsym comma exec --no-startup-id dunstify "$(ydcv $(xclip -o | tr  -d ' \n \t'))"
@@ -606,7 +606,7 @@ mode "$mode_ydcv_off" {
 }
 
 set $mode_fortune fortune-mod:  Deutch  English  Fan:)  Chinese  Tang-Song  Japanese  Wisdom  Science  Bible  Quran
-bindsym $mod+bracketleft exec --no-startup-id pkill dunst, mode "$mode_fortune"
+bindsym $mod+bracketleft exec --no-startup-id killall dunst, mode "$mode_fortune"
 mode "$mode_fortune" {
     bindsym r exec --no-startup-id dunstify -u normal "$(cal)" "$(date --rfc-3339=s)"
     bindsym $mod+r exec --no-startup-id dunstify -u normal "$(cal)" "$(date --rfc-3339=ns)"
@@ -654,12 +654,12 @@ mode "$mode_fortune" {
     bindsym $mod+q exec --no-startup-id dunstify -u low "$(fortune quran)"
     bindsym $mod+a exec --no-startup-id dunstify -u low "$(fortune | tr -d '\n')"
 
-    bindsym space exec --no-startup-id pkill dunst
-    bindsym Escape exec --no-startup-id pkill dunst, mode "default"
+    bindsym space exec --no-startup-id killall dunst
+    bindsym Escape exec --no-startup-id killall dunst, mode "default"
 }
 
 set $mode_mouse δ-mode
-bindsym $mod+m exec --no-startup-id pkill dunst, mode "$mode_mouse"
+bindsym $mod+m exec --no-startup-id killall dunst, mode "$mode_mouse"
 bindsym $mod+period mode "$mode_mouse"
 bindsym $mod+comma mode "$mode_mouse"
 bindsym $mod+Zenkaku_Hankaku exec --no-startup-id xdotool click 2
@@ -948,7 +948,7 @@ mode "$mode_mouse" {
     bindsym u exec --no-startup-id xdotool mouseup 1
     bindsym d exec --no-startup-id xdotool mousedown 1
 
-    bindsym BackSpace exec --no-startup-id pkill dunst
+    bindsym BackSpace exec --no-startup-id killall dunst
     bindsym Escape mode "default"
 	bindsym $mod+Escape exec --no-startup-id python ~/.i3/get_jukuu.py , mode "default"
 }
@@ -1269,8 +1269,8 @@ mode "$mode_art" {
     bindsym i exec --no-startup-id python ~/.i3/info_art_chicago.py
     bindsym $mod+i mode "default", exec --no-startup-id ~/.i3/query_art_chicago
     bindsym $mod+o mode "default", exec --no-startup-id ~/.i3/query_artist_chicago
-    bindsym space exec --no-startup-id pkill dunst
-    bindsym $mod+space exec --no-startup-id pkill dunst
+    bindsym space exec --no-startup-id killall dunst
+    bindsym $mod+space exec --no-startup-id killall dunst
     bindsym r exec echo > ~/.config/i3/.query.txt, exec echo > ~/.config/i3/.query_artist.txt, mode "default"
     bindsym $mod+r exec rm ~/.config/i3/.art.lck, mode "default"
     bindsym Return mode "default"
