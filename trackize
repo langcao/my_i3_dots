@@ -44,9 +44,9 @@ if [ -f "${1}" ]; then
 	then
 		NEW="${HOME}/Music/Songs/${ALBUM}/${TITLE}.mp3"
 		if [ ! -f "${NEW}" ]; then
+			mid3v2 -t "${TITLE}" -a "${ARTIST}" -A "${ALBUM}" "${1}"
 			mv "${1}" "${NEW}"
-			mid3v2 -t "${TITLE}" -a "${ARTIST}" -A "${ALBUM}" $NEW
-			TEXT=$(mid3v2 -l $NEW)
+			TEXT=$(mid3v2 -l "${NEW}")
 			zenity --info --width=300 --text="${TEXT}"
 		else
 			zenity --error --width=300 --text="${NEW} already exists. Please rename."
@@ -59,9 +59,9 @@ if [ -f "${1}" ]; then
 		then
 			NEW="${HOME}/Music/Songs/${ALBUM}/${TITLE}.mp3"
 			if [ ! -f "${NEW}" ]; then
+				mid3v2 -t "${TITLE}" -a "${ARTIST}" -A "${ALBUM}" "${1}"
 				mv "${1}" "${NEW}"
-				mid3v2 -t "${TITLE}" -a "${ARTIST}" -A "${ALBUM}" $NEW
-				TEXT=$(mid3v2 -l $NEW)
+				TEXT=$(mid3v2 -l "${NEW}")
 				zenity --info --width=300 --text="${TEXT}"
 			else
 				zenity --error --width=300 --text="${NEW} already exists. Please rename."

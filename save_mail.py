@@ -3,13 +3,13 @@ import email
 import base64
 import quopri
 import codecs
-import os, sys, re, datetime
+import os, sys, re
 from email.header import decode_header, make_header
 
-NAME = ['Lang Cao', 'Xun Li', 'Lang Cao', 'Xun Li']
-ADDRESS = ['lcao@zzu.edu.cn', 'li_xun@ircn.jp', 'cao@ircn.jp', 'milkquick@gmail.com']
-PASSWORD = ['miaomiao1982', '20200608lixun', 'miaomiao1982','kkmiudnpygdsyflj']
-SERVER = ['mail.v.zzu.edu.cn', 'ircn.sakura.ne.jp', 'ircn.sakura.ne.jp', 'imap.gmail.com']
+NAME = ['Lang Cao', 'Xun Li', 'Lang Cao', 'Lang Cao', 'Xun Li']
+ADDRESS = ['lcao@zzu.edu.cn', 'li_xun@ircn.jp', 'cao@ircn.jp', 'lcao@g.ecc.u-tokyo.ac.jp', 'milkquick@gmail.com']
+PASSWORD = ['miaomiao1982', '20200608lixun', 'miaomiao1982','miaomiao-1982', 'kkmiudnpygdsyflj']
+SERVER = ['mail.v.zzu.edu.cn', 'ircn.sakura.ne.jp', 'ircn.sakura.ne.jp', 'imap.gmail.com', 'imap.gmail.com']
 
 SHOW_NUM = 10
 
@@ -83,11 +83,14 @@ def split_content(content, maxrow=36):
     f.write(omitted)
     f.close()
 
-now = datetime.datetime.now()
-moment = str(now.time())
-print(moment[0:moment.find('.')-3])
+args = sys.argv
 
 for user, _ in enumerate(ADDRESS):
+
+    if len(args)>1:
+        user = int(args[1])
+
+    print("fetching %s..."%ADDRESS[user])
 
     imapobj = imaplib.IMAP4_SSL(SERVER[user], '993')
     imapobj.login(ADDRESS[user], PASSWORD[user])
@@ -141,5 +144,8 @@ for user, _ in enumerate(ADDRESS):
 
         content = get_content(mail)
         split_content(content)
+
+    if len(args)>1:
+        break
 
 imapobj.close()

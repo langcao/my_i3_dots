@@ -434,7 +434,7 @@ mode "$mode_mail" {
     bindsym $mod+Shift+0 exec --no-startup-id pkill send_mail, exec --no-startup-id ~/.i3/send_mail 2 9
 
     bindsym Left exec --no-startup-id py3-cmd click --button 9 group
-    bindsym Right exec --no-startup-id py3-cmd click --button 9 group
+    bindsym Right exec --no-startup-id py3-cmd click --button 8 group
     bindsym Up exec --no-startup-id dunstctl close
     bindsym Down exec --no-startup-id py3-cmd click --button 1 imap
 

@@ -17,6 +17,9 @@ case "$ADDR" in
     ADDR="cao@ircn.jp"
     ;;
 "3")
+    ADDR="lcao@g.ecc.u-tokyo.ac.jp"
+    ;;
+"4")
     ADDR="milkquick@gmail.com"
     ;;
 esac
@@ -34,7 +37,7 @@ if [ -f "$HEADER" ]; then
 	do
 		case "$BACK" in
 		"default")
-			dunstctl -r $HEAD_ID close
+			dunstctl close
 			if [ -f "$HEADER" ]; then
 				ACTION=$(dunstify -r $HEAD_ID --action="default,Reply" -u critical "$(cat $HEADER)")
 			fi
@@ -47,7 +50,7 @@ if [ -f "$HEADER" ]; then
 
 		case "$ACTION" in
 		"default")
-			dunstctl -r $HEAD_ID close
+			dunstctl close
 		    ORDER=$((ORDER+1));
 		    HEADER="$EMAIL_PATH$ADDR$HEAD$ORDER"
 		    if [ ! -f "$HEADER" ]; then
@@ -59,7 +62,7 @@ if [ -f "$HEADER" ]; then
 			dunstify -r $HEAD_ID -u critical "$(cat $HEADER)"
 		    ;;
 		"2")
-			dunstctl -r $TEXT_ID close
+			dunstctl close
 		    if [ -f "$HEADER" ]; then
 		    	BACK=$(dunstify -r $TEXT_ID --action="default,Reply" -u low "$(cat $HEADER)" "$(cat $CONTENT)")
 		    fi

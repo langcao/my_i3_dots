@@ -6,10 +6,10 @@ import os, sys, time
 import html2text
 from email.header import decode_header, make_header
 
-NAME = ['Lang Cao', 'Xun Li', 'Lang Cao', 'Xun Li']
-ADDRESS = ['lcao@zzu.edu.cn', 'li_xun@ircn.jp', 'cao@ircn.jp', 'milkquick@gmail.com']
-PASSWORD = ['miaomiao1982', '20200608lixun', 'miaomiao1982','kkmiudnpygdsyflj']
-SERVER = ['mail.v.zzu.edu.cn', 'ircn.sakura.ne.jp', 'ircn.sakura.ne.jp', 'imap.gmail.com']
+NAME = ['Lang Cao', 'Xun Li', 'Lang Cao', 'Lang Cao', 'Xun Li']
+ADDRESS = ['lcao@zzu.edu.cn', 'li_xun@ircn.jp', 'cao@ircn.jp', 'lcao@g.ecc.u-tokyo.ac.jp', 'milkquick@gmail.com']
+PASSWORD = ['miaomiao1982', '20200608lixun', 'miaomiao1982','miaomiao-1982', 'kkmiudnpygdsyflj']
+SERVER = ['mail.v.zzu.edu.cn', 'ircn.sakura.ne.jp', 'ircn.sakura.ne.jp', 'imap.gmail.com', 'imap.gmail.com']
 
 if len(sys.argv)>1:
     user = int(sys.argv[1])
@@ -71,7 +71,7 @@ def popup_content(content, note_id, level, maxrow=36):
         else:
             text += '\n'
             current += 1
-    os.system('notify-send.sh -r %d -u %s "%s" "%s"'%(note_id, level, text, omitted))
+    os.system('notify-send.sh -r %d -u %s "%s" "%s"'%(TEXT_ID, level, text, omitted))
     # print(content)
 
 if user < len(NAME):
