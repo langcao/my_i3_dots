@@ -448,7 +448,7 @@ mode "$mode_ydcv_on" {
     bindsym Return exec --no-startup-id dunstify -u critical "$(ydcv $(xclip -o))"
     bindsym Shift+Return exec --no-startup-id python ~/.i3/get_jukuu.py 
     bindsym space exec --no-startup-id killall dunst
-    bindsym Escape exec --no-startup-id killall dunst, exec --no-startup-id killall send_ydcv, mode "default"
+    bindsym Escape exec --no-startup-id killall dunst, exec --no-startup-id killall send_ydcv_screen, mode "default"
 
     bindsym m exec --no-startup-id dunstify "$(ydcv $(xclip -o))"
     bindsym comma exec --no-startup-id dunstify "$(ydcv $(xclip -o | tr  -d ' \n \t'))"
@@ -524,7 +524,7 @@ mode "$mode_ydcv_on" {
 }
 
 
-set $mode_ydcv_off ydcv   Click   Enter   +Enter   Prev   Next   PageUp   PageDown   Grab-Off   Space   Esc 
+set $mode_ydcv_off ydcv   Click   Enter   +Enter   Prev   Next   PageUp   PageDown   Grab-Off   Space   Esc
 bindsym $mod+Shift+y exec --no-startup-id ~/.i3/send_ydcv, exec --no-startup-id dunstify -u normal "  Click to grab words...", mode "$mode_ydcv_off"
 mode "$mode_ydcv_off" {
     bindsym Return exec --no-startup-id dunstify -u critical "$(ydcv $(xclip -o))"
@@ -972,7 +972,7 @@ mode "$mode_launcher" {
     bindsym l workspace $ws_z, exec --no-startup-id lazarus --class floatingApp, mode "default"
     bindsym m workspace $ws_n, exec --no-startup-id lilyterm -E matlab, mode "default"
     bindsym n exec nautilus, mode "default"
-    bindsym o exec --no-startup-id guake -e cmus --show, mode "default"
+    bindsym o exec --no-startup-id killall cmus, exec --no-startup-id guake -e cmus --show, mode "default"
     bindsym p workspace $ws_p, exec --no-startup-id pycharm-edu, mode "default"
     bindsym q workspace $ws_q, exec --no-startup-id qtcreator, mode "default"
     bindsym r workspace $ws_r, exec --no-startup-id rstudio-bin, mode "default"
@@ -1001,7 +1001,7 @@ mode "$mode_launcher" {
     bindsym $mod+l workspace $ws_z, exec --no-startup-id lazarus --class floatingApp, mode "default"
     bindsym $mod+m workspace $ws_n, exec --no-startup-id lilyterm -E matlab, mode "default"
     bindsym $mod+n exec --no-startup-id nautilus, mode "default"
-    bindsym $mod+o exec --no-startup-id guake -e cmus --show, mode "default"
+    bindsym $mod+o exec --no-startup-id killall cmus, exec --no-startup-id guake -e cmus --show, mode "default"
     bindsym $mod+p workspace $ws_p, exec --no-startup-id pycharm-edu, mode "default"
     bindsym $mod+q workspace $ws_q, exec --no-startup-id qtcreator, mode "default"
     bindsym $mod+r workspace $ws_r, exec --no-startup-id rstudio-bin, mode "default"
@@ -1321,6 +1321,8 @@ mode "Resize mode" {
 }
 
 bindsym $mod+r mode "Resize mode"
+
+bindsym $mod+Shift+h bar mode toggle
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
