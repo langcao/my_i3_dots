@@ -90,7 +90,7 @@ for user, _ in enumerate(ADDRESS):
     if len(args)>1:
         user = int(args[1])
 
-    print("fetching %s..."%ADDRESS[user])
+    print("fetching %s"%ADDRESS[user])
 
     imapobj = imaplib.IMAP4_SSL(SERVER[user], '993')
     imapobj.login(ADDRESS[user], PASSWORD[user])
@@ -105,7 +105,10 @@ for user, _ in enumerate(ADDRESS):
 
         num = select[-note_id-1]
         typ, data = imapobj.fetch(num, '(RFC822)')
-        mail = email.message_from_string(data[0][1].decode('utf-8'))
+        try:
+        	mail = email.message_from_string(data[0][1].decode('utf-8'))
+        except:
+        	mail = email.message_from_string(data[0][1].decode('shift_jis'))
         subject = str(make_header(decode_header(mail["Subject"])))
         output += " %s"%(subject)
 

@@ -12,7 +12,7 @@ EMAIL_PATH = '/tmp/emails/'
 MAIL_NUM = EMAIL_PATH + 'new_mail_num.txt'
 LCK_FLAG = EMAIL_PATH + 'receiving.lck'
 
-@timeout_decorator.timeout(100, timeout_exception=StopIteration)
+@timeout_decorator.timeout(120, timeout_exception=StopIteration)
 def check():
 	if not os.path.exists(EMAIL_PATH):
 		os.system('python ~/.i3/save_mail.py')

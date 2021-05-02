@@ -12,5 +12,5 @@ if [ $(pamixer --get-volume) -lt 120 ]; then
 fi
 
 py3-cmd refresh volume_status
-notify-send.sh -r $notification_id -u low " $(pamixer --get-volume)% "
+notify-send.sh -r $notification_id -h int:value:$(pamixer --get-volume) -u low " $(pamixer --get-volume)% "
 ~/.i3/beep
