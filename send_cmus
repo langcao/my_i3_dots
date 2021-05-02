@@ -7,11 +7,13 @@ tag=$(cmus-remote -Q | grep tag | head -n 3 | sort -r | cut -d ' ' -f 3- | tr '\
 if [ -f "/tmp/cmus_status.lck" ]; then
 	pos=$(cmus-remote -Q | grep position | cut -d ' ' -f 2-)
 	len=$(cmus-remote -Q | grep duration | cut -d ' ' -f 2-)
-	((m1=pos/60, s1=pos%60, m2=len/60, s2=len%60))
+	((m1=pos/60, s1=pos%60, m2=len/60, s2=len%60, percent=pos*100/len))
+	echo $percent
 
 	case $(cmus-remote -Q | grep status) in
 		'status paused') notify-send.sh -r $cmus_notification_id " $tag" "$(printf "♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)";;
-		'status playing') notify-send.sh -r $cmus_notification_id " $tag" "$(printf "♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)";;
+		'status playing') notify-send.sh -r $cmus_notification_id -h int:value:$percent -u low "$(printf " $tag\n♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)";;
+		#'status playing') notify-send.sh -r $cmus_notification_id "$(printf " $tag\n♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)";;
 	 	'status stopped') notify-send.sh -r $cmus_notification_id " $tag" "$(printf "♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)";;
 	esac
 else
