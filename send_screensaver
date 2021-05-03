@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+export COORDINS=`xdotool getmouselocation 2>/dev/null | sed 's/x:\([0-9]\+\)[ \t]y:\([0-9]\+\)[ \t].*/\1;\2/'`
+export XPOS=${COORDINS/;*/}
+export YPOS=${COORDINS/*;/}
+
+if [[ $XPOS -le 2560 ]]; then
+	/usr/lib/xscreensaver/gluqlo -r 2560x1600 -s 1 -ampm #-anykeyclose
+else
+	/usr/lib/xscreensaver/gluqlo -r 1024x1600 -s 0.5  #-anykeyclose
+fi
