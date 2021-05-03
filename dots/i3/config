@@ -358,7 +358,7 @@ bindsym $mod+shift+p workspace prev
 bindsym $mod+minus scratchpad show
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+Shift+Escape exec --no-startup-id ~/.i3/send_screensaver
-bindsym $mod+Escape exec --no-startup-id i3lock-fancy-multimonitor --blur=0x6
+bindsym $mod+Escape exec --no-startup-id ~/.i3/betterlock
 
 bindsym $mod+Ctrl+space exec --no-startup-id killall zenity; exec --no-startup-id killall dunst;
 bindsym $mod+Ctrl+k exec --no-startup-id dunstify -t 2000 ' Retrieving bbs.fudan.edu.cn'; exec --no-startup-id python ~/.i3/get_joke.py;
@@ -1288,6 +1288,7 @@ mode "$mode_system" {
     bindsym 1 exec --no-startup-id /usr/lib/xscreensaver/gluqlo -r 2560x1600 -s 1 -ampm -anykeyclose, mode "default"
     bindsym 2 exec --no-startup-id /usr/lib/xscreensaver/gluqlo -r 1024x1380 -s 0.5 -ampm -anykeyclose, mode "default"
     bindsym l exec --no-startup-id i3lock-fancy-multimonitor --blur=0x6, mode "default"
+    #bindsym l exec --no-startup-id i3lock-fancy-multimonitor --blur=0x6, mode "default"
     bindsym r exec --no-startup-id systemctl reboot, mode "default"
     bindsym p exec --no-startup-id systemctl poweroff, mode "default"
     bindsym s exec --no-startup-id systemctl suspend, mode "default"

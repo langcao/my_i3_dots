@@ -1,0 +1,66 @@
+#!/bin/bash
+
+# pathList=(".")
+# for p in ${pathList[*]}
+# do
+# 	find $p -type f -name '[^.]*' > /tmp/temp.txt
+# done
+
+# for f in `cat /tmp/temp.txt`
+# do
+# 	# mv $f ${f/\.sh/}
+# 	echo $f
+# done
+
+# cd $HOME/Music/seek
+# xclip -o > mp3name.txt
+echo $1 > mp3name.txt
+# FILE=$()
+# echo $FILE > 
+# sed -i "s/[a-zA-Z]//g" mp3name.txt
+sed -i -r "s/([a-zA-Z0-9]) ([a-zA-Z0-9])/\1\_\2/g" mp3name.txt
+RidList=("\[" "\]" "[()（）【】《》「」『』]" '"' "[-&　]")
+for p in ${RidList[*]}
+do
+	sed -i "s/${p}/ /g" mp3name.txt
+done
+opencc -i mp3name.txt -o mp3name -c t2s.json
+
+INFO=$(cat mp3name | tr -s [:space:] | sed 's/^[ ]*//g; s/^[ ]*//g')
+echo $INFO | sed 's/ /\n/g; s/_/ /g' > items.txt
+# cat mp3name.txt
+
+SEL=$(zenity --entry --width=300 --title="${FILE}" --text="Album: 0 - Æ\t1 - 中\t2 - あ\n$(echo $INFO | sed 's/^/1.\t/; s/ /\n2.\t/; s/ /\n3.\t/; s/ /\n4.\t/; s/ /\n5.\t/; s/ /\n6.\t/; s/ /\n7.\t/; s/ /\n8.\t/; s/ /\n9.\t/; s/_/ /g')")
+case ${SEL:0:1} in
+	0) ALBUM=English;;
+	1) ALBUM=China;;
+	2) ALBUM=Japan;;
+esac
+ARTIST=$(cat items.txt | sed -n ''${SEL:1:1}'p')
+TITLE=$(cat items.txt | sed -n ''${SEL:2:1}'p')
+
+if zenity --question --width=300 --title="${FILE}" --text="Artist - ${ARTIST}\n Title - ${TITLE}\n Album - ${ALBUM}"
+then
+	echo $(xclip -o)
+	TMP=$(xclip -o)
+	FILE=$(find . -type f -name "${TMP}*")
+	echo $FILE
+	mv "${FILE}" ../Songs/$ALBUM/$TITLE.mp3
+	mid3v2 -t "${TITLE}" -a "${ARTIST}" -A "${ALBUM}" ../Songs/$ALBUM/$TITLE.mp3
+else
+	ARTIST=$(zenity --entry --width=300 --title="${FILE}" --text="Artist" --entry-text="${ARTIST}")
+	TITLE=$(zenity --entry --width=300 --title="${FILE}" --text="Title" --entry-text="${TITLE}")
+	if zenity --question --width=300 --title="${FILE}" --text="Artist - ${ARTIST}\n Title - ${TITLE}\n Album - ${ALBUM}"
+	then
+		echo $(xclip -o)
+		TMP=$(xclip -o)
+		FILE=$(find . -type f -name "${TMP}*")
+		echo $FILE
+		mv "${FILE}" ../Songs/$ALBUM/$TITLE.mp3
+		mid3v2 -t "${TITLE}" -a "${ARTIST}" -A "${ALBUM}" ../Songs/$ALBUM/$TITLE.mp3
+		TEXT=$(mid3v2 -l ../Songs/$ALBUM/$TITLE.mp3)
+		zenity --info --width=300 --text="${TEXT}"
+	else
+		zenity --error --width=300 --text="Operation is canceled."
+	fi
+fi

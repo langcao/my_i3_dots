@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+if [[ -f "/home/milklee/.cache/i3lock/current/l_dim.png" ]]; then
+	~/.i3/betterlockscreen -l dim
+else
+	echo "Preparing background..."
+fi
+
+
+LCK=/tmp/betterlockscreen.lck
+if [ -e $LCK ]; then
+	echo "$LCK exists."
+else
+	echo "Updating background..."
+	touch $LCK
+	~/.i3/betterlockscreen -u ~/Pictures/Wallpapers/Views
+	rm $LCK
+fi

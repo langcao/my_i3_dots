@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+xdotool mousemove 0 0
+~/.i3/send_screensaver
+
+xdotool mousemove 2560 0
+~/.i3/send_screensaver
