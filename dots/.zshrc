@@ -97,6 +97,10 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias ls='exa'
+alias lc='exa --icons'
+alias ll='exa -ahl --git'
+alias lt='exa -T'
 
 export PATH=/home/milklee/.local/bin/:/home/milklee/.i3/:$PATH
 
