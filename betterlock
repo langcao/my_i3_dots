@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [[ -f "/home/milklee/.cache/i3lock/current/l_dim.png" ]]; then
-	~/.i3/betterlockscreen -l dim
+if [[ -f "$HOME/.cache/i3lock/current/l_dim.png" ]]; then
+	~/.i3/betterlockscreen -l dimblur # dim pixel
 else
 	echo "Preparing background..."
 fi
@@ -13,6 +13,6 @@ if [ -e $LCK ]; then
 else
 	echo "Updating background..."
 	touch $LCK
-	~/.i3/betterlockscreen -u ~/Pictures/Wallpapers/Views
+	~/.i3/betterlockscreen -u "$HOME/Pictures/Wallpapers/Views"
 	rm $LCK
 fi

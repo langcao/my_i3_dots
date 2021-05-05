@@ -51,7 +51,8 @@ font pango: WenQuanYi Zen Hei Mono, Icons 16
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec lilyterm
+bindsym $mod+Return exec alacritty
+bindsym $mod+Shift+Return exec st
 
 # kill focused window
 bindsym $mod+q kill
@@ -357,8 +358,8 @@ bindsym $mod+shift+n workspace next
 bindsym $mod+shift+p workspace prev
 bindsym $mod+minus scratchpad show
 bindsym $mod+Shift+minus move scratchpad
-bindsym $mod+Shift+Escape exec --no-startup-id ~/.i3/send_screensaver
-bindsym $mod+Escape exec --no-startup-id ~/.i3/betterlock
+bindsym $mod+Escape exec --no-startup-id ~/.i3/send_screensaver
+bindsym $mod+Shift+Escape exec --no-startup-id ~/.i3/betterlock
 
 bindsym $mod+Ctrl+space exec --no-startup-id killall zenity; exec --no-startup-id killall dunst;
 bindsym $mod+Ctrl+k exec --no-startup-id dunstify -t 2000 ' Retrieving bbs.fudan.edu.cn'; exec --no-startup-id python ~/.i3/get_joke.py;
@@ -972,7 +973,7 @@ mode "$mode_launcher" {
     bindsym j workspace $ws_joy, exec --no-startup-id steam, mode "default"
     bindsym h workspace ,  exec --no-startup-id google-chrome-stable --incognito --new-window https://jp.pornhub.com/, mode "default"
     bindsym l workspace $ws_z, exec --no-startup-id lazarus --class floatingApp, mode "default"
-    bindsym m workspace $ws_n, exec --no-startup-id lilyterm -E matlab, mode "default"
+    bindsym m workspace $ws_n, exec --no-startup-id alacritty -e matlab, mode "default"
     bindsym n exec nautilus, mode "default"
     bindsym o exec --no-startup-id killall cmus, exec --no-startup-id guake -e cmus --show, mode "default"
     bindsym p workspace $ws_p, exec --no-startup-id pycharm-edu, mode "default"
@@ -1001,7 +1002,7 @@ mode "$mode_launcher" {
     bindsym $mod+j workspace $ws_joy, exec --no-startup-id steam, mode "default"
     bindsym $mod+h workspace $ws_movie,  exec --no-startup-id google-chrome-stable --incognito --new-window https://www.xvideos.com/, mode "default"
     bindsym $mod+l workspace $ws_z, exec --no-startup-id lazarus --class floatingApp, mode "default"
-    bindsym $mod+m workspace $ws_n, exec --no-startup-id lilyterm -E matlab, mode "default"
+    bindsym $mod+m workspace $ws_n, exec --no-startup-id alacritty -e matlab, mode "default"
     bindsym $mod+n exec --no-startup-id nautilus, mode "default"
     bindsym $mod+o exec --no-startup-id killall cmus, exec --no-startup-id guake -e cmus --show, mode "default"
     bindsym $mod+p workspace $ws_p, exec --no-startup-id pycharm-edu, mode "default"

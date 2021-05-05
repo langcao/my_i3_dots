@@ -4,8 +4,23 @@ export COORDINS=`xdotool getmouselocation 2>/dev/null | sed 's/x:\([0-9]\+\)[ \t
 export XPOS=${COORDINS/;*/}
 export YPOS=${COORDINS/*;/}
 
+LCK_L=/tmp/gluqlo_L.lck
+LCK_R=/tmp/gluqlo_R.lck
+
 if [[ $XPOS -le 2560 ]]; then
-	/usr/lib/xscreensaver/gluqlo -r 2560x1600 -s 1 -ampm #-anykeyclose
+	if [ -e $LCK_L ]; then
+		echo "$LCK_L exists."
+	else
+		touch $LCK_L
+		/usr/lib/xscreensaver/gluqlo -r 2560x1600 -s 1 -ampm #-anykeyclose
+		rm $LCK_L
+	fi
 else
-	/usr/lib/xscreensaver/gluqlo -r 1024x1600 -s 0.5  #-anykeyclose
+	if [ -e $LCK_R ]; then
+		echo "$LCK_R exists."
+	else
+		touch $LCK_R
+		/usr/lib/xscreensaver/gluqlo -r 1024x1600 -s 0.5  #-anykeyclose
+		rm $LCK_R
+	fi
 fi

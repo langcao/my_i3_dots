@@ -89,8 +89,8 @@ lock() {
 	i3lock \
 		-c 00000000 \
 		-t -i "$1" \
-		--timepos='x+115:h-65' \
-		--datepos='x+48:h-42' \
+		--timepos='x+117:h-63' \
+		--datepos='x+48:h-40' \
 		--clock --date-align 1 --datestr "$locktext" \
 		--insidecolor=$insidecolor --ringcolor=$ringcolor --line-uses-inside \
 		--keyhlcolor=$keyhlcolor --bshlcolor=$bshlcolor --separatorcolor=$separatorcolor \
