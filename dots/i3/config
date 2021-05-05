@@ -448,6 +448,7 @@ mode "$mode_mail" {
 set $mode_ydcv_on ydcv   Click   Enter   +Enter   Prev   Next   PageUp   PageDown   Grab-On   Space   Esc
 bindsym $mod+Shift+s exec --no-startup-id ~/.i3/send_ydcv_screen, exec --no-startup-id dunstify -u normal "  Screen grab words...", mode "$mode_ydcv_on"
 mode "$mode_ydcv_on" {
+	bindsym q exec --no-startup-id killall surf
     bindsym Return exec --no-startup-id dunstify -u critical "$(ydcv $(xclip -o))"
     bindsym Shift+Return exec --no-startup-id python ~/.i3/get_jukuu.py 
     bindsym space exec --no-startup-id killall dunst
@@ -517,9 +518,9 @@ mode "$mode_ydcv_on" {
     bindsym $mod+v exec --no-startup-id python ~/.i3/get_jukuu.py  inversed critical
     bindsym $mod+g exec --no-startup-id python ~/.i3/get_jukuu.py  user critical
 
-    bindsym h exec --no-startup-id google-chrome-stable ~/.cache/jukuu/words.txt, exec --no-startup-id dunstify -u low " Jukuu wordlist is loaded."
-    bindsym b exec --no-startup-id google-chrome-stable ~/.cache/jukuu/output.txt, exec --no-startup-id dunstify -u low " Recent output is loaded."
-    bindsym $mod+h exec --no-startup-id google-chrome-stable ~/.cache/jukuu/, exec --no-startup-id dunstify -u low " Jukuu .cache is loaded." ""
+    bindsym h exec --no-startup-id surf ~/.cache/jukuu/words.txt, exec --no-startup-id dunstify -u low " Jukuu wordlist is loaded."
+    bindsym b exec --no-startup-id surf ~/.cache/jukuu/output.txt, exec --no-startup-id dunstify -u low " Recent output is loaded."
+    bindsym $mod+h exec --no-startup-id surf ~/.cache/jukuu/, exec --no-startup-id dunstify -u low " Jukuu .cache is loaded." ""
     bindsym $mod+BackSpace exec --no-startup-id python ~/.i3/get_jukuu.py 
     bindsym Shift $mod+BackSpace exec --no-startup-id python ~/.i3/get_jukuu.py 
     bindsym Ctrl+$mod+BackSpace exec --no-startup-id rm -r ~/.cache/jukuu/dels.txt, exec --no-startup-id dunstify -u low " Deteleted wordlist is cleared." ""
@@ -530,6 +531,7 @@ mode "$mode_ydcv_on" {
 set $mode_ydcv_off ydcv   Click   Enter   +Enter   Prev   Next   PageUp   PageDown   Grab-Off   Space   Esc
 bindsym $mod+Shift+y exec --no-startup-id ~/.i3/send_ydcv, exec --no-startup-id dunstify -u normal "  Click to grab words...", mode "$mode_ydcv_off"
 mode "$mode_ydcv_off" {
+    bindsym q exec --no-startup-id killall surf
     bindsym Return exec --no-startup-id dunstify -u critical "$(ydcv $(xclip -o))"
     bindsym Shift+Return exec --no-startup-id python ~/.i3/get_jukuu.py 
     bindsym space exec --no-startup-id killall dunst
@@ -599,9 +601,9 @@ mode "$mode_ydcv_off" {
     bindsym $mod+v exec --no-startup-id python ~/.i3/get_jukuu.py  inversed critical
     bindsym $mod+g exec --no-startup-id python ~/.i3/get_jukuu.py  user critical
 
-    bindsym h exec --no-startup-id google-chrome-stable ~/.cache/jukuu/words.txt, exec --no-startup-id dunstify -u low " Jukuu wordlist is loaded."
-    bindsym b exec --no-startup-id google-chrome-stable ~/.cache/jukuu/output.txt, exec --no-startup-id dunstify -u low " Recent output is loaded."
-    bindsym $mod+h exec --no-startup-id google-chrome-stable ~/.cache/jukuu/, exec --no-startup-id dunstify -u low " Jukuu .cache is loaded." ""
+    bindsym h exec --no-startup-id surf ~/.cache/jukuu/words.txt, exec --no-startup-id dunstify -u low " Jukuu wordlist is loaded."
+    bindsym b exec --no-startup-id surf ~/.cache/jukuu/output.txt, exec --no-startup-id dunstify -u low " Recent output is loaded."
+    bindsym $mod+h exec --no-startup-id surf ~/.cache/jukuu/, exec --no-startup-id dunstify -u low " Jukuu .cache is loaded." ""
     bindsym $mod+BackSpace exec --no-startup-id python ~/.i3/get_jukuu.py 
     bindsym Shift $mod+BackSpace exec --no-startup-id python ~/.i3/get_jukuu.py 
     bindsym Ctrl+$mod+BackSpace exec --no-startup-id rm -r ~/.cache/jukuu/dels.txt, exec --no-startup-id dunstify -u low " Deteleted wordlist is cleared." ""
@@ -678,6 +680,7 @@ bindsym KP_Subtract exec --no-startup-id xdotool click 4
 bindsym KP_Add exec --no-startup-id xdotool click 5
 
 mode "$mode_mouse" {
+	bindsym q exec --no-startup-id killall surf
     bindsym m exec --no-startup-id dunstify "$(ydcv $(xclip -o))"
     bindsym comma exec --no-startup-id dunstify "$(ydcv $(xclip -o | tr  -d ' \n \t'))"
     bindsym period exec --no-startup-id python ~/.i3/get_jukuu.py 
@@ -734,9 +737,9 @@ mode "$mode_mouse" {
     bindsym $mod+v exec --no-startup-id python ~/.i3/get_jukuu.py  inversed critical
     bindsym $mod+g exec --no-startup-id python ~/.i3/get_jukuu.py  user critical
 
-    bindsym h exec --no-startup-id google-chrome-stable ~/.cache/jukuu/words.txt, exec --no-startup-id dunstify -u low " Jukuu wordlist is loaded."
-    bindsym b exec --no-startup-id google-chrome-stable ~/.cache/jukuu/output.txt, exec --no-startup-id dunstify -u low " Recent output is loaded."
-    bindsym $mod+h exec --no-startup-id google-chrome-stable ~/.cache/jukuu/, exec --no-startup-id dunstify -u low " Jukuu .cache is loaded." ""
+    bindsym h exec --no-startup-id surf ~/.cache/jukuu/words.txt, exec --no-startup-id dunstify -u low " Jukuu wordlist is loaded."
+    bindsym b exec --no-startup-id surf ~/.cache/jukuu/output.txt, exec --no-startup-id dunstify -u low " Recent output is loaded."
+    bindsym $mod+h exec --no-startup-id surf ~/.cache/jukuu/, exec --no-startup-id dunstify -u low " Jukuu .cache is loaded." ""
     bindsym $mod+BackSpace exec --no-startup-id python ~/.i3/get_jukuu.py 
     bindsym Shift $mod+BackSpace exec --no-startup-id python ~/.i3/get_jukuu.py 
     bindsym Ctrl+$mod+BackSpace exec --no-startup-id rm -r ~/.cache/jukuu/dels.txt, exec --no-startup-id dunstify -u low " Deteleted wordlist is cleared." ""
@@ -884,7 +887,7 @@ mode "$mode_mouse" {
     bindsym 0 exec --no-startup-id xdotool mousemove_relative --polar 150 10
     bindsym minus exec --no-startup-id xdotool mousemove_relative --polar 165 10
     bindsym asciicircum exec --no-startup-id xdotool mousemove_relative --polar 180 10
-    bindsym q exec --no-startup-id xdotool mousemove_relative --polar 15 -10
+    # bindsym q exec --no-startup-id xdotool mousemove_relative --polar 15 -10
     bindsym w exec --no-startup-id xdotool mousemove_relative --polar 30 -10
     bindsym e exec --no-startup-id xdotool mousemove_relative --polar 45 -10
     bindsym r exec --no-startup-id xdotool mousemove_relative --polar 60 -10
