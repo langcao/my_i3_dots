@@ -42,9 +42,9 @@ def check():
 					if num > news[user]:
 						os.system('python ~/.i3/save_mail.py %d'%user)
 						if news[user] >= 0:
-							os.system('dunstify -r %d -u critical "✉ %d New message(s)  %s %s"'%(321567+user, num-news[user], moment[0:moment.find('.')-3], ADDRESS[user]))
+							os.system('dunstify -r %d -u critical "✉ %d New message(s)  %s %s"'%(321567, num-news[user], moment[0:moment.find('.')-3], ADDRESS[user]))
 						else:
-							os.system('dunstify -r %d -u low "✉ %d Unseen message(s)  %s %s"'%(321567+user, num, moment[0:moment.find('.')-3], ADDRESS[user]))
+							os.system('dunstify -r %d -u low "✉ %d Unseen message(s)  %s %s"'%(321567, num, moment[0:moment.find('.')-3], ADDRESS[user]))
 				imapobj.close()
 		except:
 			print('Timeout...')

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+notification_id=728
+LCK=/tmp/break_pomodoro.lck
+SHOW=/tmp/show_pomodoro.lck
+STOP=/tmp/stop_pomodoro.lck
+SWAP=/tmp/swap_pomodoro.lck
+
+if [ ! -e $SHOW ]; then
+	touch $SHOW
+fi
+
+if [ -e $STOP ]; then
+	rm $STOP
+fi
+
+if [ -e $LCK ]; then
+	echo 1500 > $SWAP
+fi
+
+dunstify -r $notification_id -h int:value:100 -u critical " Start Work Time!"
+sleep 1
+
+if (( $# > 0)); then
+	~/.i3/send_pomodoro $1 Work
+else
+	~/.i3/send_pomodoro 25 Work
+fi

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+SHOW=/tmp/show_pomodoro.lck
+STOP=/tmp/stop_pomodoro.lck
+STAT=/tmp/stat_pomodoro.lck
+ASKZ=/tmp/ask_pomodoro.lck
+
+
+if [ -e $SHOW ]; then
+	STR=" "
+else
+	STR=" "
+fi
+if [ -e $STAT ]; then
+	STR+=" #$(cat $STAT)"
+else
+	STR+=" #"
+fi
+if [ -e $ASKZ ]; then
+	STR+=" "
+else
+	STR+=" "
+fi
+if [ -e $STOP ]; then
+	STR+=" "
+else
+	STR+=" "
+fi
+echo $STR

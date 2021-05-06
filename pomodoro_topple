@@ -1,0 +1,66 @@
+#!/bin/bash
+
+#!/bin/bash
+
+notification_id=728
+topple_id=718
+LCK=/tmp/break_pomodoro.lck
+SHOW=/tmp/show_pomodoro.lck
+INFO=/tmp/info_pomodoro.lck
+STOP=/tmp/stop_pomodoro.lck
+SWAP=/tmp/swap_pomodoro.lck
+STAT=/tmp/stat_pomodoro.lck
+ASKZ=/tmp/ask_pomodoro.lck
+
+case $1 in
+	'show')
+		if [ -e $SHOW ]; then
+			rm $SHOW
+			dunstify -C $notification_id
+			dunstify -r $topple_id -u normal -t 800 ' Pomodoro Display Off'
+		else
+			touch $SHOW
+			if [[ ! -e $LCK ]]; then
+				dunstify -r $topple_id -u low -t 800 ' Pomodoro Display On'
+			else
+				dunstify -C $topple_id
+			fi
+		fi;;
+	'stop')
+		if [ -e $STOP ]; then
+			rm $STOP
+			if [ ! -e $LCK -o ! -e $SHOW ]; then
+				dunstify -r $topple_id -u low -t 800 ' Pomodoro Resumed'
+			fi
+		else
+			touch $STOP
+			if [ ! -e $LCK -o ! -e $SHOW  ]; then
+				dunstify -r $topple_id -u normal -t 800 ' Pomodoro Paused'
+			fi
+		fi;;
+	'swap')
+		if [ -e $SWAP ]; then
+			rm $SWAP
+		else
+			touch $SWAP
+		fi;;
+	'ask')
+		if [ -e $ASKZ ]; then
+			rm $ASKZ
+			dunstify -r $topple_id -u normal -t 800 ' Pomodoro Reminder Off'
+		else
+			touch $ASKZ
+			dunstify -r $topple_id -u low -t 800 ' Pomodoro Reminder On'
+		fi;;
+	'quit')
+		dunstify -r $topple_id -u normal -t 800 ' Pomodoro Stopped'
+		if [ -e $LCK ]; then
+			rm $LCK
+		fi
+		if [ -e $STAT ]; then
+			rm $STAT
+		fi
+		dunstify -C $notification_id;;
+esac
+
+py3-cmd refresh external_script

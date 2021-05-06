@@ -13,7 +13,7 @@ py3-cmd refresh volume_status
 
 if pamixer --get-mute
 then
-	notify-send.sh -r $notification_id -h int:value:$(pamixer --get-volume) -u low " ✗ "
+	notify-send.sh -r $notification_id -h int:value:$(pamixer --get-volume) -u normal " $(pamixer --get-volume)% ✗"
 else
 	notify-send.sh -r $notification_id -h int:value:$(pamixer --get-volume) -u low " $(pamixer --get-volume)% "
 fi

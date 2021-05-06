@@ -1,0 +1,161 @@
+#!/bin/bash
+
+notification_id=728
+LCK=/tmp/break_pomodoro.lck
+SHOW=/tmp/show_pomodoro.lck
+INFO=/tmp/info_pomodoro.lck
+STOP=/tmp/stop_pomodoro.lck
+SWAP=/tmp/swap_pomodoro.lck
+STAT=/tmp/stat_pomodoro.lck
+ASKZ=/tmp/ask_pomodoro.lck
+
+if [ ! -e $INFO ]; then
+	echo '  pomodoro' > $INFO
+fi
+
+if (( $# > 0)); then
+	if [ -e $LCK ]; then
+		echo "$LCK exists."
+	else
+		touch $LCK
+		TOTAL=$(($1 * 60))
+		REMAIN=TOTAL
+		TYPE=$2
+		while [[ $REMAIN -ge 0 ]]; do
+			if [ -e $SWAP ]; then
+				TOTAL=$(cat $SWAP)
+				if [[ $TOTAL -eq 300 ]]; then
+					TYPE=Break
+				else
+					TYPE=Work
+				fi
+				rm $SWAP
+				REMAIN=TOTAL
+			fi
+
+			((m=REMAIN/60, s=REMAIN%60, percent=REMAIN*100/TOTAL))
+			if [ ! -e $STOP ]; then
+				if [ $# -ge 2 ]; then
+					echo "$(printf " $TYPE Time (%d:%02d)" $m $s)" > $INFO
+				else
+					echo "$(printf " %d:%02d" $m $s)" > $INFO
+				fi
+			else
+				if [ $# -ge 2 ]; then
+					echo "$(printf " $TYPE Time (%d:%02d)" $m $s)" > $INFO
+				else
+					echo "$(printf " %d:%02d" $m $s)" > $INFO
+				fi
+			fi
+			cat $INFO
+
+			if [[ $REMAIN -ge 10 ]]; then
+				LEVEL=low
+			else
+				if [[ $REMAIN%2 -eq 1 ]]; then
+					LEVEL=normal
+				else
+					LEVEL=critical
+				fi
+			fi
+
+			if [ -e $STOP ]; then
+				LEVEL=normal
+			fi
+
+			if [ -e $SHOW ] || [ $REMAIN -le 10 -a -e $ASKZ ]; then
+				dunstify -r $notification_id -h int:value:$percent -u $LEVEL "$(cat $INFO) "
+			fi
+
+			if [ -e $LCK ]; then
+				if [ ! -e $STOP ]; then
+					REMAIN=$(($REMAIN-1))
+				fi
+			else
+				if [ -e $INFO ]; then
+					rm $INFO
+				fi
+				if [ -e $STOP ]; then
+					rm $STOP
+				fi
+				break
+			fi
+			# sleep 1
+			if [[ $REMAIN -eq 0 ]]; then
+				if [[ ! -e $STAT ]]; then
+					PERD=1
+					echo $PERD > $STAT
+				else
+					PERD=$(cat $STAT)
+					PERD=$(($PERD+1))
+				fi
+				if [[ -e $ASKZ ]]; then
+					if [[ $TOTAL -eq 1500 ]]; then
+						TYPE=Break
+						TOTAL=300
+						if [[ -e $SHOW ]]; then
+							dunstify -r $notification_id -h int:value:100 -u critical " It's Break Time!"
+						else
+							dunstify -r $notification_id -h int:value:100 -u normal -t 800 " It's Break Time!"
+						fi
+						if zenity \
+							--question --width 360 --title "  Pomodoro - It's Break Time!" \
+							--text "<span foreground='#000000' font='WenQuanYi Zen Hei Mono 15'>Ciao $(whoami), facciamo una pausa!\nHai completato $PERD pomodori ($(date +"%H:%M")).</span>" \
+							--no-wrap --ok-label "   Sì" --cancel-label "   No"
+						then
+							echo $PERD > $STAT
+						else
+							break
+						fi
+					else
+						TYPE=Work
+						TOTAL=1500
+						if [[ -e $SHOW ]]; then
+							dunstify -r $notification_id -h int:value:100 -u critical " Continue Working!"
+						else
+							dunstify -r $notification_id -h int:value:100 -u low -t 800 " Continue Working!"
+						fi
+						if zenity \
+							--question --width 360 --title "  Pomodoro - Continue Working!" \
+							--text "<span foreground='#000000' font='WenQuanYi Zen Hei Mono 15'>Ciao $(whoami), continua a lavorare!\nEntrerai presto nella prossima ora?</span>" \
+							--no-wrap --ok-label "   Sì" --cancel-label "   No"
+						then
+							echo $PERD > $STAT
+						else
+							break
+						fi
+					fi
+					REMAIN=TOTAL
+				else
+					if [[ $TOTAL -eq 1500 ]]; then
+						TYPE=Break
+						TOTAL=300
+						dunstify -r $notification_id -h int:value:100 -u normal -t 800 " It's Break Time!"
+						echo $PERD > $STAT
+					else
+						TYPE=Work
+						TOTAL=1500
+						dunstify -r $notification_id -h int:value:100 -u low -t 800 " Continue Working!"
+					fi
+					REMAIN=TOTAL
+				fi
+			fi
+		done
+
+		if [ -e $LCK ]; then
+			dunstify -C $notification_id
+			rm $LCK
+		fi
+	fi
+else
+	if [ -e $LCK ]; then
+		STR=$(cat $INFO)
+	else
+		if [-e $STOP]; then
+			STR='  pomodoro'
+		else
+			STR='  pomodoro'
+		fi
+	fi
+	echo $STR
+fi

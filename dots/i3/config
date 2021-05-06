@@ -51,8 +51,8 @@ font pango: WenQuanYi Zen Hei Mono, Icons 16
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec alacritty
-bindsym $mod+Shift+Return exec st
+bindsym $mod+Return exec --no-startup-id alacritty
+bindsym $mod+Shift+Return exec --no-startup-id st
 
 # kill focused window
 bindsym $mod+q kill
