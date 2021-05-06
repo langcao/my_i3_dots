@@ -7,9 +7,9 @@ ASKZ=/tmp/ask_pomodoro.lck
 
 
 if [ -e $SHOW ]; then
-	STR=" "
+	STR=" "
 else
-	STR=" "
+	STR=" "
 fi
 if [ -e $STAT ]; then
 	STR+=" #$(cat $STAT)"
@@ -17,9 +17,9 @@ else
 	STR+=" #"
 fi
 if [ -e $ASKZ ]; then
-	STR+=" "
+	STR+=" "
 else
-	STR+=" "
+	STR+=" "
 fi
 if [ -e $STOP ]; then
 	STR+=" "

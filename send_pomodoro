@@ -80,7 +80,7 @@ if (( $# > 0)); then
 				fi
 				break
 			fi
-			# sleep 1
+			sleep 1
 			if [[ $REMAIN -eq 0 ]]; then
 				if [[ ! -e $STAT ]]; then
 					PERD=1
