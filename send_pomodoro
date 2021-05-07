@@ -66,12 +66,7 @@ else
 		fi
 
 		((m=REMAIN/60, s=REMAIN%60, percent=REMAIN*100/TOTAL))
-		if [ ! -e $STOP ]; then
-			echo "$(printf " $TYPE Time (%d:%02d)" $m $s)" > $INFO
-		else
-			echo "$(printf " $TYPE Time (%d:%02d)" $m $s)" > $INFO
-		fi
-
+		echo "$(printf " $TYPE Time (%d:%02d)" $m $s)" > $INFO
 		if [[ $REMAIN -ge 10 ]]; then
 			LEVEL=low
 		else

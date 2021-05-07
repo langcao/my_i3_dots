@@ -28,7 +28,9 @@ case $1 in
 			else
 				dunstify -C $topple_id
 			fi
-		fi;;
+		fi
+		echo $STR
+		py3-cmd refresh "external_script pomo_show";;
 	'stop')
 		if [ -e $STOP ]; then
 			rm $STOP
@@ -42,7 +44,9 @@ case $1 in
 			if [ ! -e $LCK -o ! -e $SHOW  ]; then
 				dunstify -r $topple_id -u normal -t $duration ' Pomodoro Paused'
 			fi
-		fi;;
+		fi
+		echo $STR
+		py3-cmd refresh "external_script pomo_stop";;
 	'swap')
 		if cat $INFO | grep Work
 		then
@@ -59,7 +63,9 @@ case $1 in
 			touch $ASKZ
 			STR=" "
 			dunstify -r $topple_id -u low -t $duration ' Pomodoro Reminder On'
-		fi;;
+		fi
+		echo $STR
+		py3-cmd refresh "external_script pomo_ask";;
 	'quit')
 		dunstify -r $topple_id -u normal -t $duration ' Pomodoro Quitted'
 		if [ -e $LCK ]; then
@@ -74,8 +80,7 @@ case $1 in
 			STR=" #$(cat $STAT)"
 		else
 			STR=" #"
-		fi;;
+		fi
+		echo $STR
+		py3-cmd refresh "external_script pomo_stat";;
 esac
-
-py3-cmd refresh external_script
-echo $STR

@@ -13,9 +13,9 @@ if (( $# > 0)); then
 	case $1 in
 		'show')
 			if [ -e $SHOW ]; then
-				STR=" "
+				STR=" "
 			else
-				STR=" "
+				STR=" "
 			fi;;
 		'stat')
 			if [ -e $STAT ]; then
@@ -42,18 +42,14 @@ if (( $# > 0)); then
 			if [ -e $LCK ]; then
 				STR="$(cat $INFO | sed 's/Time //')"
 			else
-				if [ -e $STOP ]; then
-					STR='  pomodoro'
-				else
-					STR='  pomodoro'
-				fi
+				STR='  pomodoro'
 			fi;;
 	esac
 else
 	if [ -e $SHOW ]; then
-		STR=" "
+		STR=" "
 	else
-		STR=" "
+		STR=" "
 	fi
 	if [ -e $STAT ]; then
 		STR+=" #$(cat $STAT)"
