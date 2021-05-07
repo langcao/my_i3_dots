@@ -16,10 +16,12 @@ case $1 in
 	'show')
 		if [ -e $SHOW ]; then
 			rm $SHOW
+			STR=" "
 			dunstify -C $notification_id
 			dunstify -r $topple_id -u normal -t 800 ' Pomodoro Display Off'
 		else
 			touch $SHOW
+			STR=" "
 			if [[ ! -e $LCK ]]; then
 				dunstify -r $topple_id -u low -t 800 ' Pomodoro Display On'
 			else
@@ -29,27 +31,32 @@ case $1 in
 	'stop')
 		if [ -e $STOP ]; then
 			rm $STOP
+			STR=" "
 			if [ ! -e $LCK -o ! -e $SHOW ]; then
 				dunstify -r $topple_id -u low -t 800 ' Pomodoro Resumed'
 			fi
 		else
 			touch $STOP
+			STR=" "
 			if [ ! -e $LCK -o ! -e $SHOW  ]; then
 				dunstify -r $topple_id -u normal -t 800 ' Pomodoro Paused'
 			fi
 		fi;;
 	'swap')
-		if [ -e $SWAP ]; then
-			rm $SWAP
+		if cat $INFO | grep Work
+		then
+			echo 300 > $SWAP
 		else
-			touch $SWAP
+			echo 1500 > $SWAP
 		fi;;
 	'ask')
 		if [ -e $ASKZ ]; then
 			rm $ASKZ
+			STR=" "
 			dunstify -r $topple_id -u normal -t 800 ' Pomodoro Reminder Off'
 		else
 			touch $ASKZ
+			STR=" "
 			dunstify -r $topple_id -u low -t 800 ' Pomodoro Reminder On'
 		fi;;
 	'quit')
@@ -61,6 +68,13 @@ case $1 in
 			rm $STAT
 		fi
 		dunstify -C $notification_id;;
+	'stat')
+		if [ -e $STAT ]; then
+			STR=" #$(cat $STAT)"
+		else
+			STR=" #"
+		fi;;
 esac
 
 py3-cmd refresh external_script
+echo $STR

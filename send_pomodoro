@@ -147,15 +147,15 @@ if (( $# > 0)); then
 			rm $LCK
 		fi
 	fi
-else
-	if [ -e $LCK ]; then
-		STR=$(cat $INFO)
-	else
-		if [-e $STOP]; then
-			STR='  pomodoro'
-		else
-			STR='  pomodoro'
-		fi
-	fi
-	echo $STR
+# else
+# 	if [ -e $LCK ]; then
+# 		STR=$(cat $INFO)
+# 	else
+# 		if [-e $STOP]; then
+# 			STR='  pomodoro'
+# 		else
+# 			STR='  pomodoro'
+# 		fi
+# 	fi
+# 	echo $STR
 fi

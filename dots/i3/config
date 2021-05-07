@@ -80,6 +80,16 @@ bindsym Hangul_Hanja exec --no-startup-id ~/.i3/switch_eng
 bindsym $mod+Hangul_Hanja exec --no-startup-id py3-cmd click --button 3 "group im", exec --no-startup-id ~/.i3/fcitx_hotkey_topple
 bindsym Ctrl+space exec --no-startup-id ~/.i3/switch_eng_topple
 
+# pomodoro
+bindsym Ctrl+Hangul_Hanja exec --no-startup-id ~/.i3/send_pomodoro_work
+bindsym Ctrl+Shift+Hangul_Hanja exec --no-startup-id ~/.i3/send_pomodoro_break
+bindsym $mod+Ctrl+Hangul_Hanja exec --no-startup-id ~/.i3/pomodoro_topple swap
+bindsym $mod+Ctrl+Shift+Hangul_Hanja exec --no-startup-id ~/.i3/pomodoro_topple quit
+
+bindsym Ctrl+Hangul exec --no-startup-id ~/.i3/pomodoro_topple stop
+bindsym Ctrl+Shift+Hangul exec --no-startup-id ~/.i3/pomodoro_topple show
+bindsym $mod+Ctrl+Hangul exec --no-startup-id ~/.i3/pomodoro_topple ask
+
 # change focus
 bindsym $mod+j focus left
 bindsym $mod+k focus down

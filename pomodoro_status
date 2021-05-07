@@ -1,29 +1,69 @@
 #!/bin/bash
 
+LCK=/tmp/break_pomodoro.lck
 SHOW=/tmp/show_pomodoro.lck
+INFO=/tmp/info_pomodoro.lck
 STOP=/tmp/stop_pomodoro.lck
 STAT=/tmp/stat_pomodoro.lck
 ASKZ=/tmp/ask_pomodoro.lck
 
-
-if [ -e $SHOW ]; then
-	STR=" "
+if (( $# > 0)); then
+	case $1 in
+		'show')
+			if [ -e $SHOW ]; then
+				STR=" "
+			else
+				STR=" "
+			fi;;
+		'stat')
+			if [ -e $STAT ]; then
+				STR+=" #$(cat $STAT)"
+			else
+				STR+=" #"
+			fi;;
+		'ask')
+			if [ -e $ASKZ ]; then
+				STR+=" "
+			else
+				STR+=" "
+			fi;;
+		'stop')
+			if [ -e $STOP ]; then
+				STR+=" "
+			else
+				STR+=" "
+			fi;;
+		'info')
+			if [ -e $LCK ]; then
+				STR=$(cat $INFO)
+			else
+				if [ -e $STOP ]; then
+					STR='  pomodoro'
+				else
+					STR='  pomodoro'
+				fi
+			fi;;
+	esac
 else
-	STR=" "
-fi
-if [ -e $STAT ]; then
-	STR+=" #$(cat $STAT)"
-else
-	STR+=" #"
-fi
-if [ -e $ASKZ ]; then
-	STR+=" "
-else
-	STR+=" "
-fi
-if [ -e $STOP ]; then
-	STR+=" "
-else
-	STR+=" "
+	if [ -e $SHOW ]; then
+		STR=" "
+	else
+		STR=" "
+	fi
+	if [ -e $STAT ]; then
+		STR+=" #$(cat $STAT)"
+	else
+		STR+=" #"
+	fi
+	if [ -e $ASKZ ]; then
+		STR+=" "
+	else
+		STR+=" "
+	fi
+	if [ -e $STOP ]; then
+		STR+=" "
+	else
+		STR+=" "
+	fi
 fi
 echo $STR
