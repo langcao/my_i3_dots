@@ -89,6 +89,13 @@ bindsym Ctrl+Hangul exec --no-startup-id ~/.i3/pomodoro_topple stop
 bindsym Ctrl+Shift+Hangul exec --no-startup-id ~/.i3/pomodoro_topple show
 bindsym $mod+Ctrl+Hangul exec --no-startup-id ~/.i3/pomodoro_topple ask
 
+bindsym $mod+Ctrl+Shift+Up exec --no-startup-id ~/.i3/pomodoro_adjust Work 1
+bindsym $mod+Ctrl+Shift+Down exec --no-startup-id ~/.i3/pomodoro_adjust Work -1
+bindsym $mod+Ctrl+Shift+Right exec --no-startup-id ~/.i3/pomodoro_adjust Break 1
+bindsym $mod+Ctrl+Shift+Left exec --no-startup-id ~/.i3/pomodoro_adjust Break -1
+bindsym $mod+Ctrl+Shift+Hangul_Hanja exec --no-startup-id ~/.i3/pomodoro_adjust Work 0
+bindsym $mod+Ctrl+Shift+Hangul exec --no-startup-id ~/.i3/pomodoro_adjust Break 0
+
 # change focus
 bindsym $mod+j focus left
 bindsym $mod+k focus down

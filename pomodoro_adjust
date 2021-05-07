@@ -1,5 +1,9 @@
 #!/bin/bash
 
+topple_id=718
+dursec=1
+((duration=dursec*1000))
+
 WORK_TIME=/tmp/work_pomodoro.dat
 BREAK_TIME=/tmp/break_pomodoro.dat
 WORK_MIN=/tmp/work_min_pomodoro.dat
@@ -44,9 +48,11 @@ if [ $1 = Work ]; then
 			echo $WORK > $WORK_MIN
 			((LEN=WORK*60))
 			echo $LEN > $WORK_TIME
+			dunstify -r $topple_id -u normal -t $duration "$(printf " Work Time %d min." $WORK)"
 		fi
 	fi
 	cat $WORK_MIN
+	py3-cmd refresh "external_script pomo_work_adjust"
 elif [ $1 = Break ]; then
 	if [ ! -z $2 ]; then
 		if [ $2 -eq 0 ]; then
@@ -62,15 +68,19 @@ elif [ $1 = Break ]; then
 			echo $BREAK > $BREAK_MIN
 			((LEN=BREAK*60))
 			echo $LEN > $BREAK_TIME
+			dunstify -r $topple_id -u normal -t $duration "$(printf " Break Time %d min." $BREAK)"
 		fi
 	fi
 	cat $BREAK_MIN
+	py3-cmd refresh "external_script pomo_break_adjust"
 elif [ $1 = Work_Default ]; then
 	echo 1500 > $WORK_TIME
 	echo 25 > $WORK_MIN
 	cat $WORK_MIN
+	dunstify -r $topple_id -u normal -t $duration " Work Time 25 min."
 elif [ $1 = Break_Default ]; then
 	echo 300 > $BREAK_TIME
 	echo 5 > $BREAK_MIN
 	cat $BREAK_MIN
+	dunstify -r $topple_id -u normal -t $duration " Break Time 5 min."
 fi
