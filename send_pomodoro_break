@@ -1,10 +1,21 @@
 #!/bin/bash
 
 notification_id=728
-LCK=/tmp/break_pomodoro.lck
 SHOW=/tmp/show_pomodoro.lck
 STOP=/tmp/stop_pomodoro.lck
 SWAP=/tmp/swap_pomodoro.lck
+BREAK_TIME=/tmp/break_pomodoro.dat
+
+if [ ! -e $BREAK_TIME ]; then
+	TOTAL=300
+	echo $TOTAL > $BREAK_TIME
+else
+	TOTAL=$(cat $BREAK_TIME)
+fi
+if (( $# > 0)); then
+	TOTAL=$(($1 * 60))
+	echo $TOTAL > $BREAK_TIME
+fi
 
 if [ ! -e $SHOW ]; then
 	touch $SHOW
@@ -14,15 +25,5 @@ if [ -e $STOP ]; then
 	rm $STOP
 fi
 
-if [ -e $LCK ]; then
-	echo 300 > $SWAP
-fi
-
-dunstify -r $notification_id -h int:value:100 -u critical " Start Break Time!"
-sleep 1
-
-if (( $# > 0)); then
-	~/.i3/send_pomodoro $1 Break
-else
-	~/.i3/send_pomodoro 5 Break
-fi
+echo Break > $SWAP
+~/.i3/send_pomodoro

@@ -6,6 +6,8 @@ INFO=/tmp/info_pomodoro.lck
 STOP=/tmp/stop_pomodoro.lck
 STAT=/tmp/stat_pomodoro.lck
 ASKZ=/tmp/ask_pomodoro.lck
+WORK_TIME=/tmp/work_pomodoro.dat
+BREAK_TIME=/tmp/break_pomodoro.dat
 
 if (( $# > 0)); then
 	case $1 in
@@ -34,8 +36,11 @@ if (( $# > 0)); then
 				STR+=" "
 			fi;;
 		'info')
+			if [ ! -e $INFO ]; then
+				echo '  pomodoro' > $INFO
+			fi
 			if [ -e $LCK ]; then
-				STR=$(cat $INFO)
+				STR="$(cat $INFO | sed 's/Time //')"
 			else
 				if [ -e $STOP ]; then
 					STR='  pomodoro'

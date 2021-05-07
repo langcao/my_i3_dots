@@ -1,0 +1,76 @@
+#!/bin/bash
+
+WORK_TIME=/tmp/work_pomodoro.dat
+BREAK_TIME=/tmp/break_pomodoro.dat
+WORK_MIN=/tmp/work_min_pomodoro.dat
+BREAK_MIN=/tmp/break_min_pomodoro.dat
+
+if [ ! -e $WORK_MIN ]; then
+	if [ -e $WORK_TIME]; then
+		TOTAL=$(cat $WORK_TIME)
+		((LEN=TOTAL/60))
+		echo $LEN > $WORK_MIN
+	else
+		echo 1500 > $WORK_TIME
+		echo 25 > $WORK_MIN
+	fi
+fi
+WORK=$(cat $WORK_MIN)
+
+if [ ! -e $BREAK_MIN ]; then
+	if [ -e $BREAK_TIME]; then
+		TOTAL=$(cat $BREAK_TIME)
+		((LEN=TOTAL/60))
+		echo $LEN > $BREAK_MIN
+	else
+		echo 300 > $BREAK_TIME
+		echo 5 > $BREAK_MIN
+	fi
+fi
+BREAK=$(cat $BREAK_MIN)
+
+if [ $1 = Work ]; then
+	if [ ! -z $2 ]; then
+		if [ $2 = 0 ]; then
+			~/.i3/send_pomodoro_work $WORK
+		else
+			((WORK+=$2))
+			if [ $WORK -le 5 ]; then
+				WORK=5
+			fi
+			if [ $WORK -ge 120 ]; then
+				WORK=120
+			fi
+			echo $WORK > $WORK_MIN
+			((LEN=WORK*60))
+			echo $LEN > $WORK_TIME
+		fi
+	fi
+	cat $WORK_MIN
+elif [ $1 = Break ]; then
+	if [ ! -z $2 ]; then
+		if [ $2 -eq 0 ]; then
+			~/.i3/send_pomodoro_break $BREAK
+		else
+			((BREAK+=$2))
+			if [ $BREAK -le 5 ]; then
+				BREAK=5
+			fi
+			if [ $BREAK -ge 120 ]; then
+				BREAK=120
+			fi
+			echo $BREAK > $BREAK_MIN
+			((LEN=BREAK*60))
+			echo $LEN > $BREAK_TIME
+		fi
+	fi
+	cat $BREAK_MIN
+elif [ $1 = Work_Default ]; then
+	echo 1500 > $WORK_TIME
+	echo 25 > $WORK_MIN
+	cat $WORK_MIN
+elif [ $1 = Break_Default ]; then
+	echo 300 > $BREAK_TIME
+	echo 5 > $BREAK_MIN
+	cat $BREAK_MIN
+fi

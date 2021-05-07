@@ -1,9 +1,10 @@
 #!/bin/bash
 
-#!/bin/bash
-
 notification_id=728
 topple_id=718
+dursec=1
+((duration=dursec*1000))
+
 LCK=/tmp/break_pomodoro.lck
 SHOW=/tmp/show_pomodoro.lck
 INFO=/tmp/info_pomodoro.lck
@@ -18,12 +19,12 @@ case $1 in
 			rm $SHOW
 			STR=" "
 			dunstify -C $notification_id
-			dunstify -r $topple_id -u normal -t 800 ' Pomodoro Display Off'
+			dunstify -r $topple_id -u normal -t $duration ' Pomodoro Display Off'
 		else
 			touch $SHOW
 			STR=" "
 			if [[ ! -e $LCK ]]; then
-				dunstify -r $topple_id -u low -t 800 ' Pomodoro Display On'
+				dunstify -r $topple_id -u low -t $duration ' Pomodoro Display On'
 			else
 				dunstify -C $topple_id
 			fi
@@ -33,34 +34,34 @@ case $1 in
 			rm $STOP
 			STR=" "
 			if [ ! -e $LCK -o ! -e $SHOW ]; then
-				dunstify -r $topple_id -u low -t 800 ' Pomodoro Resumed'
+				dunstify -r $topple_id -u low -t $duration ' Pomodoro Resumed'
 			fi
 		else
 			touch $STOP
 			STR=" "
 			if [ ! -e $LCK -o ! -e $SHOW  ]; then
-				dunstify -r $topple_id -u normal -t 800 ' Pomodoro Paused'
+				dunstify -r $topple_id -u normal -t $duration ' Pomodoro Paused'
 			fi
 		fi;;
 	'swap')
 		if cat $INFO | grep Work
 		then
-			echo 300 > $SWAP
+			echo Break > $SWAP
 		else
-			echo 1500 > $SWAP
+			echo Work > $SWAP
 		fi;;
 	'ask')
 		if [ -e $ASKZ ]; then
 			rm $ASKZ
 			STR=" "
-			dunstify -r $topple_id -u normal -t 800 ' Pomodoro Reminder Off'
+			dunstify -r $topple_id -u normal -t $duration ' Pomodoro Reminder Off'
 		else
 			touch $ASKZ
 			STR=" "
-			dunstify -r $topple_id -u low -t 800 ' Pomodoro Reminder On'
+			dunstify -r $topple_id -u low -t $duration ' Pomodoro Reminder On'
 		fi;;
 	'quit')
-		dunstify -r $topple_id -u normal -t 800 ' Pomodoro Stopped'
+		dunstify -r $topple_id -u normal -t $duration ' Pomodoro Quitted'
 		if [ -e $LCK ]; then
 			rm $LCK
 		fi
