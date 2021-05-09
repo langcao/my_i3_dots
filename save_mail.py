@@ -3,13 +3,11 @@ import email
 import base64
 import quopri
 import codecs
+import unicodedata
 import os, sys, re
 from email.header import decode_header, make_header
+from mail_head import *
 
-NAME = ['Lang Cao', 'Xun Li', 'Lang Cao', 'Lang Cao', 'Xun Li']
-ADDRESS = ['lcao@zzu.edu.cn', 'li_xun@ircn.jp', 'cao@ircn.jp', 'lcao@g.ecc.u-tokyo.ac.jp', 'milkquick@gmail.com']
-PASSWORD = ['miaomiao1982', '20200608lixun', 'miaomiao1982','miaomiao-1982', 'kkmiudnpygdsyflj']
-SERVER = ['mail.v.zzu.edu.cn', 'ircn.sakura.ne.jp', 'ircn.sakura.ne.jp', 'imap.gmail.com', 'imap.gmail.com']
 
 SHOW_NUM = 10
 
@@ -43,7 +41,7 @@ def get_content(msg):
         return payload
 
 
-def split_content(content, maxrow=36):
+def split_content(content, attach_count, maxrow=40, maxcol=144):
     if isinstance(content, str):
         content = re.sub(r'<.*?>', '', content)
         lines = content.split('\n')
@@ -56,9 +54,10 @@ def split_content(content, maxrow=36):
 
     current = 0
     omitted = ""
+    prev_empty = True
     for i, line in enumerate(lines):
         text = ""
-        if current >= maxrow:
+        if current >= maxrow - attach_count:
             # text += '⋮║ The orininal mail has more %d line(s) omitted.'%(len(lines) - current)
             omitted = ' The orininal mail has more %d line(s) omitted.'%(len(lines) - current)
             break
@@ -73,10 +72,15 @@ def split_content(content, maxrow=36):
                     text = ' ' + line[0:pos]+'\n'
                 else:
                     text = '  ' + line[0:pos]+'\n'
-                current += 1
-        else:
+                for c in line:
+                    if unicodedata.east_asian_width(c) in ['F', 'W']:
+                        pos += 1
+                current += 1+ int(pos/maxcol)
+                prev_empty = True
+        elif prev_empty:
             text = '\n'
             current += 1
+            prev_empty = False
 
         f.write(text.replace('"',"”").replace("'",'’'))
 
@@ -89,8 +93,6 @@ for user, _ in enumerate(ADDRESS):
 
     if len(args)>1:
         user = int(args[1])
-
-    print("fetching %s"%ADDRESS[user])
 
     imapobj = imaplib.IMAP4_SSL(SERVER[user], '993')
     imapobj.login(ADDRESS[user], PASSWORD[user])
@@ -146,7 +148,7 @@ for user, _ in enumerate(ADDRESS):
         os.system('echo "%s" > %s'%(output, filename))
 
         content = get_content(mail)
-        split_content(content)
+        split_content(content, count)
 
     if len(args)>1:
         break

@@ -4,7 +4,7 @@ from random import choice
 from os import system
 
 session = HTMLSession()
-page = choice(range(2974,4560,20))
+page = choice(range(2974,4666,20))
 text = session.get('https://bbs.fudan.edu.cn/bbs/tdoc?bid=67&start=' + str(page)).text
 pos = 0
 sel = []
