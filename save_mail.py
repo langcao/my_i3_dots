@@ -46,7 +46,7 @@ def split_content(content, attach_count, maxrow=40, maxcol=144):
         content = re.sub(r'<.*?>', '', content)
         lines = content.split('\n')
     else:
-        temp = codecs.decode(content)
+        temp = codecs.decode(content, encoding="ISO-8859-1")
         lines = temp.split('\n')
 
     filename = EMAIL_PATH + ADDRESS[user] + '/content_%d'%note_id
@@ -110,7 +110,7 @@ for user, _ in enumerate(ADDRESS):
         try:
         	mail = email.message_from_string(data[0][1].decode('utf-8'))
         except:
-        	mail = email.message_from_string(data[0][1].decode('shift_jis'))
+        	mail = email.message_from_string(data[0][1].decode('ISO-8859-1'))
         subject = str(make_header(decode_header(mail["Subject"])))
         output += " %s"%(subject)
 
