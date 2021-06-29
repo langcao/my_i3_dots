@@ -35,10 +35,12 @@ set $dark   #00252E
 # font pango: helvetica rounded lt 16px
 # font pango: helvetica con bq light 8
 # font pango: Verdana 8
-# font pango: Lucida Sans Unicode 8
+# font pango: Lucida Sans Unicode 16
+# font pango: Migu 2M, Icons 16
 font pango: WenQuanYi Zen Hei Mono, Icons 16
+# font pango: Microsoft YaHei, Icons 16
 # font pango: DroidSansMono Nerd, Icons 16
-# font pango: Gen Shin Gothic Monospace Regular, Icons 8
+# font pango: Gen Shin Gothic Monospace Regular, Icons 16
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -324,12 +326,12 @@ bindsym XF86AudioMute exec --no-startup-id ~/.i3/send_mute
 # bindsym XF86Eject exec --no-startup-id guake -e cmus --show
 bindsym XF86Tools exec --no-startup-id ~/.i3/send_cmus_topple
 bindsym XF86Eject exec --no-startup-id ~/.i3/send_lyrics_topple
-bindsym $mod+Shift+XF86Tools exec --no-startup-id killall cmus, exec --no-startup-id guake --hide
-bindsym XF86AudioPlay exec --no-startup-id playerctl cmus-remote -u, exec --no-startup-id ~/.i3/send_cmus
+#bindsym $mod+Shift+XF86Tools exec --no-startup-id killall cmus, exec --no-startup-id guake --hide
+bindsym XF86AudioPlayPause exec --no-startup-id cmus-remote -u, exec --no-startup-id ~/.i3/send_cmus
 bindsym XF86AudioPause exec --no-startup-id cmus-remote -u, exec --no-startup-id ~/.i3/send_cmus
 bindsym XF86AudioPrev exec --no-startup-id ~/.i3/send_cmus_prev
 bindsym XF86AudioNext exec --no-startup-id ~/.i3/send_cmus_next
-bindsym $mod+XF86AudioPlay exec --no-startup-id ~/.i3/send_cmus_stop
+bindsym $mod+XF86AudioPlayPause exec --no-startup-id ~/.i3/send_cmus_stop
 bindsym $mod+XF86AudioNext exec --no-startup-id playerctl position 5+, exec --no-startup-id ~/.i3/send_cmus
 bindsym $mod+XF86AudioPrev exec --no-startup-id playerctl position 5-, exec --no-startup-id ~/.i3/send_cmus
 bindsym $mod+Ctrl+XF86AudioNext exec --no-startup-id playerctl position 30+, exec --no-startup-id ~/.i3/send_cmus
@@ -377,22 +379,27 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+Escape exec --no-startup-id ~/.i3/send_screensaver
 bindsym $mod+Shift+Escape exec --no-startup-id ~/.i3/betterlock
 
-bindsym $mod+Ctrl+space exec --no-startup-id killall zenity; exec --no-startup-id killall dunst;
-bindsym $mod+Ctrl+k exec --no-startup-id dunstify -t 2000 ' Retrieving bbs.fudan.edu.cn'; exec --no-startup-id python ~/.i3/get_joke.py;
-bindsym $mod+Ctrl+n exec --no-startup-id dunstify -t 2000 ' Retrieving bbs.fudan.edu.cn'; exec --no-startup-id killall zenity; exec --no-startup-id python ~/.i3/get_joke_new.py;
-bindsym $mod+Ctrl+l exec --no-startup-id dunstify -t 2000 ' Retrieving bbs.fudan.edu.cn'; exec --no-startup-id python ~/.i3/get_joke_latest.py;
-bindsym $mod+Ctrl+d exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune Vokabular German)</big></big>" --width=500
-bindsym $mod+Ctrl+e exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune gre subset)</big></big>" --width=500
-bindsym $mod+Ctrl+f exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune jokes)</big></big>" --width=500
-bindsym $mod+Ctrl+c exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune chengyu chinese diet)</big></big>" --width=500
-bindsym $mod+Ctrl+j exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune dict_ch-jp dict_jp-ch jp_gy jp_sy)</big></big>" --width=500
-bindsym $mod+Ctrl+p exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune jp_gy jp_sy)</big></big>" --width=500
-bindsym $mod+Ctrl+s exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune definitions science education issa-haiku)</big></big>" --width=500
-bindsym $mod+Ctrl+t exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune tang300 song100)</big></big>" --width=500
-bindsym $mod+Ctrl+w exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune wisdom love art paradoxum)</big></big>" --width=500
-bindsym $mod+Ctrl+b exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune wisdom bible bible_en)</big></big>" --width=500
-bindsym $mod+Ctrl+q exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune wisdom quran)</big></big>" --width=500
-bindsym $mod+Ctrl+a exec --no-startup-id killall zenity; exec zenity --info --title="ideagen" --text="<big><big>$(fortune)</big></big>" --width=500
+bindsym $mod+Ctrl+Up exec --no-startup-id dunstctl history-pop
+bindsym $mod+Ctrl+Down exec --no-startup-id dunstctl close-all
+bindsym $mod+Ctrl+Left exec --no-startup-id dunstctl set-paused toggle, exec --no-startup-id py3-cmd refresh do_not_disturb
+bindsym $mod+Ctrl+Right exec --no-startup-id dunstify -r 465372819 -u normal "Display: $(dunstctl count displayed)" "History: $(dunstctl count history)"
+
+bindsym $mod+Ctrl+space exec --no-startup-id killall zenity, exec --no-startup-id killall dunst
+bindsym $mod+Ctrl+k exec --no-startup-id dunstify -t 2000 ' Retrieving bbs.fudan.edu.cn', exec --no-startup-id python ~/.i3/get_joke.py
+bindsym $mod+Ctrl+n exec --no-startup-id dunstify -t 2000 ' Retrieving bbs.fudan.edu.cn', exec --no-startup-id killall zenity, exec --no-startup-id python ~/.i3/get_joke_new.py
+bindsym $mod+Ctrl+l exec --no-startup-id dunstify -t 2000 ' Retrieving bbs.fudan.edu.cn', exec --no-startup-id python ~/.i3/get_joke_latest.py,
+bindsym $mod+Ctrl+d exec --no-startup-id killall zenity, exec zenity --info --title="ideagen" --text="<big><big>$(fortune Vokabular German)</big></big>" --width=500
+bindsym $mod+Ctrl+e exec --no-startup-id killall zenity, exec zenity --info --title="ideagen" --text="<big><big>$(fortune gre subset)</big></big>" --width=500
+bindsym $mod+Ctrl+f exec --no-startup-id killall zenity, exec zenity --info --title="ideagen" --text="<big><big>$(fortune jokes)</big></big>" --width=500
+bindsym $mod+Ctrl+c exec --no-startup-id killall zenity, exec zenity --info --title="ideagen" --text="<big><big>$(fortune chengyu chinese diet)</big></big>" --width=500
+bindsym $mod+Ctrl+j exec --no-startup-id killall zenity, exec zenity --info --title="ideagen" --text="<big><big>$(fortune dict_ch-jp dict_jp-ch jp_gy jp_sy)</big></big>" --width=500
+bindsym $mod+Ctrl+p exec --no-startup-id killall zenity, exec zenity --info --title="ideagen" --text="<big><big>$(fortune jp_gy jp_sy)</big></big>" --width=500
+bindsym $mod+Ctrl+s exec --no-startup-id killall zenity, exec zenity --info --title="ideagen" --text="<big><big>$(fortune definitions science education issa-haiku)</big></big>" --width=500
+bindsym $mod+Ctrl+t exec --no-startup-id killall zenity, exec zenity --info --title="ideagen" --text="<big><big>$(fortune tang300 song100)</big></big>" --width=500
+bindsym $mod+Ctrl+w exec --no-startup-id killall zenity, exec zenity --info --title="ideagen" --text="<big><big>$(fortune wisdom love art paradoxum)</big></big>" --width=500
+bindsym $mod+Ctrl+b exec --no-startup-id killall zenity, exec zenity --info --title="ideagen" --text="<big><big>$(fortune wisdom bible bible_en)</big></big>" --width=500
+bindsym $mod+Ctrl+q exec --no-startup-id killall zenity, exec zenity --info --title="ideagen" --text="<big><big>$(fortune wisdom quran)</big></big>" --width=500
+bindsym $mod+Ctrl+a exec --no-startup-id killall zenity, exec zenity --info --title="ideagen" --text="<big><big>$(fortune)</big></big>" --width=500
 
 bindsym $mod+Ctrl+y exec --no-startup-id dunstify "$(xclip -o | ydcv)"
 
@@ -998,13 +1005,13 @@ mode "$mode_launcher" {
     bindsym p workspace $ws_p, exec --no-startup-id pycharm-edu, mode "default"
     bindsym q workspace $ws_q, exec --no-startup-id qtcreator, mode "default"
     bindsym r workspace $ws_r, exec --no-startup-id rstudio-bin, mode "default"
-    bindsym s exec subl3, mode "default"
+    bindsym s exec subl, mode "default"
     #bindsym t exec --no-startup-id tilda -c ydcv, mode "default"
     #bindsym t exec --no-startup-id stardict --class floatingApp, mode "default"
     #bindsym u exec --no-startup-id nautilus /run/media/fandy && umount /dev/sdb1, mode "default"
     bindsym v exec --no-startup-id guake -e nvim, mode "default"
     bindsym w workspace $ws_wechat, exec --no-startup-id electronic-wechat  --class floatingApp, mode "default"
-    bindsym x workspace $ws_work, exec --no-startup-id subl3 -n, mode "default"
+    bindsym x workspace $ws_work, exec --no-startup-id subl -n, mode "default"
     bindsym y workspace $ws_movie,  exec --no-startup-id google-chrome-stable --new-window https://www.youtube.com, mode "default"
     bindsym z exec workspace $ws_socks, exec --no-startup-id zotero --class floatingApp, mode "default"
 
@@ -1019,7 +1026,7 @@ mode "$mode_launcher" {
     #bindsym $mod+i exec --no-startup-id feh --bg-fill ~/.config/i3/.wallpaper.jpg, mode "default"
     #bindsym $mod+j exec --no-startup-id systemd-run --on-calendar="*-*-* *:*/5:00" --user -- \ /usr/bin/feh --no-fehbg --bg-scale --randomize -r ~/Pictures/Wallpapers, mode "default"
     bindsym $mod+j workspace $ws_joy, exec --no-startup-id steam, mode "default"
-    bindsym $mod+h workspace $ws_movie,  exec --no-startup-id google-chrome-stable --incognito --new-window https://www.xvideos.com/, mode "default"
+    bindsym $mod+h workspace $ws_movie,  exec --no-startup-id google-chrome-stable --incognito --new-window https://javmix.tv/, mode "default"
     bindsym $mod+l workspace $ws_z, exec --no-startup-id lazarus --class floatingApp, mode "default"
     bindsym $mod+m workspace $ws_n, exec --no-startup-id alacritty -e matlab, mode "default"
     bindsym $mod+n exec --no-startup-id nautilus, mode "default"
@@ -1027,13 +1034,13 @@ mode "$mode_launcher" {
     bindsym $mod+p workspace $ws_p, exec --no-startup-id pycharm-edu, mode "default"
     bindsym $mod+q workspace $ws_q, exec --no-startup-id qtcreator, mode "default"
     bindsym $mod+r workspace $ws_r, exec --no-startup-id rstudio-bin, mode "default"
-    bindsym $mod+s exec subl3, mode "default"
+    bindsym $mod+s exec subl, mode "default"
     #bindsym $mod+t exec --no-startup-id tilda -c ydcv, mode "default"
     #bindsym $mod+t exec --no-startup-id stardict --class floatingApp, mode "default"
     #bindsym $mod+u exec --no-startup-id nautilus /run/media/fandy && umount /dev/sdb1, mode "default"
     bindsym $mod+v exec --no-startup-id guake -e nvim, mode "default"
     bindsym $mod+w workspace $ws_wechat, exec --no-startup-id electronic-wechat  --class floatingApp, mode "default"
-    bindsym $mod+x workspace $ws_work, exec --no-startup-id subl3 -n, mode "default"
+    bindsym $mod+x workspace $ws_work, exec --no-startup-id subl -n, mode "default"
     bindsym $mod+y workspace $ws_movie, exec --no-startup-id google-chrome-stable --new-window https://www.youtube.com, mode "default"
     bindsym $mod+z workspace $ws_socks, exec --no-startup-id zotero --class floatingApp, mode "default"
 
@@ -1355,6 +1362,7 @@ bar {
     i3bar_command i3bar -t
  #   status_command i3status
     status_command py3status -c ~/.i3/i3status.conf
+ #   status_command /usr/bin/i3status-rs ~/.config/i3status-rust/config.toml
     position bottom
     modifier Shift
     separator_symbol " "

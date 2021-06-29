@@ -103,7 +103,7 @@ for user, _ in enumerate(ADDRESS):
 
     select = data[0].split()
     for note_id in range(min(NEW_NUM, SHOW_NUM)):
-        output = " %s <%s> (%d)\n"%(NAME[user], ADDRESS[user], note_id+1)
+        output = "𝛻  %s <%s> (%d)\n"%(NAME[user], ADDRESS[user], note_id+1)
 
         num = select[-note_id-1]
         typ, data = imapobj.fetch(num, '(RFC822)')

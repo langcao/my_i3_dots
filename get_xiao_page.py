@@ -10,6 +10,7 @@ import pyperclip
 
 # page = randint(1, 55)
 path = '/home/milklee/Pictures/Wallpapers/Selected/xiao/'
+path = '/tmp/ppperson'
 system('cd %s'%path)
 url = pyperclip.paste()
 print(url)
