@@ -1,0 +1,8 @@
+#!/bin/bash
+
+notify-send "Cleaning $PWD..."
+exts="aux bbl blg brf fls idx ilg ind lof log lol lot out toc synctex.gz fdb_latexmk"
+
+for ext in $exts; do
+	rm -f $PWD/*.$ext
+done

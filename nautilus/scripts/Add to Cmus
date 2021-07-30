@@ -1,0 +1,14 @@
+#!/bin/bash
+
+MY_SAVEIFS=$IFS
+#IFS=$(echo -en "\n\b")
+IFS=$'\n'
+
+i="$1"
+filename=$(basename "$1")
+extension="${filename##*.}"
+if [ "$extension" = "mp3" ]; then
+	trackize  $i
+fi
+
+IFS=$MY_SAVEIFS

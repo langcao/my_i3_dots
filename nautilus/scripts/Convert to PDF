@@ -1,0 +1,72 @@
+#!/bin/bash
+
+# convert DjVu -> PDF
+# usage:  djvu2pdf.sh  <file.djvu>
+
+MY_SAVEIFS=$IFS
+#IFS=$(echo -en "\n\b")
+IFS=$'\n'
+
+NOTIFY_ID=56437281
+i="$1"
+filename=$(basename "$1")
+extension="${filename##*.}"
+if [ "$extension" = "djvu" ]; then
+	notify-send.sh -r $NOTIFY_ID -u low "Converting $i to PDF..."
+	o=$(basename $i .djvu)
+	o="$o".pdf
+
+	if [ -e $o ]; then
+		sleep 0.2
+		notify-send.sh -r $NOTIFY_ID "Converting $i to PDF..." "Done!"
+	else
+		tmp=$(date +%H:%M:%S-%m%d%y)
+		tmp_i=/tmp/ddjvu_"$tmp".djvu
+		tmp_o=/tmp/ddjvu_"$tmp".pdf
+		cp $i $tmp_i
+		ddjvu -format=pdf -quality=85 $tmp_i $tmp_o
+		mv $tmp_o $o
+		notify-send.sh -r $NOTIFY_ID "Converting $i to PDF..." "Done!"
+	fi
+fi
+
+if [ "$extension" = "svg" ]; then
+	notify-send.sh -r $NOTIFY_ID -u low "Converting $i to PDF..."
+	o=$(basename $i .svg)
+	o="$o".pdf
+
+	if [ -e $o ]; then
+		sleep 0.2
+		notify-send.sh -r $NOTIFY_ID "Converting $i to PDF..." "Done!"
+	else
+		tmp=$(date +%H:%M:%S-%m%d%y)
+		tmp_i=/tmp/ddjvu_"$tmp".svg
+		tmp_o=/tmp/ddjvu_"$tmp".pdf
+		cp $i $tmp_i
+		svg2pdf $tmp_i $tmp_o
+		mv $tmp_o $o
+		notify-send.sh -r $NOTIFY_ID "Converting $i to PDF..." "Done!"
+	fi
+fi
+
+
+if [ "$extension" = "eps" ]; then
+	notify-send.sh -r $NOTIFY_ID -u low "Converting $i to PDF..."
+	o=$(basename $i .eps)
+	o="$o".pdf
+
+	if [ -e $o ]; then
+		sleep 0.2
+		notify-send.sh -r $NOTIFY_ID "Converting $i to PDF..." "Done!"
+	else
+		tmp=$(date +%H:%M:%S-%m%d%y)
+		tmp_i=/tmp/ddjvu_"$tmp".eps
+		tmp_o=/tmp/ddjvu_"$tmp".pdf
+		cp $i $tmp_i
+		epstopdf $tmp_i $tmp_o
+		mv $tmp_o $o
+		notify-send.sh -r $NOTIFY_ID "Converting $i to PDF..." "Done!"
+	fi
+fi
+
+IFS=$MY_SAVEIFS
