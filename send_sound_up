@@ -2,15 +2,29 @@
 
 notification_id=777
 
-pactl set-sink-mute 0 0
-if [ $(pamixer --get-volume) -lt 120 ]; then
-	if [ $# -eq 0 ]; then
-		pactl set-sink-volume 0 +1%
-	else
-		pactl set-sink-volume 0 +$1%
+VOL=$(python ~/.i3/bluevol.py)
+
+if [ $VOL -lt 0 ]; then
+	pactl set-sink-mute 0 0
+	if [ $(pamixer --get-volume) -lt 127 ]; then
+		if [ $# -eq 0 ]; then
+			pactl set-sink-volume 0 +1%
+		else
+			pactl set-sink-volume 0 +$1%
+		fi
 	fi
+	py3-cmd refresh volume_status
+	notify-send.sh -r $notification_id -h int:value:$(pamixer --get-volume) -u low " $(pamixer --get-volume)% "
+else
+	if [ -e /tmp/bluevol ]; then
+		VOL=$(cat /tmp/bluevol)
+	fi
+	if [ $VOL -lt 127 ]; then
+		VOL=$((VOL+1))
+		python ~/.i3/bluevol.py $VOL
+	fi
+	echo $VOL > /tmp/bluevol
+	notify-send.sh -r $notification_id -h int:value:$VOL -u low " $VOL% "
 fi
 
-py3-cmd refresh volume_status
-notify-send.sh -r $notification_id -h int:value:$(pamixer --get-volume) -u low " $(pamixer --get-volume)% "
 ~/.i3/beep
