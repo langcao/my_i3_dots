@@ -46,7 +46,7 @@ if [ -f "$HEADER" ]; then
 		    break
 		    ;;
 		esac
-		# notify-send.sh -r $TEXT_ID -u low "$(cat $CONTENT)"
+		# dunstify -r $TEXT_ID -u low "$(cat $CONTENT)"
 
 		case "$ACTION" in
 		"default")

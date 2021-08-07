@@ -1,0 +1,36 @@
+#!/bin/bash
+
+MY_SAVEIFS=$IFS
+#IFS=$(echo -en "\n\b")
+IFS=$'\n'
+
+if [[ $# -eq 0 ]] ; then
+    RES=1000
+else
+	RES=$1
+fi
+
+for file in `ls $PWD`
+do
+	filename=$(basename "$file")
+	extension="${filename##*.}"
+	if [ "$extension" = "pdf" ]; then
+		echo $file
+		o=$(basename $file .pdf)
+		o="$o".jpg
+		if [ -e $o ]; then
+			echo "Done!"
+		else
+			tmp=$(date +%H:%M:%S-%m%d%y)
+			tmp_i=/tmp/"$tmp".pdf
+			tmp_o=/tmp/"$tmp"
+			cp $file $tmp_i
+			pdftoppm -jpeg -r $RES $tmp_i $tmp_o
+			tmp_o="$tmp_o"-1.jpg
+			mv $tmp_o $o
+			echo "Done!"
+		fi
+	fi
+done
+
+IFS=$MY_SAVEIFS

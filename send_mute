@@ -15,20 +15,20 @@ if [ $VOL -lt 0 ]; then
 
 	if pamixer --get-mute
 	then
-		notify-send.sh -r $notification_id -h int:value:$(pamixer --get-volume) -u normal " $(pamixer --get-volume)% ✗"
+		dunstify -r $notification_id -h int:value:$(pamixer --get-volume) -u normal " $(pamixer --get-volume)% ✗"
 	else
-		notify-send.sh -r $notification_id -h int:value:$(pamixer --get-volume) -u low " $(pamixer --get-volume)% "
+		dunstify -r $notification_id -h int:value:$(pamixer --get-volume) -u low " $(pamixer --get-volume)% "
 		~/.i3/beep
 	fi
 else
 	if [ $VOL -gt 0 ]; then
 		echo $VOL > /tmp/bluevol
 		python ~/.i3/bluevol.py 0
-		notify-send.sh -r $notification_id -h int:value:$VOL -u normal " $VOL% ✗"
+		dunstify -r $notification_id -h int:value:$VOL -u normal "ⓑ $VOL% ✗"
 	else
 		VOL=$(cat /tmp/bluevol)
 		python ~/.i3/bluevol.py $VOL
-		notify-send.sh -r $notification_id -h int:value:$VOL -u low " $VOL% "
+		dunstify -r $notification_id -h int:value:$VOL -u low "ⓑ $VOL% "
 		~/.i3/beep
 	fi
 fi

@@ -11,15 +11,15 @@ if [ -f "/tmp/cmus_status.lck" ]; then
 	echo $percent
 
 	case $(cmus-remote -Q | grep status) in
-		'status paused') notify-send.sh -r $cmus_notification_id " $tag" "$(printf "♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)";;
-		'status playing') notify-send.sh -r $cmus_notification_id -h int:value:$percent -u low "$(printf " $tag\n♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)";;
-		#'status playing') notify-send.sh -r $cmus_notification_id "$(printf " $tag\n♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)";;
-	 	'status stopped') notify-send.sh -r $cmus_notification_id " $tag" "$(printf "♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)";;
+		'status paused') dunstify -r $cmus_notification_id " $tag" "$(printf "♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)";;
+		'status playing') dunstify -r $cmus_notification_id -h int:value:$percent -u low "$(printf " $tag\n♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)";;
+		#'status playing') dunstify -r $cmus_notification_id "$(printf " $tag\n♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)";;
+	 	'status stopped') dunstify -r $cmus_notification_id " $tag" "$(printf "♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)";;
 	esac
 else
 	case $(cmus-remote -Q | grep status) in
-		'status paused') notify-send.sh -r $cmus_notification_id -u low " $tag";;
-		'status playing') notify-send.sh -r $cmus_notification_id -u low " $tag";;
-	 	'status stopped') notify-send.sh -r $cmus_notification_id -u low " $tag";;
+		'status paused') dunstify -r $cmus_notification_id -u low " $tag";;
+		'status playing') dunstify -r $cmus_notification_id -u low " $tag";;
+	 	'status stopped') dunstify -r $cmus_notification_id -u low " $tag";;
 	esac
 fi

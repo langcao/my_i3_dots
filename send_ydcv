@@ -9,7 +9,7 @@ do
 		WORD=$(xclip -o | head -n1 | cut -d" " -f 1 | sed 's/[[:punct:]]//g')
 		echo $WORD
 		if [ -n $WORD ]; then
-			notify-send.sh -r $notification_id -u low "$(ydcv $WORD)"
+			dunstify -r $notification_id -u low "$(ydcv $WORD)"
 		fi
 		sleep 0.2
 	fi

@@ -20,5 +20,5 @@ redshift -PO $SCREEN_COLOR
 PERCENT=$((($SCREEN_COLOR-2000)/60))
 echo $PERCENT
 
-notify-send.sh -r $notification_id -h int:value:$PERCENT -u low " $(cat /tmp/screen_color.conf)K"
+dunstify -r $notification_id -h int:value:$PERCENT -u low " $(cat /tmp/screen_color.conf)K"
 py3-cmd refresh redshift

@@ -7,9 +7,9 @@ len=$(cmus-remote -Q | grep duration | cut -d ' ' -f 2-)
 
 cmus_notification_id=778
 if [ "$(cmus-remote -Q | grep status)" == "status paused" ]; then
-	notify-send.sh -r $cmus_notification_id " $tag" "$(printf "♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)"
+	dunstify -r $cmus_notification_id " $tag" "$(printf "♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)"
 elif [ "$(cmus-remote -Q | grep status)" == "status playing" ]; then
-	notify-send.sh -r $cmus_notification_id " $tag" "$(printf "♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)"
+	dunstify -r $cmus_notification_id " $tag" "$(printf "♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)"
 elif [ "$(cmus-remote -Q | grep status)" == "status stopped" ]; then
-	notify-send.sh -r $cmus_notification_id " $tag" "$(printf "♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)"
+	dunstify -r $cmus_notification_id " $tag" "$(printf "♪ %d:%02d/%d:%02d ♪" $m1 $s1 $m2 $s2)"
 fi

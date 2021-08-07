@@ -1,8 +1,9 @@
 #!/bin/bash
 
 FILE=/tmp/cmus_lyrics.lck
+cmus_lyrics_id=779
 if [ -f "$FILE" ]; then
-	notification.sh -R /tmp/cmus_lyrics_id -u critical '  Lyrics file is loading...'
+	dunstify -r $cmus_lyrics_id -u critical '  Lyrics file is loading...'
 fi
 
 cmus-remote -r

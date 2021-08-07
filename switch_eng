@@ -12,7 +12,7 @@ if [ ! -f "/tmp/fcitx_hotkey_disable" ]; then
 		3) echo 'あ' > /tmp/fcitx_current;;
 	esac
 	py3-cmd refresh external_script fcitx, keyboard_layout on
-	notify-send.sh -r $notification_id -u low " ($(cat /tmp/fcitx_current)) ${fcitx_show}"
+	dunstify -r $notification_id -u low " ($(cat /tmp/fcitx_current)) ${fcitx_show}"
 else
-	notify-send.sh -r $notification_id -u low " Command (⌘) + Eng to enable IM swtiches." 
+	dunstify -r $notification_id -u low " Command (⌘) + Eng to enable IM swtiches." 
 fi
