@@ -33,7 +33,7 @@ if [ ! -e $BREAK_MIN ]; then
 fi
 BREAK=$(cat $BREAK_MIN)
 
-if [ $1 = Work ]; then
+if [ "$1" == "Work" ]; then
 	if [ ! -z $2 ]; then
 		if [ $2 = 0 ]; then
 			~/.i3/send_pomodoro_work $WORK
@@ -52,8 +52,11 @@ if [ $1 = Work ]; then
 		fi
 	fi
 	cat $WORK_MIN
-	py3-cmd refresh "external_script pomo_work_adjust"
-elif [ $1 = Break ]; then
+	PIDS=`ps -ef |grep py3-cmd |grep -v grep | awk '{print $2}'`
+	if [ "$PIDS" == "" ]; then
+		py3-cmd refresh "external_script pomo_work_adjust"
+	fi
+elif [ "$1" == "Break" ]; then
 	if [ ! -z $2 ]; then
 		if [ $2 -eq 0 ]; then
 			~/.i3/send_pomodoro_break $BREAK
@@ -72,13 +75,16 @@ elif [ $1 = Break ]; then
 		fi
 	fi
 	cat $BREAK_MIN
-	py3-cmd refresh "external_script pomo_break_adjust"
-elif [ $1 = Work_Default ]; then
+	PIDS=`ps -ef |grep py3-cmd |grep -v grep | awk '{print $2}'`
+	if [ "$PIDS" == "" ]; then
+		py3-cmd refresh "external_script pomo_break_adjust"
+	fi
+elif [ "$1" == "Work_Default" ]; then
 	echo 1500 > $WORK_TIME
 	echo 25 > $WORK_MIN
 	cat $WORK_MIN
 	dunstify -r $topple_id -u normal -t $duration " Work Time 25 min."
-elif [ $1 = Break_Default ]; then
+elif [ "$1" == "Break_Default" ]; then
 	echo 300 > $BREAK_TIME
 	echo 5 > $BREAK_MIN
 	cat $BREAK_MIN

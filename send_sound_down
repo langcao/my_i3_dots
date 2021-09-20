@@ -12,8 +12,10 @@ if [ $VOL -lt 0 ]; then
 			pactl set-sink-volume 0 -$1%
 		fi
 	fi
-
-	py3-cmd refresh volume_status
+	PIDS=`ps -ef |grep py3-cmd |grep -v grep | awk '{print $2}'`
+	if [ "$PIDS" == "" ]; then
+		py3-cmd refresh volume_status
+	fi
 	if pamixer --get-mute
 	then
 		dunstify -r $notification_id -h int:value:$(pamixer --get-volume) -u normal " $(pamixer --get-volume)% ✗"

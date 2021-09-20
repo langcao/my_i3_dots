@@ -10,7 +10,7 @@ fi
 notification_id=777
 if [ -f "$BOOL" ]; then
 	fcitx_set=$(fcitx-imlist -l | head -n 1 | sed 's/[^(]*(//; s/)[^)]*//')
-	notify-send.sh -r $notification_id -u low " Fcitx-IM Fixed: ${fcitx_set}"
+	dunstify -r $notification_id -u low " Fcitx-IM Fixed: ${fcitx_set}"
 else
-	notify-send.sh -r $notification_id -u low " (Æ) Eng, (中) Kana, (あ) ⌘ + Kana"
+	dunstify -r $notification_id -u low " (Æ) Eng, (中) Kana, (あ) ⌘ + Kana"
 fi

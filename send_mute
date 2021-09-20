@@ -10,7 +10,10 @@ if [ $VOL -lt 0 ]; then
 		pactl set-sink-mute 0 $1
 	fi
 
-	py3-cmd refresh volume_status
+	PIDS=`ps -ef |grep py3-cmd |grep -v grep | awk '{print $2}'`
+	if [ "$PIDS" == "" ]; then
+		py3-cmd refresh volume_status
+	fi
 	~/.i3/beep
 
 	if pamixer --get-mute

@@ -20,6 +20,61 @@ do
 			tmp_o=/tmp/ddjvu_"$tmp".pdf
 			cp $file $tmp_i
 			ddjvu -format=pdf -quality=85 $tmp_i $tmp_o
+			exiftool -all:all= -overwrite_original_in_place $tmp_o
+			mv $tmp_o $o
+			echo "Done!"
+		fi
+	fi
+
+	if [ "$extension" = "epub" ]; then
+		echo $file
+		o=$(basename $file .epub)
+		o="$o".pdf
+		if [ -e $o ]; then
+			echo "Done!"
+		else
+			tmp=$(date +%H:%M:%S-%m%d%y)
+			tmp_i=/tmp/epub_"$tmp".epub
+			tmp_o=/tmp/epub_"$tmp".pdf
+			cp $file $tmp_i
+			ebook-convert $tmp_i $tmp_o
+			exiftool -all:all= -overwrite_original_in_place $tmp_o
+			mv $tmp_o $o
+			echo "Done!"
+		fi
+	fi
+
+	if [ "$extension" = "mobi" ]; then
+		echo $file
+		o=$(basename $file .mobi)
+		o="$o".pdf
+		if [ -e $o ]; then
+			echo "Done!"
+		else
+			tmp=$(date +%H:%M:%S-%m%d%y)
+			tmp_i=/tmp/mobi_"$tmp".mobi
+			tmp_o=/tmp/mobi_"$tmp".pdf
+			cp $file $tmp_i
+			ebook-convert $tmp_i $tmp_o
+			exiftool -all:all= -overwrite_original_in_place $tmp_o
+			mv $tmp_o $o
+			echo "Done!"
+		fi
+	fi
+
+	if [ "$extension" = "azw3" ]; then
+		echo $file
+		o=$(basename $file .azw3)
+		o="$o".pdf
+		if [ -e $o ]; then
+			echo "Done!"
+		else
+			tmp=$(date +%H:%M:%S-%m%d%y)
+			tmp_i=/tmp/azw3_"$tmp".azw3
+			tmp_o=/tmp/azw3_"$tmp".pdf
+			cp $file $tmp_i
+			ebook-convert $tmp_i $tmp_o
+			exiftool -all:all= -overwrite_original_in_place $tmp_o
 			mv $tmp_o $o
 			echo "Done!"
 		fi

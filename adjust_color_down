@@ -21,4 +21,7 @@ PERCENT=$((($SCREEN_COLOR-2000)/60))
 echo $PERCENT
 
 dunstify -r $notification_id -h int:value:$PERCENT -u low " $(cat /tmp/screen_color.conf)K"
-py3-cmd refresh redshift
+PIDS=`ps -ef |grep py3-cmd |grep -v grep | awk '{print $2}'`
+if [ "$PIDS" == "" ]; then
+	py3-cmd refresh redshift
+fi

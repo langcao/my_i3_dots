@@ -30,7 +30,10 @@ case $1 in
 			fi
 		fi
 		echo $STR
-		py3-cmd refresh "external_script pomo_show";;
+		PIDS=`ps -ef |grep py3-cmd |grep -v grep | awk '{print $2}'`
+		if [ "$PIDS" == "" ]; then
+			py3-cmd refresh "external_script pomo_show"
+		fi;;
 	'stop')
 		if [ -e $STOP ]; then
 			rm $STOP
@@ -46,7 +49,10 @@ case $1 in
 			fi
 		fi
 		echo $STR
-		py3-cmd refresh "external_script pomo_stop";;
+		PIDS=`ps -ef |grep py3-cmd |grep -v grep | awk '{print $2}'`
+		if [ "$PIDS" == "" ]; then
+			py3-cmd refresh "external_script pomo_stop"
+		fi;;
 	'swap')
 		if cat $INFO | grep Work
 		then
@@ -65,7 +71,10 @@ case $1 in
 			dunstify -r $topple_id -u low -t $duration ' Pomodoro Reminder On'
 		fi
 		echo $STR
-		py3-cmd refresh "external_script pomo_ask";;
+		PIDS=`ps -ef |grep py3-cmd |grep -v grep | awk '{print $2}'`
+		if [ "$PIDS" == "" ]; then
+			py3-cmd refresh "external_script pomo_ask"
+		fi;;
 	'quit')
 		dunstify -r $topple_id -u normal -t $duration ' Pomodoro Quitted'
 		if [ -e $LCK ]; then
@@ -82,5 +91,8 @@ case $1 in
 			STR=" #"
 		fi
 		echo $STR
-		py3-cmd refresh "external_script pomo_stat";;
+		PIDS=`ps -ef |grep py3-cmd |grep -v grep | awk '{print $2}'`
+		if [ "$PIDS" == "" ]; then
+			py3-cmd refresh "external_script pomo_stat"
+		fi;;
 esac
