@@ -69,4 +69,4 @@ if len(sys.argv)>1:
     filename = EMAIL_PATH + ADDRESS[user] + '/content_%d'%page
     os.system('dunstify -r %d -u low "$(cat %s)"'%(TEXT_ID, filename))
 
-os.system('rm %s'%(SHOW_FLAG))
+# os.system('rm %s'%(SHOW_FLAG))

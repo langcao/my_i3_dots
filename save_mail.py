@@ -8,7 +8,6 @@ import os, sys, re
 from email.header import decode_header, make_header
 from mail_head import *
 
-
 SHOW_NUM = 10
 
 EMAIL_PATH = '/tmp/emails/'
@@ -94,7 +93,10 @@ for user, _ in enumerate(ADDRESS):
     if len(args)>1:
         user = int(args[1])
 
-    imapobj = imaplib.IMAP4_SSL(SERVER[user], '993')
+    try:
+        imapobj = imaplib.IMAP4_SSL(SERVER[user], '993')
+    except:
+        continue
     imapobj.login(ADDRESS[user], PASSWORD[user])
 
     imapobj.select()
