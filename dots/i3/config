@@ -54,7 +54,7 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec --no-startup-id alacritty
-bindsym $mod+Shift+Return exec --no-startup-id st
+bindsym $mod+Shift+Return exec --no-startup-id alacritty -e fish
 
 # kill focused window
 bindsym $mod+q kill
@@ -110,6 +110,9 @@ bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 bindsym $mod+z focus right
+
+bindsym $mod+Home exec --no-startup-id xdotool keydown ctrl click 4 keyup ctrl
+bindsym $mod+End exec --no-startup-id xdotool keydown ctrl click 5 keyup ctrl
 
 # move focused window
 bindsym $mod+Shift+j move left
@@ -402,6 +405,9 @@ bindsym $mod+Ctrl+q exec --no-startup-id killall zenity, exec zenity --info --ti
 bindsym $mod+Ctrl+a exec --no-startup-id killall zenity, exec zenity --info --title="ideagen" --text="<big><big>$(fortune)</big></big>" --width=500
 
 bindsym $mod+Ctrl+y exec --no-startup-id dunstify "$(xclip -o | ydcv)"
+# bindsym $mod+Shift+t exec --no-startup-id dunstify "$(translate $(xclip -o))"
+# bindsym $mod+Shift+t exec --no-startup-id python ~/.i3/translate.py
+bindsym $mod+Shift+t exec --no-startup-id python ~/.i3/declension.py
 
 # Assign floating windows.
 for_window [class="tilda"] floating enable border normal
@@ -1273,6 +1279,8 @@ bindsym $mod+Shift+o exec --no-startup-id google-chrome-stable $(xsel -o)
 bindsym $mod+Ctrl+o exec --no-startup-id google-chrome-stable $(xsel --clipboard)
 bindsym $mod+Shift+g exec --no-startup-id google-chrome-stable --new-window "https://www.google.com/search?\&q=$(xsel -o)"
 bindsym $mod+Ctrl+g exec --no-startup-id google-chrome-stable --new-window "https://www.google.com/search?\&q=$(xsel --clipboard)"
+bindsym $mod+Shift+u exec --no-startup-id google-chrome-stable --new-window "https://scholar.google.co.jp/scholar?q=$(xsel -o)"
+bindsym $mod+Ctrl+u exec --no-startup-id google-chrome-stable --new-window "https://scholar.google.co.jp/scholar?q=$(xsel --clipboard)"
 bindsym $mod+i mode "$mode_art"
 mode "$mode_art" {
     #bindsym o workspace , exec --no-startup-id python ~/.i3/open_art_chicago.py
