@@ -193,7 +193,7 @@ else:
 		for i in range(EXAM_PER_PAGE):
 			if i < len(rus):
 				system("dunstify -t 0 -r %d -u low ' %s' '  %s'"%(EXAM_ID + i, rus[i], chn[i]))
-		system("dunstify -t 0 -r %d -u low ' ex. 1-%d / %d\t\t⌘+⇧+o: Browse online.'"%(EXAM_ID + EXAM_PER_PAGE, min(len(rus), EXAM_PER_PAGE), len(rus)))
+		system("dunstify -t 0 -r %d -u low ' ex. 1-%d / %d' '  fandy™   🖭 Pronunciation   ↑↓ Example   ←→ Declension    ⌘+⇧+o Online   ↲ Dictionary'"%(EXAM_ID + EXAM_PER_PAGE, min(len(rus), EXAM_PER_PAGE), len(rus)))
 
 		grammar = soup.findAll('table')
 		title = soup.find('div', class_='grammardiv')
@@ -229,16 +229,16 @@ else:
 		if not os.path.exists(file):
 			read = soup.find('a', class_='speaker')
 			if read:
-				system("dunstify -t 0 -r %d '▷Восстановление произношения...'"%PLAY_ID)
+				system("dunstify -t 0 -r %d '⏯ Восстановление произношения...'"%PLAY_ID)
 				urlretrieve(read['data-url'], file)
-				system("dunstify -t 0 -r %d -u low '▷%s [%s] %s'"%(PLAY_ID, word, pron, trans))
+				system("dunstify -t 0 -r %d -u low '⏯ %s [%s] %s'"%(PLAY_ID, word, pron, trans))
 				audio = MP3(file)
 				value = audio.info.length
 			else:
 				system("dunstify -t 0 -r %d ' %s [%s] %s'"%(NOTIFY_ID, word, pron, trans))
-				system("dunstify -t 0 -r %d -u low '▷Нет произношения.'"%PLAY_ID)
+				system("dunstify -t 0 -r %d -u low '⏯ Нет    .'"%PLAY_ID)
 		else:
-			system("dunstify -t 0 -r %d -u low '▷%s [%s] %s'"%(PLAY_ID, word, pron, trans))
+			system("dunstify -t 0 -r %d -u low '⏯ %s [%s] %s'"%(PLAY_ID, word, pron, trans))
 			audio = MP3(file)
 			value = audio.info.length
 
@@ -254,7 +254,7 @@ else:
 				if any(all(k in current for k in COMBO) for COMBO in COMBINATIONS):
 					system("google-chrome-stable  --new-window %s"%url)
 			if key in [Key.space] and os.path.exists(file) and not play_blk:
-				# system("dunstify -t 0 -r %d -u critical '▷%s [%s] %s'"%(PLAY_ID, word, pron, trans))
+				# system("dunstify -t 0 -r %d -u critical ' %s [%s] %s'"%(PLAY_ID, word, pron, trans))
 				media_player = vlc.MediaPlayer()
 				media = vlc.Media(file)
 				media_player.set_media(media)
@@ -264,10 +264,10 @@ else:
 				cd = len(pron)
 				for i in range(cd + 1):
 					jd = pron[0:i] + '-'*(cd - i)
-					system("dunstify -t 0 -r %d -u critical '▷%s [%s] %s'"%(PLAY_ID, word, jd, trans))
+					system("dunstify -t 0 -r %d -u critical '⏯ %s [%s] %s'"%(PLAY_ID, word, jd, trans))
 					sleep((value-0.2)/cd)
 				play_blk = 0
-				system("dunstify -t 0 -r %d -u low '▷%s [%s] %s'"%(PLAY_ID, word, pron, trans))
+				system("dunstify -t 0 -r %d -u low '⏯ %s [%s] %s'"%(PLAY_ID, word, pron, trans))
 			if key in [Key.enter]:
 				for i in range(EXAM_PER_PAGE):
 					system("dunstify -C %d"%(EXAM_ID + i))
@@ -295,7 +295,7 @@ else:
 					else:
 						system("dunstify -C %d"%(EXAM_ID + i))
 						end = len(rus)
-				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d\t\t⌘+⇧+o: Browse online.'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
+				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d' '  fandy™   🖭 Pronunciation   ↑↓ Example   ←→ Declension    ⌘+⇧+o Online   ↲ Dictionary'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
 			if key in [Key.up]:
 				system("dunstify -C %d"%DICT_ID)
 				offset -= EXAM_PER_PAGE
@@ -311,7 +311,7 @@ else:
 					else:
 						system("dunstify -C %d"%(EXAM_ID + i))
 						end = len(rus)
-				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d\t\t⌘+⇧+o: Browse online.'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
+				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d' '  fandy™     ↲ Dictionary    🖭 Pronunciation   ↑↓ Example    ←→ Declension    ⌘+⇧+o Online'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
 
 		def on_release(key):
 			if key in [Key.esc]:
