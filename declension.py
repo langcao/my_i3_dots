@@ -149,9 +149,9 @@ else:
 			orgn, pron_orgn, expl = key[-1].text, unidecode(key[-1].text), mean[-1].text
 		else:
 			orgn, pron_orgn, expl = key[0].text, unidecode(key[0].text), mean[0].text
-		orgn = orgn.replace('е"', 'ё')
+		orgn = orgn.replace('е"', 'ё').replace("'","’")
 		pron_orgn = pron_orgn.replace("'","’")
-		expl = expl.replace("【船舶】","").replace("【航空】","")
+		expl = expl.replace("【船舶】","").replace("【航空】","").replace("'","’")
 		expl = re.sub(' +', ' ', expl)
 		item = expl.split(',')
 		expl = ''
@@ -177,22 +177,21 @@ else:
 		orgn = sel[0:sel.find('\n')].strip()
 		pron_orgn = unidecode(orgn)
 		pron_orgn = pron_orgn.replace("'","’")
-		sel = sel[sel.find('\n'):-1].strip().replace("\n"," ").replace(").",")").replace("~","")
+		sel = sel[sel.find('\n'):-1].strip().replace("\n"," ").replace(").",")").replace("~","").replace("'","’")
 		print(sel)
 		sel = split_row(sel)
 
 		exam_ru = soup.findAll('p', class_='exam-a')
 		rus, chn = [], []
 		for one in exam_ru:
-			rus.append(split_row(re.sub(' +', ' ', one.text).replace('\n', '').replace('\r', '').strip()))
+			rus.append(split_row(re.sub(' +', ' ', one.text).replace('\n', '').replace('\r', '').replace("'","’").strip()))
 		exam_cn = soup.findAll('p', class_='exam-b')
 		for one in exam_cn:
-			chn.append(split_row(re.sub(' +', ' ', one.text).replace('\n', '').replace('\r', '').strip()))
-		offset = 0
+			chn.append(split_row(re.sub(' +', ' ', one.text).replace('\n', '').replace('\r', '').replace("'","’").strip()))
 		for i in range(EXAM_PER_PAGE):
-			ch = i + offset
-			if ch < len(rus):
-				system("dunstify -t 0 -r %d -u low ' %s' '   %s'"%(EXAM_ID + i, rus[ch], chn[ch]))
+			if i < len(rus):
+				system("dunstify -t 0 -r %d -u low ' %s' '  %s'"%(EXAM_ID + i, rus[i], chn[i]))
+		system("dunstify -t 0 -r %d -u low ' ex. 1-%d / %d\t\t⌘+⇧+o: Browse online.'"%(EXAM_ID + EXAM_PER_PAGE, min(len(rus), EXAM_PER_PAGE), len(rus)))
 
 		grammar = soup.findAll('table')
 		title = soup.find('div', class_='grammardiv')
@@ -206,11 +205,11 @@ else:
 				items = row.findAll("th")
 				for item in items:
 					one = item.text
-					out += one.replace('е"', 'ё') + '\t'
+					out += one.replace('е"', 'ё').replace("'","’") + '\t'
 				decl = row.findAll("td")
 				for item in decl:
 					one = item.text
-					out += one.replace('е"', 'ё').replace(', ', '/').replace('//', '/') + '\t'
+					out += one.replace('е"', 'ё').replace("'","’").replace(', ', '/').replace('//', '/') + '\t'
 				out += '\n'
 			# out = rid_comma(out)
 			if title and h3 and i<len(h3):
@@ -233,12 +232,12 @@ else:
 				urlretrieve(read['data-url'], file)
 			else:
 				system("dunstify -t 0 -r %d ' %s [%s] %s'"%(NOTIFY_ID, word, pron, trans))
-				system("dunstify -t 0 -r %d -u low ' Нет  .'"%PLAY_ID)
+				system("dunstify -t 0 -r %d -u low ' Нет произношения.'"%PLAY_ID)
 				exit()
 
 		def read_word():
 			system("dunstify -t 0 -r %d ' %s [%s] %s'"%(NOTIFY_ID, word, pron, trans))
-			system("dunstify -t 0 -r %d -u low ' %s [%s]\t\t Press ⌘+⇧+o to browse online.'"%(PLAY_ID, word, pron))
+			system("dunstify -t 0 -r %d -u low ' %s [%s]'"%(PLAY_ID, word, pron))
 			p = vlc.MediaPlayer(file)
 			p.play()
 
@@ -273,15 +272,31 @@ else:
 			if key in [Key.down]:
 				system("dunstify -C %d"%DICT_ID)
 				offset += EXAM_PER_PAGE
+				if offset >= len(rus):
+					offset = 0
+				start, end = offset + 1, offset + EXAM_PER_PAGE
 				for i in range(EXAM_PER_PAGE):
-					ch = (i + offset) % len(rus)
-					system("dunstify -t 0 -r %d -u low ' %s' '   %s'"%(EXAM_ID + i, rus[ch], chn[ch]))
+					ch = i + offset
+					if ch < len(rus):
+						system("dunstify -t 0 -r %d -u low ' %s' '  %s'"%(EXAM_ID + i, rus[ch], chn[ch]))
+					else:
+						system("dunstify -C %d"%(EXAM_ID + i))
+						end = len(rus)
+				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d\t\t⌘+⇧+o: Browse online.'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
 			if key in [Key.up]:
 				system("dunstify -C %d"%DICT_ID)
 				offset -= EXAM_PER_PAGE
+				if offset < 0:
+					offset = EXAM_PER_PAGE * (int(len(rus) / EXAM_PER_PAGE) - 1)
+				start, end = offset + 1, offset + EXAM_PER_PAGE
 				for i in range(EXAM_PER_PAGE):
-					ch = (i + offset) % len(rus)
-					system("dunstify -t 0 -r %d -u low ' %s' '   %s'"%(EXAM_ID + i, rus[ch], chn[ch]))
+					ch = i + offset
+					if ch < len(rus):
+						system("dunstify -t 0 -r %d -u low ' %s' '  %s'"%(EXAM_ID + i, rus[ch], chn[ch]))
+					else:
+						system("dunstify -C %d"%(EXAM_ID + i))
+						end = len(rus)
+				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d\t\t⌘+⇧+o: Browse online.'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
 
 		def on_release(key):
 			if key in [Key.esc]:
