@@ -5,6 +5,7 @@ import os
 import sys
 import datetime
 from googletrans import Translator
+from bs4 import BeautifulSoup
 
 cache_path = os.getenv("HOME")+"/.cache/jukuu/"
 jukuu_cache = cache_path + "sentences.txt"
@@ -278,12 +279,17 @@ def google(str):
 
 def get_text(word, page, emergence = "normal", show = False):
 	output = ""
-	url = "http://www.jukuu.com/show-'%s'-%d.html"%(quote(word), page)
-	with request.urlopen(url) as file:
+	url = "http://www.jukuu.com/show-%s-%d.html"%(quote(word), page)
+	print(url)
+	req = request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+	with request.urlopen(req) as file:
 		data = file.read().decode('utf-8')
 	h = html2text.HTML2Text()
 	h.ignore_links = True
 	content = h.handle(data)
+	# gfg = BeautifulSoup(request.urlopen(url).read())
+	# bodyHtml = gfg.find('article', {'class' : 'content'})
+	# content = bodyHtml.get_text()
 
 	for i in range(10):
 		key = str(page*10+1+i)+'\. |  '
