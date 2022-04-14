@@ -11,6 +11,8 @@ import simpleaudio as sa
 from pynput.keyboard import Key, Listener, KeyCode
 import requests
 import vlc
+from mutagen.mp3 import MP3
+from time import sleep
 import ssl
 import re
 from prettytable import PrettyTable
@@ -88,7 +90,7 @@ def adjust_tab(out, name='', tab_width=2):
 			if name:
 				row[0] = name
 			x.field_names = row[:-1]
-	# print(x)
+	print(x)
 	# return x.get_string()
 
 	# item = [x.split('\t') for x in out.split('\n')]
@@ -121,7 +123,7 @@ pron = unidecode(tmp)
 pron = pron.replace("'","’")
 word = remove_accents(tmp)
 # word = tmp
-system("dunstify -t 0 -r %d ' %s [%s]'"%(NOTIFY_ID, word, pron))
+system("dunstify -r %d ' %s [%s]'"%(NOTIFY_ID, word, pron))
 
 translator = Translator()
 try:
@@ -227,39 +229,50 @@ else:
 		if not os.path.exists(file):
 			read = soup.find('a', class_='speaker')
 			if read:
-				# print(read['data-url'])
-				system("dunstify -t 0 -r %d ' Восстановление произношения...'"%PLAY_ID)
+				system("dunstify -t 0 -r %d '▷Восстановление произношения...'"%PLAY_ID)
 				urlretrieve(read['data-url'], file)
+				system("dunstify -t 0 -r %d -u low '▷%s [%s] %s'"%(PLAY_ID, word, pron, trans))
+				audio = MP3(file)
+				value = audio.info.length
 			else:
 				system("dunstify -t 0 -r %d ' %s [%s] %s'"%(NOTIFY_ID, word, pron, trans))
-				system("dunstify -t 0 -r %d -u low ' Нет произношения.'"%PLAY_ID)
-				exit()
-
-		def read_word():
-			system("dunstify -t 0 -r %d ' %s [%s] %s'"%(NOTIFY_ID, word, pron, trans))
-			system("dunstify -t 0 -r %d -u low ' %s [%s]'"%(PLAY_ID, word, pron))
-			p = vlc.MediaPlayer(file)
-			p.play()
+				system("dunstify -t 0 -r %d -u low '▷Нет произношения.'"%PLAY_ID)
+		else:
+			system("dunstify -t 0 -r %d -u low '▷%s [%s] %s'"%(PLAY_ID, word, pron, trans))
+			audio = MP3(file)
+			value = audio.info.length
 
 		def on_press(key):
 			COMBINATIONS = [
 				{Key.shift, Key.cmd_l, KeyCode(char='o')},
     			{Key.shift, Key.cmd_l, KeyCode(char='O')}
 			]
-			global ind, offset, orgn, pron_orgn, expl, word, pron, trans
+			global ind, offset, play_blk, orgn, pron_orgn, expl, word, pron, trans
 			# print('{0} release'.format(key))
 			if any([key in COMBO for COMBO in COMBINATIONS]):
 				current.add(key)
 				if any(all(k in current for k in COMBO) for COMBO in COMBINATIONS):
 					system("google-chrome-stable  --new-window %s"%url)
-			if key in [Key.space]:
-				p = vlc.MediaPlayer(file)
-				p.play()
+			if key in [Key.space] and os.path.exists(file) and not play_blk:
+				# system("dunstify -t 0 -r %d -u critical '▷%s [%s] %s'"%(PLAY_ID, word, pron, trans))
+				media_player = vlc.MediaPlayer()
+				media = vlc.Media(file)
+				media_player.set_media(media)
+				media_player.play()
+				play_blk = 1
+				# sleep(value)
+				cd = len(pron)
+				for i in range(cd + 1):
+					jd = pron[0:i] + '-'*(cd - i)
+					system("dunstify -t 0 -r %d -u critical '▷%s [%s] %s'"%(PLAY_ID, word, jd, trans))
+					sleep((value-0.2)/cd)
+				play_blk = 0
+				system("dunstify -t 0 -r %d -u low '▷%s [%s] %s'"%(PLAY_ID, word, pron, trans))
 			if key in [Key.enter]:
 				for i in range(EXAM_PER_PAGE):
 					system("dunstify -C %d"%(EXAM_ID + i))
 				system("dunstify -t 0 -r %d ' %s [%s] %s' '  %s'"%(DICT_ID, orgn, pron_orgn, trans, sel))
-			if declist and key in [Key.right]:
+			if key in [Key.right] and declist:
 				ind += 1
 				if ind >= len(declist):
 					ind = 0
@@ -287,7 +300,9 @@ else:
 				system("dunstify -C %d"%DICT_ID)
 				offset -= EXAM_PER_PAGE
 				if offset < 0:
-					offset = EXAM_PER_PAGE * (int(len(rus) / EXAM_PER_PAGE) - 1)
+					offset = EXAM_PER_PAGE * int(len(rus)/EXAM_PER_PAGE)
+					if len(rus) % EXAM_PER_PAGE==0:
+						offset -= EXAM_PER_PAGE
 				start, end = offset + 1, offset + EXAM_PER_PAGE
 				for i in range(EXAM_PER_PAGE):
 					ch = i + offset
@@ -303,8 +318,8 @@ else:
 				system("killall dunst")
 				return False
 
-		read_word()
 		ind, offset = 0, 0
 		current = set()
+		play_blk = 0
 		with Listener(on_press=on_press, on_release=on_release) as listener:
 			listener.join()
