@@ -23,7 +23,6 @@ dic = pyphen.Pyphen(lang='ru')
 NOTIFY_ID = 62231
 PLAY_ID = 622331
 GRAMM_ID = 162231
-MEAN_ID = 462231
 PAGE_ID = 362231
 DICT_ID = 562231
 EXAM_ID = 762231
@@ -129,8 +128,6 @@ pron = unidecode(tmp)
 pron = pron.lower().replace("'","’").strip().replace(" ","-")
 phen_pron = unidecode(phen)
 phen_pron = phen_pron.lower().replace("'","’").strip().replace(" ","-")
-
-# word = tmp
 system("dunstify -r %d ' %s [%s]'"%(NOTIFY_ID, word, pron))
 
 translator = Translator()
@@ -159,7 +156,12 @@ else:
 		else:
 			orgn, pron_orgn, expl = key[0].text, unidecode(key[0].text), mean[0].text
 		orgn = orgn.replace('е"', 'ё').replace("'","’")
+		pron_orgn = unidecode(orgn)
 		pron_orgn = pron_orgn.lower().replace("'","’").strip().replace(" ","-")
+		phen_orgn = dic.inserted(orgn)
+		phen_orgn = phen_orgn.lower().replace("'","’").strip().replace(" ","-")
+		phen_pron_orgn = unidecode(phen_orgn)
+		phen_pron_orgn = phen_pron_orgn.lower().replace("'","’").strip().replace(" ","-")
 		expl = expl.replace("【船舶】","").replace("【航空】","").replace("'","’")
 		expl = re.sub(' +', ' ', expl)
 		item = expl.split(',')
@@ -171,7 +173,7 @@ else:
 			expl = expl[:-2]
 		print(expl)
 		expl = split_row(expl)
-		system("dunstify -t 0 -r %d ' %s [%s] %s' '  %s.'"%(MEAN_ID, orgn, pron_orgn, trans, expl))
+		system("dunstify -t 0 -r %d ' %s [%s] %s' '  %s.'"%(DICT_ID, orgn, pron_orgn, trans, expl))
 
 		page = soup.findAll('div', class_='subExp view')
 		sel = ''
@@ -183,12 +185,14 @@ else:
 		sel = "".join([s for s in sel.strip().splitlines(True) if s.strip()])
 		sel = re.sub(' +', ' ', sel)
 		sel = sel.replace("'","’")
-		orgn = sel[0:sel.find('\n')].strip()
-		phen_orgn = dic.inserted(orgn)
-		pron_orgn = unidecode(orgn)
-		phen_orgn = phen_orgn.lower().replace("'","’").strip().replace(" ","-")
-		phen_pron_orgn = unidecode(phen_orgn)
-		phen_pron_orgn = phen_pron_orgn.lower().replace("'","’").strip().replace(" ","-")
+		more = sel[0:sel.find('\n')].strip()
+		more = more.replace('е"', 'ё').replace("'","’")
+		pron_more = unidecode(orgn)
+		pron_more = pron_more.lower().replace("'","’").strip().replace(" ","-")
+		phen_more = dic.inserted(more)
+		phen_more = phen_orgn.lower().replace("'","’").strip().replace(" ","-")
+		phen_pron_more = unidecode(phen_more)
+		phen_pron_more = phen_pron_more.lower().replace("'","’").strip().replace(" ","-")
 
 		sel = sel[sel.find('\n'):-1].strip().replace("\n"," ").replace(").",")").replace("~","").replace("'","’")
 		print(sel)
@@ -286,7 +290,7 @@ else:
 				{Key.shift, Key.cmd_l, KeyCode(char='p')},
     			{Key.shift, Key.cmd_l, KeyCode(char='P')}
 			]
-			global ind, offset, orgn, pron_orgn, expl, word, pron, trans
+			global ind, offset, dict_flag, orgn, pron_orgn, expl, word, pron, trans
 			# print('{0} release'.format(key))
 			if any([key in COMBO for COMBO in COMBINATIONS]):
 				current.add(key)
@@ -295,9 +299,11 @@ else:
 			if key in [Key.space] and os.path.exists(file):
 				threading.Thread(target=pronunciate).start()
 			if key in [Key.enter]:
-				for i in range(EXAM_PER_PAGE):
-					system("dunstify -C %d"%(EXAM_ID + i))
-				system("dunstify -t 0 -r %d ' %s [%s] %s' '  %s'"%(DICT_ID, orgn, pron_orgn, trans, sel))
+				if dict_flag:
+					system("dunstify -t 0 -r %d ' %s [%s] %s' '  %s.'"%(DICT_ID, orgn, pron_orgn, trans, expl))
+				else:
+					system("dunstify -t 0 -r %d ' %s [%s] %s' '  %s'"%(DICT_ID, more, pron_more, trans, sel))
+				dict_flag = 1 - dict_flag
 			if key in [Key.right] and declist:
 				ind += 1
 				if ind >= len(declist):
@@ -309,7 +315,6 @@ else:
 					ind = len(declist) - 1
 				system("dunstify -t 0 -r %d '%s' ' pp. %d / %d'"%(GRAMM_ID, declist[ind], ind+1, len(declist)))
 			if key in [Key.down]:
-				system("dunstify -C %d"%DICT_ID)
 				offset += EXAM_PER_PAGE
 				if offset >= len(rus):
 					offset = 0
@@ -337,14 +342,15 @@ else:
 					else:
 						system("dunstify -C %d"%(EXAM_ID + i))
 						end = len(rus)
-				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d' '™     ↲ Dictionary    🖭 Pronunciation   ↑↓ Example    ←→ Declension    ⌘+⇧+p Online'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
+				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d' '™🖭 Pronunciation   ↑↓ Example   ←→ Declension    ⌘+⇧+p Online   ↲ Dictionary'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
+
 
 		def on_release(key):
 			if key in [Key.esc]:
 				system("killall dunst")
 				return False
 
-		ind, offset, play_blk = 0, 0, 0
+		ind, offset, play_blk, dict_flag = 0, 0, 0, 0
 		current = set()
 		with Listener(on_press=on_press, on_release=on_release) as listener:
 			listener.join()
