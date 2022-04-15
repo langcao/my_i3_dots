@@ -17,6 +17,8 @@ import threading
 import ssl
 import re
 from prettytable import PrettyTable
+import pyphen
+dic = pyphen.Pyphen(lang='ru')
 
 NOTIFY_ID = 62231
 PLAY_ID = 622331
@@ -113,16 +115,21 @@ sound_path = "/tmp/Russian"
 if not os.path.exists(sound_path):
 	os.mkdir(sound_path)
 tmp = popen('xsel').read()
-tmp = tmp.strip()
 tmp.replace("`",'')
 if tmp.find(' ')>-1:
 	tmp = tmp[0:tmp.find(' ')]
 if tmp.find('\n')>-1:
 	tmp = tmp[0:tmp.find('\n')]
 tmp = "".join([x.lower() for x in tmp if x.isalpha()])
-pron = unidecode(tmp)
-pron = pron.replace("'","’")
+tmp = tmp.strip()
+phen = dic.inserted(tmp)
+phen = phen.lower().replace("'","’").strip().replace(" ","-")
 word = remove_accents(tmp)
+pron = unidecode(tmp)
+pron = pron.lower().replace("'","’").strip().replace(" ","-")
+phen_pron = unidecode(phen)
+phen_pron = phen_pron.lower().replace("'","’").strip().replace(" ","-")
+
 # word = tmp
 system("dunstify -r %d ' %s [%s]'"%(NOTIFY_ID, word, pron))
 
@@ -133,8 +140,7 @@ try:
 except:
 	system("dunstify -r %d -u low 'Переводимое слово не обнаружено.\nNo translatable word dectected.'"%NOTIFY_ID)
 else:
-	trans = trans.replace("'","’")
-	pron = pron.replace("'","’")
+	trans = trans.lower().replace("'","’")
 	if word == trans:
 		system("dunstify -r %d -u low 'Русское слово не обнаружено.\n%s - No Russian word dectected.'"%(NOTIFY_ID, tmp))
 	else:
@@ -153,7 +159,7 @@ else:
 		else:
 			orgn, pron_orgn, expl = key[0].text, unidecode(key[0].text), mean[0].text
 		orgn = orgn.replace('е"', 'ё').replace("'","’")
-		pron_orgn = pron_orgn.replace("'","’")
+		pron_orgn = pron_orgn.lower().replace("'","’").strip().replace(" ","-")
 		expl = expl.replace("【船舶】","").replace("【航空】","").replace("'","’")
 		expl = re.sub(' +', ' ', expl)
 		item = expl.split(',')
@@ -178,8 +184,12 @@ else:
 		sel = re.sub(' +', ' ', sel)
 		sel = sel.replace("'","’")
 		orgn = sel[0:sel.find('\n')].strip()
+		phen_orgn = dic.inserted(orgn)
 		pron_orgn = unidecode(orgn)
-		pron_orgn = pron_orgn.replace("'","’")
+		phen_orgn = phen_orgn.lower().replace("'","’").strip().replace(" ","-")
+		phen_pron_orgn = unidecode(phen_orgn)
+		phen_pron_orgn = phen_pron_orgn.lower().replace("'","’").strip().replace(" ","-")
+
 		sel = sel[sel.find('\n'):-1].strip().replace("\n"," ").replace(").",")").replace("~","").replace("'","’")
 		print(sel)
 		sel = split_row(sel)
@@ -194,7 +204,7 @@ else:
 		for i in range(EXAM_PER_PAGE):
 			if i < len(rus):
 				system("dunstify -t 0 -r %d -u low ' %s' '  %s'"%(EXAM_ID + i, rus[i], chn[i]))
-		system("dunstify -t 0 -r %d -u low ' ex. 1-%d / %d' '™   🖭 Pronunciation   ↑↓ Example   ←→ Declension    ⌘+⇧+o Online   ↲ Dictionary'"%(EXAM_ID + EXAM_PER_PAGE, min(len(rus), EXAM_PER_PAGE), len(rus)))
+		system("dunstify -t 0 -r %d -u low ' ex. 1-%d / %d' '™🖭 Pronunciation   ↑↓ Example   ←→ Declension    ⌘+⇧+p Online   ↲ Dictionary'"%(EXAM_ID + EXAM_PER_PAGE, min(len(rus), EXAM_PER_PAGE), len(rus)))
 
 		grammar = soup.findAll('table')
 		title = soup.find('div', class_='grammardiv')
@@ -232,14 +242,14 @@ else:
 			if read:
 				system("dunstify -t 0 -r %d '⏯ Восстановление произношения...'"%PLAY_ID)
 				urlretrieve(read['data-url'], file)
-				system("dunstify -t 0 -r %d -u low '⏯ %s [%s] %s'"%(PLAY_ID, word, pron, trans))
+				system("dunstify -t 0 -r %d -u low '⏯ %s [%s] %s'"%(PLAY_ID, phen_orgn, phen_pron_orgn, trans))
 				audio = MP3(file)
 				value = audio.info.length
 			else:
-				system("dunstify -t 0 -r %d ' %s [%s] %s'"%(NOTIFY_ID, word, pron, trans))
-				system("dunstify -t 0 -r %d -u low '⏯ Нет    .'"%PLAY_ID)
+				system("dunstify -t 0 -r %d ' %s [%s] %s'"%(NOTIFY_ID, phen, phen_pron, trans))
+				system("dunstify -t 0 -r %d -u low '⏯ Нет произношения.'"%PLAY_ID)
 		else:
-			system("dunstify -t 0 -r %d -u low '⏯ %s [%s] %s'"%(PLAY_ID, word, pron, trans))
+			system("dunstify -t 0 -r %d -u low '⏯ %s [%s] %s'"%(PLAY_ID, phen_orgn, phen_pron_orgn, trans))
 			audio = MP3(file)
 			value = audio.info.length
 
@@ -252,35 +262,36 @@ else:
 				media_player.set_media(media)
 				media_player.play()
 				if anime:
-					yin, jie = '', []
-					for i, c in enumerate(pron):
-						yin += c
-						if c in 'aueoy`':
-							jie.append(yin)
-						elif c == 'i':
-							if i+1 < len(pron) and not pron[i+1] in 'aueoy':
-								jie.append(yin)
-					for yin in jie:
-						jd = yin + '-'*(len(pron) - len(yin))
-						system("dunstify -t 0 -r %d -u critical '⏯ %s [%s] %s'"%(PLAY_ID, word, jd, trans))
-						sleep(value/len(jie))
+					yin = phen_pron_orgn.split('-')
+					prev = ''
+					for i in range(len(yin)):
+						if i:
+							prev += '-' + yin[i]
+						else:
+							prev += yin[i]
+						jd = prev + '-'*(len(phen_pron_orgn) - len(prev))
+						system("dunstify -t 0 -r %d -u critical '⏯ %s [%s] %s'"%(PLAY_ID, phen_orgn, jd, trans))
+						sleep(value/len(yin))
 				else:
-					system("dunstify -t 0 -r %d -u critical '⏯ %s [%s] %s'"%(PLAY_ID, word, pron, trans))
+					system("dunstify -t 0 -r %d -u critical '⏯ %s [%s] %s'"%(PLAY_ID, phen_orgn, phen_pron_orgn, trans))
 					sleep(value)
-				system("dunstify -t 0 -r %d -u low '⏯ %s [%s] %s'"%(PLAY_ID, word, pron, trans))
+				system("dunstify -t 0 -r %d -u low '⏯ %s [%s] %s'"%(PLAY_ID, phen_orgn, phen_pron_orgn, trans))
 				play_blk = 0
+
+		def browse():
+			system("google-chrome-stable  --new-window %s"%url)
 
 		def on_press(key):
 			COMBINATIONS = [
-				{Key.shift, Key.cmd_l, KeyCode(char='o')},
-    			{Key.shift, Key.cmd_l, KeyCode(char='O')}
+				{Key.shift, Key.cmd_l, KeyCode(char='p')},
+    			{Key.shift, Key.cmd_l, KeyCode(char='P')}
 			]
 			global ind, offset, orgn, pron_orgn, expl, word, pron, trans
 			# print('{0} release'.format(key))
 			if any([key in COMBO for COMBO in COMBINATIONS]):
 				current.add(key)
 				if any(all(k in current for k in COMBO) for COMBO in COMBINATIONS):
-					system("google-chrome-stable  --new-window %s"%url)
+					threading.Thread(target=browse).start()
 			if key in [Key.space] and os.path.exists(file):
 				threading.Thread(target=pronunciate).start()
 			if key in [Key.enter]:
@@ -310,7 +321,7 @@ else:
 					else:
 						system("dunstify -C %d"%(EXAM_ID + i))
 						end = len(rus)
-				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d' '™   🖭 Pronunciation   ↑↓ Example   ←→ Declension    ⌘+⇧+o Online   ↲ Dictionary'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
+				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d' '™🖭 Pronunciation   ↑↓ Example   ←→ Declension    ⌘+⇧+p Online   ↲ Dictionary'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
 			if key in [Key.up]:
 				system("dunstify -C %d"%DICT_ID)
 				offset -= EXAM_PER_PAGE
@@ -326,7 +337,7 @@ else:
 					else:
 						system("dunstify -C %d"%(EXAM_ID + i))
 						end = len(rus)
-				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d' '™     ↲ Dictionary    🖭 Pronunciation   ↑↓ Example    ←→ Declension    ⌘+⇧+o Online'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
+				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d' '™     ↲ Dictionary    🖭 Pronunciation   ↑↓ Example    ←→ Declension    ⌘+⇧+p Online'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
 
 		def on_release(key):
 			if key in [Key.esc]:
