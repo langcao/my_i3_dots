@@ -13,6 +13,7 @@ import requests
 import vlc
 from mutagen.mp3 import MP3
 from time import sleep
+import threading
 import ssl
 import re
 from prettytable import PrettyTable
@@ -193,7 +194,7 @@ else:
 		for i in range(EXAM_PER_PAGE):
 			if i < len(rus):
 				system("dunstify -t 0 -r %d -u low ' %s' '  %s'"%(EXAM_ID + i, rus[i], chn[i]))
-		system("dunstify -t 0 -r %d -u low ' ex. 1-%d / %d' '  fandy™   🖭 Pronunciation   ↑↓ Example   ←→ Declension    ⌘+⇧+o Online   ↲ Dictionary'"%(EXAM_ID + EXAM_PER_PAGE, min(len(rus), EXAM_PER_PAGE), len(rus)))
+		system("dunstify -t 0 -r %d -u low ' ex. 1-%d / %d' '™   🖭 Pronunciation   ↑↓ Example   ←→ Declension    ⌘+⇧+o Online   ↲ Dictionary'"%(EXAM_ID + EXAM_PER_PAGE, min(len(rus), EXAM_PER_PAGE), len(rus)))
 
 		grammar = soup.findAll('table')
 		title = soup.find('div', class_='grammardiv')
@@ -242,32 +243,46 @@ else:
 			audio = MP3(file)
 			value = audio.info.length
 
+		def pronunciate(anime=True):
+			global play_blk
+			if not play_blk:
+				play_blk = 1
+				media_player = vlc.MediaPlayer()
+				media = vlc.Media(file)
+				media_player.set_media(media)
+				media_player.play()
+				if anime:
+					yin, jie = '', []
+					for i, c in enumerate(pron):
+						yin += c
+						if c in 'aueoy`':
+							jie.append(yin)
+						elif c == 'i':
+							if i+1 < len(pron) and not pron[i+1] in 'aueoy':
+								jie.append(yin)
+					for yin in jie:
+						jd = yin + '-'*(len(pron) - len(yin))
+						system("dunstify -t 0 -r %d -u critical '⏯ %s [%s] %s'"%(PLAY_ID, word, jd, trans))
+						sleep(value/len(jie))
+				else:
+					system("dunstify -t 0 -r %d -u critical '⏯ %s [%s] %s'"%(PLAY_ID, word, pron, trans))
+					sleep(value)
+				system("dunstify -t 0 -r %d -u low '⏯ %s [%s] %s'"%(PLAY_ID, word, pron, trans))
+				play_blk = 0
+
 		def on_press(key):
 			COMBINATIONS = [
 				{Key.shift, Key.cmd_l, KeyCode(char='o')},
     			{Key.shift, Key.cmd_l, KeyCode(char='O')}
 			]
-			global ind, offset, play_blk, orgn, pron_orgn, expl, word, pron, trans
+			global ind, offset, orgn, pron_orgn, expl, word, pron, trans
 			# print('{0} release'.format(key))
 			if any([key in COMBO for COMBO in COMBINATIONS]):
 				current.add(key)
 				if any(all(k in current for k in COMBO) for COMBO in COMBINATIONS):
 					system("google-chrome-stable  --new-window %s"%url)
-			if key in [Key.space] and os.path.exists(file) and not play_blk:
-				# system("dunstify -t 0 -r %d -u critical ' %s [%s] %s'"%(PLAY_ID, word, pron, trans))
-				media_player = vlc.MediaPlayer()
-				media = vlc.Media(file)
-				media_player.set_media(media)
-				media_player.play()
-				play_blk = 1
-				# sleep(value)
-				cd = len(pron)
-				for i in range(cd + 1):
-					jd = pron[0:i] + '-'*(cd - i)
-					system("dunstify -t 0 -r %d -u critical '⏯ %s [%s] %s'"%(PLAY_ID, word, jd, trans))
-					sleep((value-0.2)/cd)
-				play_blk = 0
-				system("dunstify -t 0 -r %d -u low '⏯ %s [%s] %s'"%(PLAY_ID, word, pron, trans))
+			if key in [Key.space] and os.path.exists(file):
+				threading.Thread(target=pronunciate).start()
 			if key in [Key.enter]:
 				for i in range(EXAM_PER_PAGE):
 					system("dunstify -C %d"%(EXAM_ID + i))
@@ -295,7 +310,7 @@ else:
 					else:
 						system("dunstify -C %d"%(EXAM_ID + i))
 						end = len(rus)
-				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d' '  fandy™   🖭 Pronunciation   ↑↓ Example   ←→ Declension    ⌘+⇧+o Online   ↲ Dictionary'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
+				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d' '™   🖭 Pronunciation   ↑↓ Example   ←→ Declension    ⌘+⇧+o Online   ↲ Dictionary'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
 			if key in [Key.up]:
 				system("dunstify -C %d"%DICT_ID)
 				offset -= EXAM_PER_PAGE
@@ -311,15 +326,14 @@ else:
 					else:
 						system("dunstify -C %d"%(EXAM_ID + i))
 						end = len(rus)
-				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d' '  fandy™     ↲ Dictionary    🖭 Pronunciation   ↑↓ Example    ←→ Declension    ⌘+⇧+o Online'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
+				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d' '™     ↲ Dictionary    🖭 Pronunciation   ↑↓ Example    ←→ Declension    ⌘+⇧+o Online'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
 
 		def on_release(key):
 			if key in [Key.esc]:
 				system("killall dunst")
 				return False
 
-		ind, offset = 0, 0
+		ind, offset, play_blk = 0, 0, 0
 		current = set()
-		play_blk = 0
 		with Listener(on_press=on_press, on_release=on_release) as listener:
 			listener.join()
