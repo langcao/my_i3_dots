@@ -68,6 +68,7 @@ ZSH_THEME="candy"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+# plugins=(git zsh-completions zsh-autosuggestions sudo zsh-syntax-highlighting zsh-256color)
 plugins=(git zsh-completions zsh-autosuggestions sudo zsh-syntax-highlighting zsh-256color)
 
 source $ZSH/oh-my-zsh.sh
@@ -101,8 +102,22 @@ alias ls='exa'
 alias lc='exa --icons'
 alias ll='exa -ahl --git'
 alias lt='exa -T'
+#alias yay='paru'
+alias fp='sk --preview "bat  --color=always --style=header,grid --line-range :100 {}"'
+alias fpdf='mupdf "$(sk --preview "pdftotext -layout {} - | less")"'
+alias fo='xdg-open "$(fp)"'
+alias dl='(){dunstify -r 465372819 -u low "$($@)"}'
+alias dn='(){dunstify -r 465372819 -u normal "$($@)"}'
+alias dc='(){dunstify -r 465372819 -u critical "$($@)"}'
+alias dq='dunstify -C 465372819'
 
 export PATH=/home/milklee/.local/bin/:/home/milklee/.i3/:$PATH
+export FZF_CTRL_T_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
+export FZF_CTRL_T_OPTS='--preview "bat  --color=always --style=header,grid --line-range :100 {}"'
+export MCFLY_FUZZY=true
 
 [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(zoxide init zsh)"
+eval "$(mcfly init zsh)"
+
+# source ~/opt/python3.10-env/bin/activate

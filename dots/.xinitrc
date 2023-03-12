@@ -4,6 +4,8 @@ export QT_IM_MODULE=fcitx
 export XMODIFIERS="@im=fcitx"
 cat $HOME/.config/fcitx/profile | sed 's/:True/\&\n/g' | grep \& | sed 's/[,\&]//g' | sed 's/.*=//' > /tmp/fcitx_methods
 
+export DISP_DEV=$(ddccontrol -p | grep Device  | awk '{print $NF}')
+
 # dbus-update-activation-environment --sysemd --all
 
 if [ -d /etc/X11/xinit/xinitrc.d ]; then
