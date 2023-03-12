@@ -23,6 +23,8 @@ if [ $VOL -lt 0 ]; then
 		dunstify -r $notification_id -h int:value:$(pamixer --get-volume) -u low " $(pamixer --get-volume)% "
 	fi
 else
+	MAC=`bluetoothctl info | awk 'index($1,"Device") {print $2}'`
+	DEV=`bluetoothctl info | awk 'index($1,"Name") {print $2}'`
 	if [ -e /tmp/bluevol ]; then
 		VOL=$(cat /tmp/bluevol)
 	fi
@@ -32,7 +34,7 @@ else
 		python ~/.i3/bluevol.py $VOL
 	fi
 	echo $VOL > /tmp/bluevol
-	dunstify -r $notification_id -h int:value:$VOL -u low "ⓑ $VOL% "
+	dunstify -r $notification_id -h int:value:$VOL -u low "ⓑ $DEV $VOL% "
 fi
 
 ~/.i3/beep

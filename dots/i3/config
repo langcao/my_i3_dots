@@ -31,16 +31,17 @@ set $dark   #00252E
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 # font pango:Monaco 8
-# font pango:DejaVu Sans Mono, Icons 8
+# font pango:DejaVu Sans Mono, Icons 16
 # font pango: helvetica rounded lt 16px
 # font pango: helvetica con bq light 8
 # font pango: Verdana 8
 # font pango: Lucida Sans Unicode 16
 # font pango: Migu 2M, Icons 16
-font pango: WenQuanYi Zen Hei Mono, Icons 16
 # font pango: Microsoft YaHei, Icons 16
 # font pango: DroidSansMono Nerd, Icons 16
 # font pango: Gen Shin Gothic Monospace Regular, Icons 16
+font pango: WenQuanYi Zen Hei Mono, Icons 16
+# font pango: GenEi Gothic, 16
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -54,7 +55,8 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec --no-startup-id alacritty
-bindsym $mod+Shift+Return exec --no-startup-id alacritty -e fish
+bindsym $mod+Shift+Control+Return exec --no-startup-id alacritty -e fish
+bindsym $mod+Shift+Return exec --no-startup-id alacritty -e nu
 
 # kill focused window
 bindsym $mod+q kill
@@ -77,8 +79,11 @@ bindsym $mod+Shift+d exec --no-startup-id "rofi -show run -font 'WenQuanYi Zen H
 
 # fcitx
 bindsym Hangul exec --no-startup-id ~/.i3/switch_eng 1
+bindsym Henkan_Mode exec --no-startup-id ~/.i3/switch_eng 1
 bindsym $mod+Hangul exec --no-startup-id ~/.i3/switch_eng 2
+bindsym Super_R exec --no-startup-id ~/.i3/switch_eng 2
 bindsym Hangul_Hanja exec --no-startup-id ~/.i3/switch_eng
+bindsym Muhenkan exec --no-startup-id ~/.i3/switch_eng
 bindsym $mod+Hangul_Hanja exec --no-startup-id py3-cmd click --button 3 "group im", exec --no-startup-id ~/.i3/fcitx_hotkey_topple
 bindsym Ctrl+space exec --no-startup-id ~/.i3/switch_eng_topple
 
@@ -352,10 +357,14 @@ bindsym --release XF86MonBrightnessUp exec --no-startup-id xdotool key F2
 bindsym --release XF86MonBrightnessDown exec --no-startup-id xdotool key F1
 
 # Keyboardlight
-bindsym XF86KbdBrightnessUp exec --no-startup-id kbdlight up 10
-bindsym XF86KbdBrightnessDown exec --no-startup-id kbdlight down 10
+# bindsym XF86KbdBrightnessUp exec --no-startup-id kbdlight up 10
+# bindsym XF86KbdBrightnessDown exec --no-startup-id kbdlight down 10
+bindsym XF86MonBrightnessUp exec --no-startup-id ~/.i3/adjust_brightness_up
+bindsym XF86MonBrightnessDown exec --no-startup-id ~/.i3/adjust_brightness_down
 
-bindsym $mod+F3 exec --no-startup-id ~/.i3/dstat_topple
+bindsym $mod+Shift+F3 exec --no-startup-id ddccontrol -r 0x60 -w 15 $DISP_DEV
+bindsym $mod+Shift+F4 exec --no-startup-id ddccontrol -r 0x60 -w 4 $DISP_DEV
+# bindsym $mod+F3 exec --no-startup-id ~/.i3/dstat_topple
 
 # screenshot
 bindsym $mod+F4 exec --no-startup-id scrot 'Screenshot_%y%m%d_%H%M%S_$wx$h.jpg' -e 'mv $f ~/Pictures/Screenshots/', exec --no-startup-id dunstify 'PrtScreen saved to ~/Pictures/'
@@ -1003,7 +1012,8 @@ mode "$mode_launcher" {
     #bindsym i exec --no-startup-id feh --bg-fill ~/.config/i3/.wallpaper.jpg, mode "default"
     #bindsym j exec --no-startup-id systemd-run --on-calendar="*-*-* *:*/5:00" --user -- \ /usr/bin/feh --no-fehbg --bg-scale --randomize -r ~/Pictures/Wallpapers, mode "default"
     bindsym j workspace $ws_joy, exec --no-startup-id steam, mode "default"
-    bindsym h workspace ,  exec --no-startup-id google-chrome-stable --incognito --new-window https://jp.pornhub.com/, mode "default"
+    # bindsym h workspace ,  exec --no-startup-id google-chrome-stable --incognito --new-window https://jp.1hub.com/, mode "default"
+    bindsym h exec --no-startup-id google-chrome-stable --incognito, mode "default"
     bindsym l workspace $ws_z, exec --no-startup-id lazarus --class floatingApp, mode "default"
     bindsym m workspace $ws_n, exec --no-startup-id alacritty -e matlab, mode "default"
     bindsym n exec nautilus, mode "default"
@@ -1024,6 +1034,7 @@ mode "$mode_launcher" {
     bindsym $mod+a workspace $ws_home, exec --no-startup-id atom, mode "default"
     bindsym $mod+b workspace $ws_win, exec --no-startup-id virtualbox, mode "default"
     bindsym $mod+c exec --no-startup-id google-chrome-stable, mode "default"
+    bindsym $mod+Shift+c exec --no-startup-id google-chrome-stable --incognito, mode "default"
     #bindsym $mod+c workspace $ws_joy, exec --no-startup-id cgoban3, mode "default"
     bindsym $mod+d exec --no-startup-id pcloud, mode "default"
     bindsym $mod+e workspace $ws_link, exec --no-startup-id sylpheed, mode "default"
@@ -1032,7 +1043,8 @@ mode "$mode_launcher" {
     #bindsym $mod+i exec --no-startup-id feh --bg-fill ~/.config/i3/.wallpaper.jpg, mode "default"
     #bindsym $mod+j exec --no-startup-id systemd-run --on-calendar="*-*-* *:*/5:00" --user -- \ /usr/bin/feh --no-fehbg --bg-scale --randomize -r ~/Pictures/Wallpapers, mode "default"
     bindsym $mod+j workspace $ws_joy, exec --no-startup-id steam, mode "default"
-    bindsym $mod+h workspace $ws_movie,  exec --no-startup-id google-chrome-stable --incognito --new-window https://javmix.tv/, mode "default"
+    #bindsym $mod+h workspace $ws_movie, exec --no-startup-id google-chrome-stable --incognito --new-window https://javmix.tv/, mode "default"
+    bindsym $mod+h workspace $ws_movie, exec --no-startup-id google-chrome-stable --incognito --new-window "https://www.google.com/search?\&q=$(xsel -o)", mode "default"
     bindsym $mod+l workspace $ws_z, exec --no-startup-id lazarus --class floatingApp, mode "default"
     bindsym $mod+m workspace $ws_n, exec --no-startup-id alacritty -e matlab, mode "default"
     bindsym $mod+n exec --no-startup-id nautilus, mode "default"
@@ -1277,10 +1289,12 @@ set $mode_art Chicago Art Institute  Load   Current   Save   Get
 bindsym $mod+Ctrl+i exec --no-startup-id python ~/.i3/info_art_chicago.py
 bindsym $mod+Shift+o exec --no-startup-id google-chrome-stable $(xsel -o)
 bindsym $mod+Ctrl+o exec --no-startup-id google-chrome-stable $(xsel --clipboard)
-bindsym $mod+Shift+g exec --no-startup-id google-chrome-stable --new-window "https://www.google.com/search?\&q=$(xsel -o)"
-bindsym $mod+Ctrl+g exec --no-startup-id google-chrome-stable --new-window "https://www.google.com/search?\&q=$(xsel --clipboard)"
-bindsym $mod+Shift+u exec --no-startup-id google-chrome-stable --new-window "https://scholar.google.co.jp/scholar?q=$(xsel -o)"
-bindsym $mod+Ctrl+u exec --no-startup-id google-chrome-stable --new-window "https://scholar.google.co.jp/scholar?q=$(xsel --clipboard)"
+bindsym $mod+Shift+g exec --no-startup-id google-chrome-stable --incognito --new-window "https://www.google.com/search?\&q=$(xsel -o)"
+bindsym $mod+Ctrl+g exec --no-startup-id google-chrome-stable --incognito --new-window "https://www.google.com/search?\&q=$(xsel --clipboard)"
+# bindsym $mod+Shift+u exec --no-startup-id google-chrome-stable --new-window "https://scholar.google.co.jp/scholar?q=$(xsel -o)"
+bindsym $mod+Shift+u exec --no-startup-id google-chrome-stable --incognito --new-window "https://scholar.google.co.jp/scholar?q=%22$(xsel -o)%22"
+# bindsym $mod+Ctrl+u exec --no-startup-id google-chrome-stable --new-window "https://scholar.google.co.jp/scholar?q=$(xsel --clipboard)"
+bindsym $mod+Ctrl+u exec --no-startup-id google-chrome-stable --incognito --new-window "https://scholar.google.co.jp/scholar?q=%22$(xsel --clipboard)%22"
 bindsym $mod+i mode "$mode_art"
 mode "$mode_art" {
     #bindsym o workspace , exec --no-startup-id python ~/.i3/open_art_chicago.py

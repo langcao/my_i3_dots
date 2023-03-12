@@ -1,0 +1,20 @@
+#!/bin/bash
+
+notification_id=777
+
+if [ ! -f "/tmp/screen_brightness.conf" ];then
+	SCREEN_BRIGHTNESS=40
+	echo 40 > /tmp/SCREEN_BRIGHTNESS.conf
+else
+	echo "Reading..."
+	SCREEN_BRIGHTNESS=$(cat /tmp/screen_brightness.conf)
+fi
+
+if [ $SCREEN_BRIGHTNESS -gt 0 ];then
+	SCREEN_BRIGHTNESS=$(($SCREEN_BRIGHTNESS-10))
+fi
+
+echo $SCREEN_BRIGHTNESS > /tmp/screen_brightness.conf
+ddccontrol $DISP_DEV -r 0x10 -w $SCREEN_BRIGHTNESS
+
+dunstify -r $notification_id -h int:value:$SCREEN_BRIGHTNESS -u low " $(cat /tmp/screen_brightness.conf)%"

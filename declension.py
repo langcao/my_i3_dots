@@ -114,7 +114,7 @@ sound_path = "/tmp/Russian"
 if not os.path.exists(sound_path):
 	os.mkdir(sound_path)
 tmp = popen('xsel').read()
-tmp.replace("`",'')
+tmp = tmp.replace("`",'').strip()
 if tmp.find(' ')>-1:
 	tmp = tmp[0:tmp.find(' ')]
 if tmp.find('\n')>-1:
@@ -139,7 +139,8 @@ except:
 else:
 	trans = trans.lower().replace("'","’")
 	if word == trans:
-		system("dunstify -r %d -u low 'Русское слово не обнаружено.\n%s - No Russian word dectected.'"%(NOTIFY_ID, tmp))
+		# system("dunstify -r %d -u low 'Русское слово не обнаружено.\n%s - No Russian word dectected.'"%(NOTIFY_ID, tmp))
+		system("python ~/.i3/get_jukuu.py %s"%word)
 	else:
 		url = "https://www.igimu.com/index.php?q=%s"%(quote(word))
 		print("https://www.igimu.com/index.php?q=%s"%word)
@@ -296,25 +297,25 @@ else:
 				current.add(key)
 				if any(all(k in current for k in COMBO) for COMBO in COMBINATIONS):
 					threading.Thread(target=browse).start()
-			if key in [Key.space] and os.path.exists(file):
+			if key in [Key.space, Key.ctrl, Key.ctrl_r, Key.caps_lock] and os.path.exists(file):
 				threading.Thread(target=pronunciate).start()
-			if key in [Key.enter]:
+			if key in [Key.enter, Key.shift, Key.shift_r]:
 				if dict_flag:
 					system("dunstify -t 0 -r %d ' %s [%s] %s' '  %s.'"%(DICT_ID, orgn, pron_orgn, trans, expl))
 				else:
 					system("dunstify -t 0 -r %d ' %s [%s] %s' '  %s'"%(DICT_ID, more, pron_more, trans, sel))
 				dict_flag = 1 - dict_flag
-			if key in [Key.right] and declist:
+			if key in [Key.right, Key.end] and declist:
 				ind += 1
 				if ind >= len(declist):
 					ind = 0
 				system("dunstify -t 0 -r %d '%s' ' pp. %d / %d'"%(GRAMM_ID, declist[ind], ind+1, len(declist)))
-			if declist and key in [Key.left]:
+			if declist and key in [Key.left, key.home]:
 				ind -= 1
 				if ind < 0:
 					ind = len(declist) - 1
 				system("dunstify -t 0 -r %d '%s' ' pp. %d / %d'"%(GRAMM_ID, declist[ind], ind+1, len(declist)))
-			if key in [Key.down]:
+			if key in [Key.down, Key.page_down]:
 				offset += EXAM_PER_PAGE
 				if offset >= len(rus):
 					offset = 0
@@ -327,8 +328,7 @@ else:
 						system("dunstify -C %d"%(EXAM_ID + i))
 						end = len(rus)
 				system("dunstify -t 0 -r %d -u low ' ex. %d-%d / %d' '™🖭 Pronunciation   ↑↓ Example   ←→ Declension    ⌘+⇧+p Online   ↲ Dictionary'"%(EXAM_ID + EXAM_PER_PAGE, start, end, len(rus)))
-			if key in [Key.up]:
-				system("dunstify -C %d"%DICT_ID)
+			if key in [Key.up, Key.page_up]:
 				offset -= EXAM_PER_PAGE
 				if offset < 0:
 					offset = EXAM_PER_PAGE * int(len(rus)/EXAM_PER_PAGE)
@@ -346,11 +346,12 @@ else:
 
 
 		def on_release(key):
-			if key in [Key.esc]:
+			if key in [Key.esc, Key.delete]:
 				system("killall dunst")
 				return False
 
 		ind, offset, play_blk, dict_flag = 0, 0, 0, 0
 		current = set()
+		threading.Thread(target=pronunciate).start()
 		with Listener(on_press=on_press, on_release=on_release) as listener:
 			listener.join()
