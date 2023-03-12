@@ -1,0 +1,20 @@
+#!/bin/bash
+
+notification_id=777
+
+if [ ! -f "/tmp/screen_contrast.conf" ];then
+	SCREEN_CONTRAST=30
+	echo 30 > /tmp/screen_contrast.conf
+else
+	echo "Reading..."
+	SCREEN_CONTRAST=$(cat /tmp/screen_contrast.conf)
+fi
+
+if [ $SCREEN_CONTRAST -lt 100 ];then
+	SCREEN_CONTRAST=$(($SCREEN_CONTRAST+5))
+fi
+
+echo $SCREEN_CONTRAST > /tmp/screen_contrast.conf
+ddccontrol $DISP_DEV -r 0x12 -w $SCREEN_CONTRAST
+
+dunstify -r $notification_id -h int:value:$SCREEN_CONTRAST -u low " $(cat /tmp/screen_contrast.conf)%"

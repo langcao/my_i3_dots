@@ -361,6 +361,8 @@ bindsym --release XF86MonBrightnessDown exec --no-startup-id xdotool key F1
 # bindsym XF86KbdBrightnessDown exec --no-startup-id kbdlight down 10
 bindsym XF86MonBrightnessUp exec --no-startup-id ~/.i3/adjust_brightness_up
 bindsym XF86MonBrightnessDown exec --no-startup-id ~/.i3/adjust_brightness_down
+bindsym $mod+Ctrl+XF86MonBrightnessUp exec --no-startup-id ~/.i3/adjust_contrast_up
+bindsym $mod+Ctrl+XF86MonBrightnessDown exec --no-startup-id ~/.i3/adjust_contrast_down
 
 bindsym $mod+Shift+F3 exec --no-startup-id ddccontrol -r 0x60 -w 15 $DISP_DEV
 bindsym $mod+Shift+F4 exec --no-startup-id ddccontrol -r 0x60 -w 4 $DISP_DEV
